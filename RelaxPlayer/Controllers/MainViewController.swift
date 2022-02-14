@@ -12,7 +12,7 @@ class MainViewController: UIViewController {
     
     //  MARK: - declaring variables
     var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
-    var noises = ["fire", "sea", "night", "rain"]
+    var noises = ["1","2","3","4","5","6","7","8","9","10"]
     var audioSassion = AVAudioSession.sharedInstance()
     var audioPlayers = [String: AVAudioPlayer]()
     var selectedPlayers = [String]()
@@ -34,7 +34,6 @@ class MainViewController: UIViewController {
         setupButtonsStack()
     }
     
-    
     //  MARK: - setup collection view
     func setupCollectionView() {
         view.addSubview(collectionView)
@@ -49,6 +48,7 @@ class MainViewController: UIViewController {
         collectionView.register(MainNoiseCell.self, forCellWithReuseIdentifier: MainNoiseCell.reuseId)
         collectionView.delegate = self
         collectionView.dataSource = self
+        collectionView.backgroundColor = .white
     }
     
     //  MARK: - setup layout section
@@ -78,11 +78,7 @@ class MainViewController: UIViewController {
         buttonsStack.spacing = 20
         buttonsStack.alignment = .center
         buttonsStack.distribution = .fillEqually
-        buttonsStack.backgroundColor = .white
-        buttonsStack.layer.shadowColor = UIColor.black.cgColor
-        buttonsStack.layer.shadowRadius = 2
-        buttonsStack.layer.shadowOffset = CGSize(width: 0, height: 0)
-        buttonsStack.layer.shadowOpacity = 0.2
+        buttonsStack.backgroundColor = .systemGray5
         buttonsStack.layer.cornerRadius = 15
         setupTimerButton()
         setupPlayPauseButton()
@@ -219,26 +215,15 @@ class MainViewController: UIViewController {
     }
     @objc func playPauseButtonTapped() {
         for (noise, player) in audioPlayers {
-            
             if selectedPlayers.contains(noise) {
                 if player.isPlaying {
                     player.pause()
-                    playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
                 } else {
                     player.play()
-                    playPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
                 }
+                playPauseButton.setImage(UIImage(systemName: player.isPlaying ? "pause.fill" : "play.fill"),
+                                         for: .normal)
             }
-            
-            //            if selectedNoises.contains(noise) {
-            //                if player.isPlaying {
-            //                    player.pause()
-            //                    playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
-            //                } else {
-            //                    player.play()
-            //                    playPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
-            //                }
-            //            }
         }
     }
     
@@ -266,6 +251,7 @@ class MainViewController: UIViewController {
         mixerVC.handleDeletedPlayer = { [weak self] playerName in
             guard let self = self, let player = self.audioPlayers[playerName] else { return }
             player.stop()
+            
             for player in self.selectedPlayers {
                 if player == playerName, let playerIndex = self.selectedPlayers.firstIndex(of: player) {
                     self.selectedPlayers.remove(at: playerIndex)
@@ -279,6 +265,18 @@ class MainViewController: UIViewController {
             self.updateButtons()
         }
         
+        mixerVC.handleDeletedPlayers = { [weak self] cleanAllPlayers in
+            guard let self = self else { return }
+            self.selectedPlayers.removeAll()
+            self.selectedPlayersVolume.removeAll()
+            for (_, player) in self.audioPlayers {
+                if player.isPlaying {
+                    player.stop()
+                }
+            }
+            self.collectionView.reloadData()
+            self.updateButtons()
+        }
         self.present(UINavigationController(rootViewController: mixerVC), animated: true, completion: nil)
     }
     
