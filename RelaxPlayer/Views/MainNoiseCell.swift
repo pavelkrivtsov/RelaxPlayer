@@ -18,6 +18,11 @@ class MainNoiseCell: UICollectionViewCell {
         super.init(frame: frame)
         contentView.layer.cornerRadius = 15
         setupImageView()
+        contentView.clipsToBounds = true
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     //  MARK: - setup image view
@@ -33,12 +38,8 @@ class MainNoiseCell: UICollectionViewCell {
     }
     
     func configure(imageWith icon: String, isSelected: Bool) {
+        contentView.backgroundColor = isSelected ? .systemGray4 : .systemGray2
         iconImageView.image = UIImage(named: icon)
-        contentView.backgroundColor = isSelected ? .red : .blue
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
 }
