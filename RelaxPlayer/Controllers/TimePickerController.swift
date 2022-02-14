@@ -25,7 +25,8 @@ class TimePickerController: UIViewController {
     //  MARK: - view did load
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .systemGray6
+        title = "Timer"
         setupTimePicker()
         setupPlayPauseButton()
         setupTimeLabel()
