@@ -8,7 +8,7 @@
 import UIKit
 
 class TimePickerController: UIViewController {
-    
+
     //  MARK: - declaring variables
     var timePicker = UIDatePicker()
     var timeLabel = UILabel()
@@ -20,8 +20,8 @@ class TimePickerController: UIViewController {
     var selectedTimeNumber = 0
     var counter = 0
     var counterOnCompletion: ((Int) -> ())?
-    var isTimerStartedOnCompletion: ((Bool) -> ())?
-    
+    var onStoppedTimer: (() -> ())?
+
     //  MARK: - view did load
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +32,7 @@ class TimePickerController: UIViewController {
         setupTimeLabel()
         setupСircleImageView()
     }
-    
+
     //      MARK: - view will appear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -43,13 +43,13 @@ class TimePickerController: UIViewController {
             startAnimation(by: currentValue)
         }
     }
-    
+
     //  MARK: - view did layout subviews
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         self.createCircleShape()
     }
-    
+
     //  MARK: - setup timer picker
     func setupTimePicker() {
         view.addSubview(timePicker)
@@ -63,7 +63,7 @@ class TimePickerController: UIViewController {
         ])
         timePicker.datePickerMode = .countDownTimer
     }
-    
+
     //  MARK: - setup image view
     func setupСircleImageView() {
         view.addSubview(circleImageView)
@@ -77,7 +77,7 @@ class TimePickerController: UIViewController {
         circleImageView.image = UIImage(named: "circle")
         circleImageView.isHidden = true
     }
-    
+
     //  MARK: - setup time label
     func setupTimeLabel() {
         circleImageView.addSubview(timeLabel)
@@ -89,7 +89,7 @@ class TimePickerController: UIViewController {
         timeLabel.textAlignment = .center
         timeLabel.font = .systemFont(ofSize: 35)
     }
-    
+
     //  MARK: - setup play/pause button
     func setupPlayPauseButton() {
         view.addSubview(playPauseButton)
@@ -106,11 +106,11 @@ class TimePickerController: UIViewController {
         playPauseButton.configuration = configuration
         playPauseButton.addTarget(self, action: #selector(playPauseButtonPressed), for: .touchUpInside)
     }
-    
+
     @objc func playPauseButtonPressed() {
         isTimerStarted.toggle()
         controllerDisplayMode()
-        
+
         if isTimerStarted {
             counter = Int(timePicker.countDownDuration)
             counterOnCompletion?(counter)
@@ -119,10 +119,10 @@ class TimePickerController: UIViewController {
         } else {
             timer?.invalidate()
             timer = nil
-            isTimerStartedOnCompletion?(false)
+            onStoppedTimer?()
         }
     }
-    
+
     //  MARK: - controller display mode
     func controllerDisplayMode() {
         timeLabel.isHidden = isTimerStarted ? false : true
@@ -130,20 +130,20 @@ class TimePickerController: UIViewController {
         timePicker.isHidden = isTimerStarted ? true : false
         playPauseButton.setImage(UIImage(systemName: isTimerStarted ? "stop" : "play"), for: .normal)
     }
-    
+
     //  MARK: - time label display mode
     func timeLabelDisplayMode(accordingToThe counter: Int) {
         let hours = counter / 3600
         let minutes = counter / 60 % 60
         let seconds = counter % 60
-        
+
         if counter < 3600 {
             timeLabel.text = NSString(format: "%0.2d:%0.2d", minutes, seconds) as String
         } else {
             timeLabel.text = NSString(format: "%0.2d:%0.2d:%0.2d", hours, minutes, seconds) as String
         }
     }
-    
+
     //  MARK: - animation
     func createCircleShape() {
         let center = CGPoint(x: circleImageView.frame.width / 2, y: circleImageView.frame.height / 2)
@@ -151,10 +151,10 @@ class TimePickerController: UIViewController {
         let startAngle = 3 * CGFloat.pi / 2
         let endAngle = 2 * -CGFloat.pi + startAngle
         let circlePath = UIBezierPath(arcCenter: center,
-                                      radius: radius,
-                                      startAngle: startAngle,
-                                      endAngle: endAngle,
-                                      clockwise: false)
+            radius: radius,
+            startAngle: startAngle,
+            endAngle: endAngle,
+            clockwise: false)
         circleShapeLayer.path = circlePath.cgPath
         circleShapeLayer.lineWidth = 29
         circleShapeLayer.fillColor = UIColor.clear.cgColor
@@ -162,7 +162,7 @@ class TimePickerController: UIViewController {
         circleShapeLayer.strokeColor = UIColor.orange.cgColor
         circleImageView.layer.addSublayer(circleShapeLayer)
     }
-    
+
     func startAnimation(by value: Double) {
         let basicAnimation = CABasicAnimation(keyPath: #keyPath(CAShapeLayer.strokeStart))
         basicAnimation.toValue = 1

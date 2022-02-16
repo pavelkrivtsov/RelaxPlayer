@@ -28,14 +28,16 @@
 		1E3DDA1D27BAB7F20068C41D /* 10.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1E3DDA1A27BAB7F20068C41D /* 10.mp3 */; };
 		1E3DDA1F27BAB9100068C41D /* 5.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1E3DDA1E27BAB9100068C41D /* 5.mp3 */; };
 		1E3F24AF27AF2B9C00860BB5 /* MixerNoiseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3F24AE27AF2B9C00860BB5 /* MixerNoiseCell.swift */; };
-		1E824F8A277E30C40085D104 /* TimePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E824F89277E30C40085D104 /* TimePickerController.swift */; };
-		1E824F8C277E30CB0085D104 /* MixerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E824F8B277E30CB0085D104 /* MixerViewController.swift */; };
 		1ECBC1292779D44C00DCD60A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ECBC1282779D44C00DCD60A /* AppDelegate.swift */; };
 		1ECBC12B2779D44C00DCD60A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ECBC12A2779D44C00DCD60A /* SceneDelegate.swift */; };
-		1ECBC12D2779D44C00DCD60A /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ECBC12C2779D44C00DCD60A /* MainViewController.swift */; };
 		1ECBC1322779D44D00DCD60A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1ECBC1312779D44D00DCD60A /* Assets.xcassets */; };
 		1ECBC1352779D44D00DCD60A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1ECBC1332779D44D00DCD60A /* LaunchScreen.storyboard */; };
 		1ECBC1412779DDD600DCD60A /* MainNoiseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ECBC1402779DDD600DCD60A /* MainNoiseCell.swift */; };
+		2DBA124F0FEA35D37B947546 /* PlaybackControlsToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DBA19210352B01B669FB7EF /* PlaybackControlsToolbar.swift */; };
+		2DBA15CD049D751F082BDB32 /* MixerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DBA1A247674927D5280D775 /* MixerViewController.swift */; };
+		2DBA15D005907D51FFFF1E21 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DBA16AF437AACFB17B43B7E /* MainViewController.swift */; };
+		2DBA1C9F72D0B444B5EFCB21 /* TimePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DBA1732679AFCA52D09FBF2 /* TimePickerController.swift */; };
+		2DBA1DF33237E923059DB504 /* AVAudioPlayerUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DBA161250841800A1C1BEC1 /* AVAudioPlayerUtils.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,16 +62,18 @@
 		1E3DDA1A27BAB7F20068C41D /* 10.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 10.mp3; sourceTree = "<group>"; };
 		1E3DDA1E27BAB9100068C41D /* 5.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 5.mp3; sourceTree = "<group>"; };
 		1E3F24AE27AF2B9C00860BB5 /* MixerNoiseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MixerNoiseCell.swift; sourceTree = "<group>"; };
-		1E824F89277E30C40085D104 /* TimePickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimePickerController.swift; sourceTree = "<group>"; };
-		1E824F8B277E30CB0085D104 /* MixerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MixerViewController.swift; sourceTree = "<group>"; };
 		1ECBC1252779D44C00DCD60A /* RelaxPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RelaxPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1ECBC1282779D44C00DCD60A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1ECBC12A2779D44C00DCD60A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		1ECBC12C2779D44C00DCD60A /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		1ECBC1312779D44D00DCD60A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1ECBC1342779D44D00DCD60A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1ECBC1362779D44D00DCD60A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1ECBC1402779DDD600DCD60A /* MainNoiseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNoiseCell.swift; sourceTree = "<group>"; };
+		2DBA161250841800A1C1BEC1 /* AVAudioPlayerUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AVAudioPlayerUtils.swift; sourceTree = "<group>"; };
+		2DBA16AF437AACFB17B43B7E /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		2DBA1732679AFCA52D09FBF2 /* TimePickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimePickerController.swift; sourceTree = "<group>"; };
+		2DBA19210352B01B669FB7EF /* PlaybackControlsToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaybackControlsToolbar.swift; sourceTree = "<group>"; };
+		2DBA1A247674927D5280D775 /* MixerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MixerViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,10 +140,9 @@
 		1ECBC1272779D44C00DCD60A /* RelaxPlayer */ = {
 			isa = PBXGroup;
 			children = (
-				1ECBC13E2779DDA900DCD60A /* Models */,
 				1ECBC13F2779DDB000DCD60A /* Views */,
-				1ECBC13D2779DDA000DCD60A /* Controllers */,
 				1ECBC13C2779D60B00DCD60A /* Supporting files */,
+				2DBA19EB5B52A8C9A10D5243 /* Screens */,
 			);
 			path = RelaxPlayer;
 			sourceTree = "<group>";
@@ -158,23 +161,6 @@
 			path = "Supporting files";
 			sourceTree = "<group>";
 		};
-		1ECBC13D2779DDA000DCD60A /* Controllers */ = {
-			isa = PBXGroup;
-			children = (
-				1ECBC12C2779D44C00DCD60A /* MainViewController.swift */,
-				1E824F89277E30C40085D104 /* TimePickerController.swift */,
-				1E824F8B277E30CB0085D104 /* MixerViewController.swift */,
-			);
-			path = Controllers;
-			sourceTree = "<group>";
-		};
-		1ECBC13E2779DDA900DCD60A /* Models */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
 		1ECBC13F2779DDB000DCD60A /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -182,6 +168,26 @@
 				1E3F24AE27AF2B9C00860BB5 /* MixerNoiseCell.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		2DBA1587AC7BE9705C034562 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				2DBA16AF437AACFB17B43B7E /* MainViewController.swift */,
+				2DBA19210352B01B669FB7EF /* PlaybackControlsToolbar.swift */,
+				2DBA161250841800A1C1BEC1 /* AVAudioPlayerUtils.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		2DBA19EB5B52A8C9A10D5243 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				2DBA1587AC7BE9705C034562 /* Main */,
+				2DBA1A247674927D5280D775 /* MixerViewController.swift */,
+				2DBA1732679AFCA52D09FBF2 /* TimePickerController.swift */,
+			);
+			path = Screens;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -274,13 +280,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1E824F8C277E30CB0085D104 /* MixerViewController.swift in Sources */,
-				1E824F8A277E30C40085D104 /* TimePickerController.swift in Sources */,
 				1ECBC1412779DDD600DCD60A /* MainNoiseCell.swift in Sources */,
 				1E3F24AF27AF2B9C00860BB5 /* MixerNoiseCell.swift in Sources */,
-				1ECBC12D2779D44C00DCD60A /* MainViewController.swift in Sources */,
 				1ECBC1292779D44C00DCD60A /* AppDelegate.swift in Sources */,
 				1ECBC12B2779D44C00DCD60A /* SceneDelegate.swift in Sources */,
+				2DBA15D005907D51FFFF1E21 /* MainViewController.swift in Sources */,
+				2DBA15CD049D751F082BDB32 /* MixerViewController.swift in Sources */,
+				2DBA1C9F72D0B444B5EFCB21 /* TimePickerController.swift in Sources */,
+				2DBA124F0FEA35D37B947546 /* PlaybackControlsToolbar.swift in Sources */,
+				2DBA1DF33237E923059DB504 /* AVAudioPlayerUtils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
