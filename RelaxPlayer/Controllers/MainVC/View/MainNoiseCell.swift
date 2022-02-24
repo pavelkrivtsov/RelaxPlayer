@@ -9,15 +9,13 @@ import UIKit
 
 class MainNoiseCell: UICollectionViewCell {
     
-    //  MARK: - declaring variables
     static let reuseId = "MainNoiseCell"
     let iconImageView = UIImageView()
     
-    //  MARK: - init
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.layer.cornerRadius = 15
         setupImageView()
+        contentView.layer.cornerRadius = 15
         contentView.clipsToBounds = true
     }
     
@@ -25,20 +23,19 @@ class MainNoiseCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //  MARK: - setup image view
     private func setupImageView() {
         contentView.addSubview(iconImageView)
         iconImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            iconImageView.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
-            iconImageView.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor),
-            iconImageView.widthAnchor.constraint(equalTo: self.contentView.widthAnchor),
-            iconImageView.heightAnchor.constraint(equalTo: self.contentView.heightAnchor)
+            iconImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            iconImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            iconImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            iconImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
     
     func configure(imageWith icon: String, isSelected: Bool) {
-        contentView.backgroundColor = isSelected ? .systemGray4 : .systemGray2
+        iconImageView.backgroundColor = isSelected ? .systemGray4 : .systemGray2
         iconImageView.image = UIImage(named: icon)
     }
     
