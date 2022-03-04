@@ -1,4 +1,4 @@
 # RelaxPlayer
 Концепт приложения для сна и релакса
 
-<img src="https://user-images.githubusercontent.com/72617749/153928975-bf807539-3435-4a7f-a41f-294877315569.png" width="250" height="525" /> <img src="https://user-images.githubusercontent.com/72617749/153928653-35ec6dee-b784-44d5-812b-ffe2f6b3e44d.png" width="250" height="525" /> <img src="https://user-images.githubusercontent.com/72617749/153928645-6b38233c-8f54-4ffa-8494-fec73154b552.png" width="250" height="525" />
+<img src="https://user-images.githubusercontent.com/72617749/156818335-9bc1d328-17c6-4b0b-8c48-13e16182aa1b.png" width="250" height="525" /> <img src="https://user-images.githubusercontent.com/72617749/156818340-8ed0bea6-2c1c-41ad-963f-e1acff104fcf.png" width="250" height="525" /> <img src="https://user-images.githubusercontent.com/72617749/156818323-c3e5e167-df72-42e0-882a-356af6079f9e.png" width="250" height="525" />
