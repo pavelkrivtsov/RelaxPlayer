@@ -20,8 +20,9 @@ class MainViewController: UIViewController {
     var playbackControlsToolbar = PlaybackControlsToolbar()
     
     var timer: Timer?
-    var isTimerStarted = false
+    var isTimerActive = false
     var seconds = Int()
+    var selectedSeconds = Int()
     
     weak var timePickerVC: TimePickerController?
     
@@ -30,7 +31,6 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         setupCollectionView()
         setupPlaybackControlsToolbar()
-        
     }
     
     //  MARK: - setup collection view
@@ -44,7 +44,7 @@ class MainViewController: UIViewController {
             collectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
         ])
         collectionView.collectionViewLayout = UICollectionViewCompositionalLayout(section: createNoisesSection())
-        collectionView.register(MainNoiseCell.self, forCellWithReuseIdentifier: MainNoiseCell.reuseId)
+        collectionView.register(MainVCNoiseCell.self, forCellWithReuseIdentifier: MainVCNoiseCell.reuseId)
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.backgroundColor = .white
@@ -78,6 +78,11 @@ class MainViewController: UIViewController {
     func openTimePickerController() {
         let timePickerVC = TimePickerController()
         timePickerVC.delegate = self
+        self.timePickerVC = timePickerVC
+        timePickerVC.isTimerActive = isTimerActive
+        timePickerVC.timePickerView.setTimeLabelText(with: seconds)
+        timePickerVC.timePickerView.selectedSeconds = self.selectedSeconds
+        timePickerVC.remainingSeconds = seconds
         self.present(UINavigationController(rootViewController: timePickerVC), animated: true, completion: nil)
     }
     
@@ -96,7 +101,6 @@ class MainViewController: UIViewController {
     //  MARK: - timer action
     @objc func timerAction() {
         seconds -= 1
-        
         if seconds == 0 {
             audioPlayers = audioPlayers.mapValues{ player in
                 if player.isPlaying{
@@ -104,23 +108,16 @@ class MainViewController: UIViewController {
                 }
                 return player
             }
-            timer?.invalidate()
-            timer = nil
+            deleteTimer()
+            updateButtons()
+            timePickerVC?.setTimePickerMode()
+        } else {
+            isTimerActive = true
         }
-        
+
         playbackControlsToolbar.setTimeLabelText(with: seconds)
-        print("MainVC \(seconds)")
-        
- 
+        timePickerVC?.timePickerView.setTimeLabelText(with: seconds)
         timePickerVC?.remainingSeconds = seconds
-        
-    }
-    
-    func togglePlayback() {
-        for playerName in selectedPlayers {
-            audioPlayers[playerName]?.toggle()
-        }
-        updateButtons()
     }
     
     func openMixerViewController() {
@@ -148,9 +145,16 @@ class MainViewController: UIViewController {
         playbackControlsToolbar.playPauseButton.configuration?.image = UIImage(systemName: isAudioPlaying ? "pause.fill" : "play.fill")
     }
     
+    func togglePlayback() {
+        for playerName in selectedPlayers {
+            audioPlayers[playerName]?.toggle()
+        }
+        updateButtons()
+    }
+    
 }
 
-//  MARK: - UICollectionViewDelegate, UICollectionViewDataSource
+
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -158,8 +162,8 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath)-> UICollectionViewCell {
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainNoiseCell.reuseId,
-                                                         for: indexPath) as? MainNoiseCell {
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainVCNoiseCell.reuseId,
+                                                         for: indexPath) as? MainVCNoiseCell {
             let noise = noises[indexPath.item]
             let player = audioPlayers[noise]
             cell.configure(imageWith: noise, isSelected: player?.isPlaying ?? false)
@@ -230,8 +234,8 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
 }
 
-//  MARK: - PlaybackControlsToolbarDelegate
 extension MainViewController: PlaybackControlsToolbarDelegate {
+    
     func openTimerViewButtonDidPress() {
         openTimePickerController()
     }
@@ -243,22 +247,29 @@ extension MainViewController: PlaybackControlsToolbarDelegate {
     func openMixerDidPress() {
         openMixerViewController()
     }
+    
 }
 
-//  MARK: - TimePickerControllerDelegate
 extension MainViewController: TimePickerControllerDelegate {
+    
     func get(selectedSeconds: Int) {
+        self.selectedSeconds = selectedSeconds
         self.seconds = selectedSeconds
+        timePickerVC?.timePickerView.selectedSeconds = selectedSeconds
+        timePickerVC?.timePickerView.setTimeLabelText(with: seconds)
+        playbackControlsToolbar.setTimeLabelText(with: seconds)
         self.createTimer()
     }
     
     func deleteTimer() {
         timer?.invalidate()
         timer = nil
+        isTimerActive = false
+        playbackControlsToolbar.hideTimeLabel()
     }
+    
 }
 
-//  MARK: - MixerViewControllerDelegate
 extension MainViewController: MixerViewControllerDelegate {
     
     func setPlayerVolume(playerName: String, playerVolume: Float) {
