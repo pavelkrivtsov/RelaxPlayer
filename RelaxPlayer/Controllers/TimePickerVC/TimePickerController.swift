@@ -14,26 +14,35 @@ class TimePickerController: UIViewController {
     var isTimerActive = false
     var selectedSeconds = 60
     var remainingSeconds = Int()
-    
-    var label = UILabel()
-    
     weak var delegate: TimePickerControllerDelegate?
-    let main = MainViewController()
     
-    
-    //  MARK: - view did load
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemGray6
         title = "Timer"
         
-        timePickerView.setDisplayMode(isTimerActive: false)
         setupTimePicker()
-        setupLabel()
         setupPlayPauseButton()
     }
     
-    func setupTimePicker() {
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        timePickerView.setDisplayMode(isTimerActive: isTimerActive)
+        playPauseButton.configuration?.image = UIImage(systemName: isTimerActive ? "stop" : "play")
+        
+        if isTimerActive {
+            let currentValue = 1 - (Double(remainingSeconds) / Double(selectedSeconds))
+            timePickerView.startAnimation(by: currentValue)
+        }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        timePickerView.createBackgroundShapeLayer()
+        timePickerView.createForegroundShapeLayer()
+    }
+    
+    private func setupTimePicker() {
         view.addSubview(timePickerView)
         NSLayoutConstraint.activate([
             timePickerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
@@ -44,20 +53,7 @@ class TimePickerController: UIViewController {
         timePickerView.delegate = self
     }
     
-    func setupLabel() {
-        view.addSubview(label)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: timePickerView.leadingAnchor),
-            label.trailingAnchor.constraint(equalTo: timePickerView.trailingAnchor),
-            label.bottomAnchor.constraint(equalTo: timePickerView.topAnchor),
-            label.heightAnchor.constraint(equalToConstant: 50)
-        ])
-        label.backgroundColor = .yellow
-        label.text = "text"
-    }
-    
-    func setupPlayPauseButton() {
+    private func setupPlayPauseButton() {
         view.addSubview(playPauseButton)
         playPauseButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -76,18 +72,24 @@ class TimePickerController: UIViewController {
         isTimerActive.toggle()
         if isTimerActive {
             delegate?.get(selectedSeconds: selectedSeconds)
-            timePickerView.setDisplayMode(isTimerActive: true)
+            timePickerView.startAnimation()
         } else {
-            timePickerView.setDisplayMode(isTimerActive: false)
             delegate?.deleteTimer()
         }
+        timePickerView.setDisplayMode(isTimerActive: isTimerActive)
         playPauseButton.configuration?.image = UIImage(systemName: isTimerActive ? "stop" : "play")
     }
-
+    
 }
 
+extension TimePickerController {
+    func setTimePickerMode() {
+        isTimerActive = false
+        timePickerView.setDisplayMode(isTimerActive: isTimerActive)
+        playPauseButton.configuration?.image = UIImage(systemName: "play")
+    }
+}
 
-//  MARK: - TimePickerViewDelegate
 extension TimePickerController: TimePickerViewDelegate {
     func getFromTimePicker(seconds: Int) {
         self.selectedSeconds = seconds
