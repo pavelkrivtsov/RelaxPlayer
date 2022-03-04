@@ -73,12 +73,12 @@ class PlaybackControlsToolbar: UIStackView {
 
 extension PlaybackControlsToolbar {
     
-    private func makeTimeText(with seconds: Int) -> String {
-        let hours = seconds / 3600
-        let minutes = seconds / 60 % 60
-        let seconds = seconds % 60
+    private func makeTimeText(with remainingSeconds: Int) -> String {
+        let hours = remainingSeconds / 3600
+        let minutes = remainingSeconds / 60 % 60
+        let seconds = remainingSeconds % 60
         
-        if seconds < 3600 {
+        if remainingSeconds < 3600 {
             return NSString(format: "%0.2d:%0.2d", minutes, seconds) as String
         }
         return NSString(format: "%0.2d:%0.2d:%0.2d", hours, minutes, seconds) as String
