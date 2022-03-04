@@ -38,7 +38,7 @@
 		1ECBC12D2779D44C00DCD60A /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ECBC12C2779D44C00DCD60A /* MainViewController.swift */; };
 		1ECBC1322779D44D00DCD60A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1ECBC1312779D44D00DCD60A /* Assets.xcassets */; };
 		1ECBC1352779D44D00DCD60A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1ECBC1332779D44D00DCD60A /* LaunchScreen.storyboard */; };
-		1ECBC1412779DDD600DCD60A /* MainNoiseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ECBC1402779DDD600DCD60A /* MainNoiseCell.swift */; };
+		1ECBC1412779DDD600DCD60A /* MainVCNoiseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ECBC1402779DDD600DCD60A /* MainVCNoiseCell.swift */; };
 		1EF44B3327C3E17B00101A16 /* TimePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EF44B3227C3E17B00101A16 /* TimePickerView.swift */; };
 /* End PBXBuildFile section */
 
@@ -76,7 +76,7 @@
 		1ECBC1312779D44D00DCD60A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1ECBC1342779D44D00DCD60A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1ECBC1362779D44D00DCD60A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1ECBC1402779DDD600DCD60A /* MainNoiseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNoiseCell.swift; sourceTree = "<group>"; };
+		1ECBC1402779DDD600DCD60A /* MainVCNoiseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainVCNoiseCell.swift; sourceTree = "<group>"; };
 		1EF44B3227C3E17B00101A16 /* TimePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimePickerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -105,7 +105,7 @@
 		1E6D36A527BFE9EB00EA87BA /* View */ = {
 			isa = PBXGroup;
 			children = (
-				1ECBC1402779DDD600DCD60A /* MainNoiseCell.swift */,
+				1ECBC1402779DDD600DCD60A /* MainVCNoiseCell.swift */,
 				1E6D369C27BFAB2900EA87BA /* PlaybackControlsToolbar.swift */,
 			);
 			path = View;
@@ -322,7 +322,7 @@
 				1E6D36AA27BFF18000EA87BA /* PlaybackControlsToolbarDelegate.swift in Sources */,
 				1E824F8A277E30C40085D104 /* TimePickerController.swift in Sources */,
 				1E6D36A327BFE88D00EA87BA /* AVAudioPlayerUtils.swift in Sources */,
-				1ECBC1412779DDD600DCD60A /* MainNoiseCell.swift in Sources */,
+				1ECBC1412779DDD600DCD60A /* MainVCNoiseCell.swift in Sources */,
 				1E3F24AF27AF2B9C00860BB5 /* MixerNoiseCell.swift in Sources */,
 				1ECBC12D2779D44C00DCD60A /* MainViewController.swift in Sources */,
 				1ECBC1292779D44C00DCD60A /* AppDelegate.swift in Sources */,

@@ -1,5 +1,5 @@
 //
-//  NoiseCell.swift
+//  MainVCNoiseCell.swift
 //  RelaxPlayer
 //
 //  Created by Павел Кривцов on 27.12.2021.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MainNoiseCell: UICollectionViewCell {
+class MainVCNoiseCell: UICollectionViewCell {
     
     static let reuseId = "MainNoiseCell"
     let iconImageView = UIImageView()
