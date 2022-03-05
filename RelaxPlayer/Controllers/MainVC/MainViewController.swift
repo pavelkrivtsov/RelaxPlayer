@@ -88,7 +88,7 @@ class MainViewController: UIViewController {
     
     //  MARK: - setup timer
     func createTimer() {
-        self.timer = Timer.scheduledTimer(timeInterval: 1,
+        timer = Timer.scheduledTimer(timeInterval: 1,
                                           target: self,
                                           selector: #selector(timerAction),
                                           userInfo: nil,
@@ -111,10 +111,8 @@ class MainViewController: UIViewController {
             deleteTimer()
             updateButtons()
             timePickerVC?.setTimePickerMode()
-        } else {
-            isTimerActive = true
         }
-
+        isTimerActive = true
         playbackControlsToolbar.setTimeLabelText(with: seconds)
         timePickerVC?.timePickerView.setTimeLabelText(with: seconds)
         timePickerVC?.remainingSeconds = seconds

@@ -95,20 +95,20 @@
 			isa = PBXGroup;
 			children = (
 				1ECBC12C2779D44C00DCD60A /* MainViewController.swift */,
-				1E6D36A527BFE9EB00EA87BA /* View */,
+				1E6D36A527BFE9EB00EA87BA /* Views */,
 				1E6D36A227BFE88D00EA87BA /* AVAudioPlayerUtils.swift */,
 				1E6D36A927BFF18000EA87BA /* PlaybackControlsToolbarDelegate.swift */,
 			);
 			path = MainVC;
 			sourceTree = "<group>";
 		};
-		1E6D36A527BFE9EB00EA87BA /* View */ = {
+		1E6D36A527BFE9EB00EA87BA /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				1ECBC1402779DDD600DCD60A /* MainVCNoiseCell.swift */,
 				1E6D369C27BFAB2900EA87BA /* PlaybackControlsToolbar.swift */,
 			);
-			path = View;
+			path = Views;
 			sourceTree = "<group>";
 		};
 		1E6D36A627BFF0D700EA87BA /* TimePickerVC */ = {
