@@ -14,9 +14,9 @@ class MainVCNoiseCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        layer.cornerRadius = 15
+        clipsToBounds = true
         setupImageView()
-        contentView.layer.cornerRadius = 15
-        contentView.clipsToBounds = true
     }
     
     required init?(coder: NSCoder) {
@@ -35,7 +35,7 @@ class MainVCNoiseCell: UICollectionViewCell {
     }
     
     func configure(imageWith icon: String, isSelected: Bool) {
-        iconImageView.backgroundColor = isSelected ? .systemGray4 : .systemGray2
+        backgroundColor = isSelected ? .systemGray : .clear
         iconImageView.image = UIImage(named: icon)
     }
     

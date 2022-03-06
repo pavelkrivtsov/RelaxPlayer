@@ -18,39 +18,48 @@ class MainViewController: UIViewController {
     var selectedPlayers = [String]()
     var selectedPlayersVolume = [String:Float]()
     var playbackControlsToolbar = PlaybackControlsToolbar()
+    var backgroundImageView = UIImageView(image: UIImage(named: "background"))
     
     var timer = RelaxTimer()
     var isTimerActive = false
     var seconds = Int()
     var selectedSeconds = Int()
-    
     weak var timePickerVC: TimePickerController?
     
-    //  MARK: - view did load
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupBackgroundImageView()
         setupCollectionView()
         setupPlaybackControlsToolbar()
     }
     
-    //  MARK: - setup collection view
+    func setupBackgroundImageView() {
+        view.addSubview(backgroundImageView)
+        backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
+            backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            backgroundImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+    
     func setupCollectionView() {
         view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: self.view.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         collectionView.collectionViewLayout = UICollectionViewCompositionalLayout(section: createNoisesSection())
         collectionView.register(MainVCNoiseCell.self, forCellWithReuseIdentifier: MainVCNoiseCell.reuseId)
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = .clear
     }
     
-    //  MARK: - setup layout section
     func createNoisesSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                               heightDimension: .fractionalHeight(1))
@@ -80,13 +89,12 @@ class MainViewController: UIViewController {
         timePickerVC.delegate = self
         self.timePickerVC = timePickerVC
         timePickerVC.isTimerActive = isTimerActive
-
+        
         if timePickerVC.isTimerActive {
             timePickerVC.timePickerView.setTimeLabelText(with: seconds)
             timePickerVC.selectedSeconds = self.selectedSeconds
             timePickerVC.remainingSeconds = seconds
         }
-        
         self.present(UINavigationController(rootViewController: timePickerVC), animated: true, completion: nil)
     }
     
@@ -112,7 +120,6 @@ class MainViewController: UIViewController {
         } else {
             playbackControlsToolbar.updateVisualState(withPlayPauseIcon: selectedPlayers.count > 0 ? .Play : .Stop)
         }
-        playbackControlsToolbar.playPauseButton.configuration?.image = UIImage(systemName: isAudioPlaying ? "pause.fill" : "play.fill")
     }
     
     func togglePlayback() {

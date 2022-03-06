@@ -14,18 +14,33 @@ class MixerViewController: UIViewController {
     var removeAllPlayersButton = UIButton()
     var noises = [String]()
     var selectedPlayersVolume = [String : Float]()
-    var volumeValue: ((String, Float) -> ())?
-    
+    let backgroundBlurView = UIVisualEffectView()
     weak var delegate: MixerViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Mixer"
+        navigationController?.navigationBar.backgroundColor = .systemGray
+        navigationItem.titleView = UIImageView(image: UIImage(systemName: "slider.horizontal.3"))
+        navigationItem.titleView?.tintColor = .white
+        setupBackgroundBlurView()
         setupTableView()
         setupCleanButton()
     }
     
-    func setupTableView() {
+    fileprivate func setupBackgroundBlurView() {
+        let blurEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
+        view.addSubview(backgroundBlurView)
+        backgroundBlurView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            backgroundBlurView.topAnchor.constraint(equalTo: view.topAnchor),
+            backgroundBlurView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            backgroundBlurView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            backgroundBlurView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        backgroundBlurView.effect = blurEffect
+    }
+    
+    fileprivate func setupTableView() {
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -39,29 +54,28 @@ class MixerViewController: UIViewController {
         tableView.register(MixerNoiseCell.self, forCellReuseIdentifier: MixerNoiseCell.reuseId)
         tableView.separatorInset = .zero
         tableView.allowsSelection = false
-        tableView.backgroundColor = .systemGray6
+        tableView.backgroundColor = .clear
     }
     
-    func setupCleanButton() {
+    fileprivate func setupCleanButton() {
         view.addSubview(removeAllPlayersButton)
         removeAllPlayersButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             removeAllPlayersButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            removeAllPlayersButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
-            
+            removeAllPlayersButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor,
+                                                           constant: -50)
         ])
-        var configuration = UIButton.Configuration.borderedTinted()
-        configuration.title = "Очистить"
-        configuration.cornerStyle = .capsule
+        var configuration = UIButton.Configuration.filled()
+        configuration.image = UIImage(systemName: "trash")
+        configuration.contentInsets = .init(top: 20, leading: 20, bottom: 20, trailing: 20)
         configuration.buttonSize = .large
-        configuration.baseForegroundColor = .red
+        configuration.cornerStyle = .capsule
         configuration.baseBackgroundColor = .red
         removeAllPlayersButton.configuration = configuration
         removeAllPlayersButton.addTarget(self, action: #selector(removeAllPlayers), for: .touchUpInside)
-        
     }
     
-    @objc func removeAllPlayers() {
+    @objc fileprivate func removeAllPlayers() {
         delegate?.removeAllPlayers()
         noises.removeAll()
         tableView.reloadData()
@@ -106,7 +120,6 @@ extension MixerViewController: UITableViewDelegate, UITableViewDataSource {
 extension MixerViewController: MixerNoiseCellDelegate {
     
     func changePlayerVolume(playerName: String, playerVolume: Float) {
-//        volumeValue?(playerName, playerVolume)
         delegate?.setPlayerVolume(playerName: playerName, playerVolume: playerVolume)
     }
     
@@ -118,7 +131,7 @@ extension MixerViewController: MixerNoiseCellDelegate {
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }
     }
-        
+    
 }
 
 protocol MixerViewControllerDelegate: AnyObject {

@@ -22,22 +22,24 @@ class PlaybackControlsToolbar: UIStackView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        layer.cornerRadius = 15
-        backgroundColor = .systemGray5
+    
+        backgroundColor = .systemGray
+        layer.cornerRadius = 20
+        clipsToBounds = true
         spacing = 20
         distribution = .fillEqually
         
         addArrangedSubview(openTimerViewButton)
         var timerButtonconfiguration = UIButton.Configuration.plain()
         timerButtonconfiguration.image = UIImage(systemName: "timer")
-        timerButtonconfiguration.baseBackgroundColor = .systemBlue
+        timerButtonconfiguration.baseForegroundColor = .white
         openTimerViewButton.configuration = timerButtonconfiguration
         openTimerViewButton.addTarget(self, action: #selector(openTimerPickerController), for: .touchUpInside)
         
         addArrangedSubview(playPauseButton)
         var playPauseButtonconfiguration = UIButton.Configuration.plain()
         playPauseButtonconfiguration.image = UIImage(systemName: "stop.fill")
+        playPauseButtonconfiguration.baseForegroundColor = .white
         playPauseButton.configuration = playPauseButtonconfiguration
         playPauseButton.isEnabled = false
         playPauseButton.addTarget(self, action: #selector(togglePlayback), for: .touchUpInside)
@@ -45,6 +47,7 @@ class PlaybackControlsToolbar: UIStackView {
         addArrangedSubview(openMixerViewButton)
         var mixerButtonconfiguration = UIButton.Configuration.plain()
         mixerButtonconfiguration.image = UIImage(systemName: "slider.horizontal.3")
+        mixerButtonconfiguration.baseForegroundColor = .white
         openMixerViewButton.configuration = mixerButtonconfiguration
         openMixerViewButton.isEnabled = false
         openMixerViewButton.addTarget(self, action: #selector(openMixerViewController), for: .touchUpInside)

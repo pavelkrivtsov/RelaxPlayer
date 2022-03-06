@@ -91,7 +91,7 @@ class TimePickerView: UIView {
         backgroundShapeLayer.lineWidth = 30
         backgroundShapeLayer.fillColor = UIColor.clear.cgColor
         backgroundShapeLayer.lineCap = CAShapeLayerLineCap.round
-        backgroundShapeLayer.strokeColor = UIColor.systemGray5.cgColor
+        backgroundShapeLayer.strokeColor = UIColor.systemGray2.cgColor
         layer.addSublayer(backgroundShapeLayer)
     }
     

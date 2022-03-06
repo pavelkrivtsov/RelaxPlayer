@@ -14,13 +14,15 @@ class TimePickerController: UIViewController {
     var isTimerActive = false
     var selectedSeconds = 60
     var remainingSeconds = Int()
+    let backgroundBlurView = UIVisualEffectView()
     weak var delegate: TimePickerControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemGray6
-        title = "Timer"
-        
+        navigationController?.navigationBar.backgroundColor = .systemGray
+        navigationItem.titleView = UIImageView(image: UIImage(systemName: "timer"))
+        navigationItem.titleView?.tintColor = .white
+        setupBackgroundBlurView()
         setupTimePicker()
         setupPlayPauseButton()
     }
@@ -42,7 +44,20 @@ class TimePickerController: UIViewController {
         timePickerView.createForegroundShapeLayer()
     }
     
-    private func setupTimePicker() {
+    fileprivate func setupBackgroundBlurView() {
+        let blurEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
+        view.addSubview(backgroundBlurView)
+        backgroundBlurView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            backgroundBlurView.topAnchor.constraint(equalTo: view.topAnchor),
+            backgroundBlurView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            backgroundBlurView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            backgroundBlurView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        backgroundBlurView.effect = blurEffect
+    }
+    
+    fileprivate func setupTimePicker() {
         view.addSubview(timePickerView)
         NSLayoutConstraint.activate([
             timePickerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
@@ -53,7 +68,7 @@ class TimePickerController: UIViewController {
         timePickerView.delegate = self
     }
     
-    private func setupPlayPauseButton() {
+    fileprivate func setupPlayPauseButton() {
         view.addSubview(playPauseButton)
         playPauseButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -68,7 +83,7 @@ class TimePickerController: UIViewController {
         playPauseButton.addTarget(self, action: #selector(playPauseButtonPressed), for: .touchUpInside)
     }
     
-    @objc func playPauseButtonPressed() {
+    @objc fileprivate func playPauseButtonPressed() {
         isTimerActive.toggle()
         if isTimerActive {
             delegate?.get(selectedSeconds: selectedSeconds)
