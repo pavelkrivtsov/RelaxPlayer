@@ -34,7 +34,7 @@ class TimePickerController: UIViewController {
         
         if isTimerActive {
             let currentValue = 1 - (Double(remainingSeconds) / Double(selectedSeconds))
-            timePickerView.startAnimation(by: currentValue, with: selectedSeconds)
+            timePickerView.startAnimation(by: currentValue, with: remainingSeconds)
         }
     }
     
