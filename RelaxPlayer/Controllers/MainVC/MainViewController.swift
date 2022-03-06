@@ -294,6 +294,10 @@ extension MainViewController: RelaxTimerDelegate {
         self.isTimerActive = isTimerActive
         print("Main \(seconds), isTimerActive \(isTimerActive)")
         
+        playbackControlsToolbar.setTimeLabelText(with: seconds)
+        timePickerVC?.timePickerView.setTimeLabelText(with: seconds)
+        timePickerVC?.remainingSeconds = seconds
+        
         if !isTimerActive {
             audioPlayers = audioPlayers.mapValues{ player in
                 if player.isPlaying{
@@ -305,9 +309,6 @@ extension MainViewController: RelaxTimerDelegate {
             updateButtons()
             timePickerVC?.setTimePickerMode()
         }
-        playbackControlsToolbar.setTimeLabelText(with: seconds)
-        timePickerVC?.timePickerView.setTimeLabelText(with: seconds)
-        timePickerVC?.remainingSeconds = seconds
     }
     
 }
