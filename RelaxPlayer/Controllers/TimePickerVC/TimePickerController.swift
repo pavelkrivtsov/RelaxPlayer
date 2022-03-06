@@ -75,7 +75,7 @@ class TimePickerController: UIViewController {
             playPauseButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             playPauseButton.topAnchor.constraint(equalTo: timePickerView.bottomAnchor, constant: 20),
         ])
-        var configuration = UIButton.Configuration.borderedTinted()
+        var configuration = UIButton.Configuration.filled()
         configuration.contentInsets = .init(top: 20, leading: 20, bottom: 20, trailing: 20)
         configuration.image = UIImage(systemName: "play")
         configuration.cornerStyle = .capsule
