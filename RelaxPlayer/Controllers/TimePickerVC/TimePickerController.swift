@@ -32,7 +32,7 @@ class TimePickerController: UIViewController {
         
         if isTimerActive {
             let currentValue = 1 - (Double(remainingSeconds) / Double(selectedSeconds))
-            timePickerView.startAnimation(by: currentValue)
+            timePickerView.startAnimation(by: currentValue, with: selectedSeconds)
         }
     }
     
@@ -72,7 +72,7 @@ class TimePickerController: UIViewController {
         isTimerActive.toggle()
         if isTimerActive {
             delegate?.get(selectedSeconds: selectedSeconds)
-            timePickerView.startAnimation()
+            timePickerView.startAnimation(with: selectedSeconds)
         } else {
             delegate?.deleteTimer()
         }
@@ -93,7 +93,6 @@ extension TimePickerController {
 extension TimePickerController: TimePickerViewDelegate {
     func getFromTimePicker(seconds: Int) {
         self.selectedSeconds = seconds
-        print("getFromTimePicker \(selectedSeconds)")
     }
 }
 

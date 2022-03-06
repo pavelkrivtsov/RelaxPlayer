@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1E008FA227D3F67E00010A37 /* RelaxTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E008FA127D3F67E00010A37 /* RelaxTimer.swift */; };
 		1E3DD9EF27BA9A4E0068C41D /* 5.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E3DD9E827BA9A4E0068C41D /* 5.png */; };
 		1E3DD9F027BA9A4E0068C41D /* 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E3DD9E927BA9A4E0068C41D /* 1.png */; };
 		1E3DD9F127BA9A4E0068C41D /* 3.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E3DD9EA27BA9A4E0068C41D /* 3.png */; };
@@ -43,6 +44,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1E008FA127D3F67E00010A37 /* RelaxTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelaxTimer.swift; sourceTree = "<group>"; };
 		1E3DD9E827BA9A4E0068C41D /* 5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 5.png; sourceTree = "<group>"; };
 		1E3DD9E927BA9A4E0068C41D /* 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1.png; sourceTree = "<group>"; };
 		1E3DD9EA27BA9A4E0068C41D /* 3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 3.png; sourceTree = "<group>"; };
@@ -192,6 +194,7 @@
 			children = (
 				1ECBC13D2779DDA000DCD60A /* Controllers */,
 				1ECBC13C2779D60B00DCD60A /* Supporting files */,
+				1E008FA127D3F67E00010A37 /* RelaxTimer.swift */,
 			);
 			path = RelaxPlayer;
 			sourceTree = "<group>";
@@ -318,6 +321,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E008FA227D3F67E00010A37 /* RelaxTimer.swift in Sources */,
 				1E824F8C277E30CB0085D104 /* MixerViewController.swift in Sources */,
 				1E6D36AA27BFF18000EA87BA /* PlaybackControlsToolbarDelegate.swift in Sources */,
 				1E824F8A277E30C40085D104 /* TimePickerController.swift in Sources */,

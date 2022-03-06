@@ -11,7 +11,6 @@ class TimePickerView: UIView {
     
     var timePicker = UIDatePicker()
     var timeLabel = UILabel()
-    var selectedSeconds = Int()
     var foregroundShapeLayer = CAShapeLayer()
     var backgroundShapeLayer = CAShapeLayer()
     weak var delegate: TimePickerViewDelegate?
@@ -123,7 +122,7 @@ extension TimePickerView {
         return NSString(format: "%0.2d:%0.2d:%0.2d", hours, minutes, seconds) as String
     }
     
-    func startAnimation(by value: Double) {
+    func startAnimation(by value: Double, with selectedSeconds: Int) {
         let basicAnimation = CABasicAnimation(keyPath: #keyPath(CAShapeLayer.strokeStart))
         basicAnimation.toValue = 1
         basicAnimation.fromValue = value
@@ -131,7 +130,7 @@ extension TimePickerView {
         foregroundShapeLayer.add(basicAnimation, forKey: nil)
     }
     
-    func startAnimation() {
+    func startAnimation(with selectedSeconds: Int) {
         let basicAnimation = CABasicAnimation(keyPath: #keyPath(CAShapeLayer.strokeStart))
         basicAnimation.toValue = 1
         basicAnimation.fromValue = 0

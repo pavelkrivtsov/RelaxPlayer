@@ -19,7 +19,7 @@ class MainViewController: UIViewController {
     var selectedPlayersVolume = [String:Float]()
     var playbackControlsToolbar = PlaybackControlsToolbar()
     
-    var timer: Timer?
+    var timer = RelaxTimer()
     var isTimerActive = false
     var seconds = Int()
     var selectedSeconds = Int()
@@ -80,42 +80,14 @@ class MainViewController: UIViewController {
         timePickerVC.delegate = self
         self.timePickerVC = timePickerVC
         timePickerVC.isTimerActive = isTimerActive
-        timePickerVC.timePickerView.setTimeLabelText(with: seconds)
-        timePickerVC.timePickerView.selectedSeconds = self.selectedSeconds
-        timePickerVC.remainingSeconds = seconds
-        self.present(UINavigationController(rootViewController: timePickerVC), animated: true, completion: nil)
-    }
-    
-    //  MARK: - setup timer
-    func createTimer() {
-        timer = Timer.scheduledTimer(timeInterval: 1,
-                                          target: self,
-                                          selector: #selector(timerAction),
-                                          userInfo: nil,
-                                          repeats: true)
-        guard let timer = self.timer else { return }
-        timer.tolerance = 0.1
-        RunLoop.current.add(timer, forMode: .common)
-    }
-    
-    //  MARK: - timer action
-    @objc func timerAction() {
-        seconds -= 1
-        if seconds == 0 {
-            audioPlayers = audioPlayers.mapValues{ player in
-                if player.isPlaying{
-                    player.stop()
-                }
-                return player
-            }
-            deleteTimer()
-            updateButtons()
-            timePickerVC?.setTimePickerMode()
+
+        if timePickerVC.isTimerActive {
+            timePickerVC.timePickerView.setTimeLabelText(with: seconds)
+            timePickerVC.selectedSeconds = self.selectedSeconds
+            timePickerVC.remainingSeconds = seconds
         }
-        isTimerActive = true
-        playbackControlsToolbar.setTimeLabelText(with: seconds)
-        timePickerVC?.timePickerView.setTimeLabelText(with: seconds)
-        timePickerVC?.remainingSeconds = seconds
+        
+        self.present(UINavigationController(rootViewController: timePickerVC), animated: true, completion: nil)
     }
     
     func openMixerViewController() {
@@ -251,17 +223,15 @@ extension MainViewController: PlaybackControlsToolbarDelegate {
 extension MainViewController: TimePickerControllerDelegate {
     
     func get(selectedSeconds: Int) {
+        timer.createTimer(with: selectedSeconds)
+        timer.delegate = self
         self.selectedSeconds = selectedSeconds
-        self.seconds = selectedSeconds
-        timePickerVC?.timePickerView.selectedSeconds = selectedSeconds
-        timePickerVC?.timePickerView.setTimeLabelText(with: seconds)
-        playbackControlsToolbar.setTimeLabelText(with: seconds)
-        self.createTimer()
+        timePickerVC?.timePickerView.setTimeLabelText(with: selectedSeconds)
+        playbackControlsToolbar.setTimeLabelText(with: selectedSeconds)
     }
     
     func deleteTimer() {
-        timer?.invalidate()
-        timer = nil
+        timer.cancelTimer()
         isTimerActive = false
         playbackControlsToolbar.hideTimeLabel()
     }
@@ -306,6 +276,31 @@ extension MainViewController: MixerViewControllerDelegate {
         selectedPlayersVolume.removeAll()
         collectionView.reloadData()
         updateButtons()
+    }
+    
+}
+
+extension MainViewController: RelaxTimerDelegate {
+    
+    func get(remainingSeconds: Int, isTimerActive: Bool) {
+        seconds = remainingSeconds
+        self.isTimerActive = isTimerActive
+        print("Main \(seconds), isTimerActive \(isTimerActive)")
+        
+        if !isTimerActive {
+            audioPlayers = audioPlayers.mapValues{ player in
+                if player.isPlaying{
+                    player.stop()
+                }
+                return player
+            }
+            deleteTimer()
+            updateButtons()
+            timePickerVC?.setTimePickerMode()
+        }
+        playbackControlsToolbar.setTimeLabelText(with: seconds)
+        timePickerVC?.timePickerView.setTimeLabelText(with: seconds)
+        timePickerVC?.remainingSeconds = seconds
     }
     
 }
