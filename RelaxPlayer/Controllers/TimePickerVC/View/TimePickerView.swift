@@ -122,6 +122,20 @@ extension TimePickerView {
         return NSString(format: "%0.2d:%0.2d:%0.2d", hours, minutes, seconds) as String
     }
     
+    func setLastSelectedTime(from seconds: Int) {
+        let hours = seconds / 3600
+        let minutes = seconds / 60 % 60
+        let seconds = seconds % 60
+        
+        let dateComp : NSDateComponents = NSDateComponents()
+        dateComp.hour = hours
+        dateComp.minute = minutes
+        dateComp.second = seconds
+        let calendar : NSCalendar = NSCalendar(calendarIdentifier: NSCalendar.Identifier.gregorian)!
+        let date : NSDate = calendar.date(from: dateComp as DateComponents)! as NSDate
+        timePicker.setDate(date as Date, animated: false)
+    }
+    
     func startAnimation(by value: Double, with selectedSeconds: Int) {
         let basicAnimation = CABasicAnimation(keyPath: #keyPath(CAShapeLayer.strokeStart))
         basicAnimation.toValue = 1

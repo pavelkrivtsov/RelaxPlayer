@@ -92,7 +92,7 @@ class MainViewController: UIViewController {
         
         if timePickerVC.isTimerActive {
             timePickerVC.timePickerView.setTimeLabelText(with: seconds)
-            timePickerVC.selectedSeconds = self.selectedSeconds
+            timePickerVC.selectedSeconds = selectedSeconds
             timePickerVC.remainingSeconds = seconds
         }
         self.present(UINavigationController(rootViewController: timePickerVC), animated: true, completion: nil)

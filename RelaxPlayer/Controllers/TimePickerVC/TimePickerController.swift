@@ -89,6 +89,7 @@ class TimePickerController: UIViewController {
             delegate?.get(selectedSeconds: selectedSeconds)
             timePickerView.startAnimation(with: selectedSeconds)
         } else {
+            timePickerView.setLastSelectedTime(from: selectedSeconds)
             delegate?.deleteTimer()
         }
         timePickerView.setDisplayMode(isTimerActive: isTimerActive)
