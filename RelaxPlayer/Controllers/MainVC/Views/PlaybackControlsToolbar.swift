@@ -106,3 +106,9 @@ extension PlaybackControlsToolbar {
     }
     
 }
+
+protocol PlaybackControlsToolbarDelegate: AnyObject {
+    func openTimerViewButtonDidPress()
+    func playPauseButtonDidPress()
+    func openMixerDidPress()
+}
