@@ -11,14 +11,16 @@ import AVFoundation
 class MainViewController: UIViewController {
     
     //  MARK: - declaring variables
-    var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
+    
     var noises = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
     var audioSassion = AVAudioSession.sharedInstance()
     var audioPlayers = [String: AVAudioPlayer]()
     var selectedPlayers = [String]()
     var selectedPlayersVolume = [String:Float]()
-    var playbackControlsToolbar = PlaybackControlsToolbar()
+    
     var backgroundImageView = UIImageView(image: UIImage(named: "background"))
+    var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
+    var playbackControlsToolbar = PlaybackControlsToolbar()
     
     var timer = RelaxTimer()
     var isTimerActive = false
