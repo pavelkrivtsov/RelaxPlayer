@@ -31,7 +31,6 @@
 		1E3F24AF27AF2B9C00860BB5 /* MixerNoiseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3F24AE27AF2B9C00860BB5 /* MixerNoiseCell.swift */; };
 		1E6D369D27BFAB2900EA87BA /* PlaybackControlsToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E6D369C27BFAB2900EA87BA /* PlaybackControlsToolbar.swift */; };
 		1E6D36A327BFE88D00EA87BA /* AVAudioPlayerUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E6D36A227BFE88D00EA87BA /* AVAudioPlayerUtils.swift */; };
-		1E6D36AA27BFF18000EA87BA /* PlaybackControlsToolbarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E6D36A927BFF18000EA87BA /* PlaybackControlsToolbarDelegate.swift */; };
 		1E824F8A277E30C40085D104 /* TimePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E824F89277E30C40085D104 /* TimePickerController.swift */; };
 		1E824F8C277E30CB0085D104 /* MixerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E824F8B277E30CB0085D104 /* MixerViewController.swift */; };
 		1ECBC1292779D44C00DCD60A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ECBC1282779D44C00DCD60A /* AppDelegate.swift */; };
@@ -68,7 +67,6 @@
 		1E3F24AE27AF2B9C00860BB5 /* MixerNoiseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MixerNoiseCell.swift; sourceTree = "<group>"; };
 		1E6D369C27BFAB2900EA87BA /* PlaybackControlsToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackControlsToolbar.swift; sourceTree = "<group>"; };
 		1E6D36A227BFE88D00EA87BA /* AVAudioPlayerUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVAudioPlayerUtils.swift; sourceTree = "<group>"; };
-		1E6D36A927BFF18000EA87BA /* PlaybackControlsToolbarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackControlsToolbarDelegate.swift; sourceTree = "<group>"; };
 		1E824F89277E30C40085D104 /* TimePickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimePickerController.swift; sourceTree = "<group>"; };
 		1E824F8B277E30CB0085D104 /* MixerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MixerViewController.swift; sourceTree = "<group>"; };
 		1ECBC1252779D44C00DCD60A /* RelaxPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RelaxPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -93,13 +91,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1E3B8A2627F4A8B00016612A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				1E008FA127D3F67E00010A37 /* RelaxTimer.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		1E6D36A427BFE9BD00EA87BA /* MainVC */ = {
 			isa = PBXGroup;
 			children = (
 				1ECBC12C2779D44C00DCD60A /* MainViewController.swift */,
 				1E6D36A527BFE9EB00EA87BA /* Views */,
 				1E6D36A227BFE88D00EA87BA /* AVAudioPlayerUtils.swift */,
-				1E6D36A927BFF18000EA87BA /* PlaybackControlsToolbarDelegate.swift */,
 			);
 			path = MainVC;
 			sourceTree = "<group>";
@@ -192,9 +197,9 @@
 		1ECBC1272779D44C00DCD60A /* RelaxPlayer */ = {
 			isa = PBXGroup;
 			children = (
+				1E3B8A2627F4A8B00016612A /* Model */,
 				1ECBC13D2779DDA000DCD60A /* Controllers */,
 				1ECBC13C2779D60B00DCD60A /* Supporting files */,
-				1E008FA127D3F67E00010A37 /* RelaxTimer.swift */,
 			);
 			path = RelaxPlayer;
 			sourceTree = "<group>";
@@ -323,7 +328,6 @@
 			files = (
 				1E008FA227D3F67E00010A37 /* RelaxTimer.swift in Sources */,
 				1E824F8C277E30CB0085D104 /* MixerViewController.swift in Sources */,
-				1E6D36AA27BFF18000EA87BA /* PlaybackControlsToolbarDelegate.swift in Sources */,
 				1E824F8A277E30C40085D104 /* TimePickerController.swift in Sources */,
 				1E6D36A327BFE88D00EA87BA /* AVAudioPlayerUtils.swift in Sources */,
 				1ECBC1412779DDD600DCD60A /* MainVCNoiseCell.swift in Sources */,
