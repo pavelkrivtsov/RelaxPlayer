@@ -7,14 +7,18 @@
 
 import UIKit
 
+protocol TimePickerViewDelegate: AnyObject {
+    func getFromTimePicker(seconds: Int)
+}
+
 class TimePickerView: UIView {
     
+    weak var delegate: TimePickerViewDelegate?
     var timePicker = UIDatePicker()
     var timeLabel = UILabel()
     var foregroundShapeLayer = CAShapeLayer()
     var backgroundShapeLayer = CAShapeLayer()
-    weak var delegate: TimePickerViewDelegate?
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -151,10 +155,4 @@ extension TimePickerView {
         basicAnimation.duration = CFTimeInterval(selectedSeconds)
         foregroundShapeLayer.add(basicAnimation, forKey: nil)
     }
-    
 }
-
-protocol TimePickerViewDelegate: AnyObject {
-    func getFromTimePicker(seconds: Int)
-}
-

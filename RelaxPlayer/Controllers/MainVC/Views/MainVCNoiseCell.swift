@@ -10,20 +10,13 @@ import UIKit
 class MainVCNoiseCell: UICollectionViewCell {
     
     static let reuseId = "MainNoiseCell"
-    let iconImageView = UIImageView()
+    private let iconImageView = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         layer.cornerRadius = 15
         clipsToBounds = true
-        setupImageView()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func setupImageView() {
+        
         contentView.addSubview(iconImageView)
         iconImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -34,9 +27,12 @@ class MainVCNoiseCell: UICollectionViewCell {
         ])
     }
     
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     func configure(imageWith icon: String, isSelected: Bool) {
         backgroundColor = isSelected ? .systemGray : .clear
         iconImageView.image = UIImage(named: icon)
     }
-    
 }

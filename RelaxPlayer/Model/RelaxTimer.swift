@@ -7,6 +7,10 @@
 
 import Foundation
 
+protocol RelaxTimerDelegate: AnyObject {
+    func get(remainingSeconds: Int, isTimerActive: Bool)
+}
+
 class RelaxTimer {
     
     var timer: Timer?
@@ -40,8 +44,4 @@ class RelaxTimer {
         timer = nil
     }
     
-}
-
-protocol RelaxTimerDelegate: AnyObject {
-    func get(remainingSeconds: Int, isTimerActive: Bool)
 }

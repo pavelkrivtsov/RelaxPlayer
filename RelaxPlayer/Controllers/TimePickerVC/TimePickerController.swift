@@ -7,15 +7,20 @@
 
 import UIKit
 
+protocol TimePickerControllerDelegate: AnyObject {
+    func get(selectedSeconds: Int)
+    func deleteTimer()
+}
+
 class TimePickerController: UIViewController {
     
+    weak var delegate: TimePickerControllerDelegate?
     var timePickerView = TimePickerView()
     var playPauseButton = UIButton()
     var isTimerActive = false
     var selectedSeconds = 60
     var remainingSeconds = Int()
     let backgroundBlurView = UIVisualEffectView()
-    weak var delegate: TimePickerControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -106,14 +111,9 @@ extension TimePickerController {
     }
 }
 
+// MARK: - TimePickerViewDelegate
 extension TimePickerController: TimePickerViewDelegate {
     func getFromTimePicker(seconds: Int) {
         self.selectedSeconds = seconds
     }
 }
-
-protocol TimePickerControllerDelegate: AnyObject {
-    func get(selectedSeconds: Int)
-    func deleteTimer()
-}
-

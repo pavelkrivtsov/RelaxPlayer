@@ -7,9 +7,14 @@
 
 import UIKit
 
+protocol MixerViewControllerDelegate: AnyObject {
+    func removeAllPlayers()
+    func removePlayerWith(playerName: String)
+    func setPlayerVolume(playerName: String, playerVolume: Float)
+}
+
 class MixerViewController: UIViewController {
     
-    //  MARK: - declaring variables
     var tableView = UITableView(frame: .zero, style: .insetGrouped)
     var removeAllPlayersButton = UIButton()
     var noises = [String]()
@@ -83,7 +88,7 @@ class MixerViewController: UIViewController {
     
 }
 
-
+// MARK: - UITableViewDelegate, UITableViewDataSource
 extension MixerViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -116,7 +121,7 @@ extension MixerViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-
+// MARK: - MixerNoiseCellDelegate
 extension MixerViewController: MixerNoiseCellDelegate {
     
     func changePlayerVolume(playerName: String, playerVolume: Float) {
@@ -131,11 +136,4 @@ extension MixerViewController: MixerNoiseCellDelegate {
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }
     }
-    
-}
-
-protocol MixerViewControllerDelegate: AnyObject {
-    func removeAllPlayers()
-    func removePlayerWith(playerName: String)
-    func setPlayerVolume(playerName: String, playerVolume: Float)
 }

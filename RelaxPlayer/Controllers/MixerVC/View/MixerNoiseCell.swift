@@ -7,6 +7,11 @@
 
 import UIKit
 
+protocol MixerNoiseCellDelegate: AnyObject {
+    func changePlayerVolume(playerName: String, playerVolume: Float)
+    func deletePlayerButtonPrassed(playerName: String)
+}
+
 class MixerNoiseCell: UITableViewCell {
     
     static let reuseId = "MixerNoiseCell"
@@ -77,10 +82,4 @@ class MixerNoiseCell: UITableViewCell {
     @objc fileprivate func deletePlayer() {
         delegate?.deletePlayerButtonPrassed(playerName: self.noiseName)
     }
-    
-}
-
-protocol MixerNoiseCellDelegate: AnyObject {
-    func changePlayerVolume(playerName: String, playerVolume: Float)
-    func deletePlayerButtonPrassed(playerName: String)
 }

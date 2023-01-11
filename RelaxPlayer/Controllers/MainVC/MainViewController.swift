@@ -10,8 +10,6 @@ import AVFoundation
 
 class MainViewController: UIViewController {
     
-    //  MARK: - declaring variables
-    
     var noises = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
     var audioSassion = AVAudioSession.sharedInstance()
     var audioPlayers = [String: AVAudioPlayer]()
@@ -133,7 +131,7 @@ class MainViewController: UIViewController {
     
 }
 
-
+// MARK: - UICollectionViewDelegate, UICollectionViewDataSource
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -213,6 +211,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
 }
 
+// MARK: - PlaybackControlsToolbarDelegate
 extension MainViewController: PlaybackControlsToolbarDelegate {
     
     func openTimerViewButtonDidPress() {
@@ -226,9 +225,9 @@ extension MainViewController: PlaybackControlsToolbarDelegate {
     func openMixerDidPress() {
         openMixerViewController()
     }
-    
 }
 
+// MARK: - TimePickerControllerDelegate
 extension MainViewController: TimePickerControllerDelegate {
     
     func get(selectedSeconds: Int) {
@@ -247,6 +246,7 @@ extension MainViewController: TimePickerControllerDelegate {
     
 }
 
+// MARK: - MixerViewControllerDelegate
 extension MainViewController: MixerViewControllerDelegate {
     
     func setPlayerVolume(playerName: String, playerVolume: Float) {
@@ -286,9 +286,9 @@ extension MainViewController: MixerViewControllerDelegate {
         collectionView.reloadData()
         updateButtons()
     }
-    
 }
 
+// MARK: - RelaxTimerDelegate
 extension MainViewController: RelaxTimerDelegate {
     
     func get(remainingSeconds: Int, isTimerActive: Bool) {

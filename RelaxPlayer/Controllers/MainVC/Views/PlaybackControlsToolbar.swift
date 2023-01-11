@@ -7,6 +7,12 @@
 
 import UIKit
 
+protocol PlaybackControlsToolbarDelegate: AnyObject {
+    func openTimerViewButtonDidPress()
+    func playPauseButtonDidPress()
+    func openMixerDidPress()
+}
+
 class PlaybackControlsToolbar: UIStackView {
     
     enum PlayPauseIcon: String {
@@ -15,10 +21,10 @@ class PlaybackControlsToolbar: UIStackView {
         case Stop = "stop.fill"
     }
     
+    weak var delegate: PlaybackControlsToolbarDelegate?
     let openTimerViewButton = UIButton()
     let playPauseButton = UIButton()
     let openMixerViewButton = UIButton()
-    weak var delegate: PlaybackControlsToolbarDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -71,7 +77,6 @@ class PlaybackControlsToolbar: UIStackView {
     @objc func openMixerViewController() {
         delegate?.openMixerDidPress()
     }
-    
 }
 
 extension PlaybackControlsToolbar {
@@ -104,11 +109,4 @@ extension PlaybackControlsToolbar {
         playPauseButton.isEnabled = icon != .Stop
         openMixerViewButton.isEnabled = icon != .Stop
     }
-    
-}
-
-protocol PlaybackControlsToolbarDelegate: AnyObject {
-    func openTimerViewButtonDidPress()
-    func playPauseButtonDidPress()
-    func openMixerDidPress()
 }
