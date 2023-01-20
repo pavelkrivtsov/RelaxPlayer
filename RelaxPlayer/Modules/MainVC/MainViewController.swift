@@ -54,7 +54,7 @@ class MainViewController: UIViewController {
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         collectionView.collectionViewLayout = UICollectionViewCompositionalLayout(section: createNoisesSection())
-        collectionView.register(MainVCNoiseCell.self, forCellWithReuseIdentifier: MainVCNoiseCell.reuseId)
+        collectionView.register(MainNoiseCell.self, forCellWithReuseIdentifier: MainNoiseCell.reuseId)
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.backgroundColor = .clear
@@ -139,8 +139,8 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath)-> UICollectionViewCell {
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainVCNoiseCell.reuseId,
-                                                         for: indexPath) as? MainVCNoiseCell {
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainNoiseCell.reuseId,
+                                                         for: indexPath) as? MainNoiseCell {
             let noise = noises[indexPath.item]
             let player = audioPlayers[noise]
             cell.configure(imageWith: noise, isSelected: player?.isPlaying ?? false)
@@ -243,7 +243,6 @@ extension MainViewController: TimePickerControllerDelegate {
         isTimerActive = false
         playbackControlsToolbar.hideTimeLabel()
     }
-    
 }
 
 // MARK: - MixerViewControllerDelegate

@@ -16,7 +16,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = .init(windowScene: windowScene)
         window?.windowScene = windowScene
-        window?.rootViewController = MainViewController()
+        window?.rootViewController = MainAssembly.assemble()
         window?.overrideUserInterfaceStyle = .dark
         window?.makeKeyAndVisible()
     }

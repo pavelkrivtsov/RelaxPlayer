@@ -13,14 +13,14 @@ protocol PlaybackControlsToolbarDelegate: AnyObject {
     func openMixerDidPress()
 }
 
+enum PlayPauseIcon: String {
+    case Play = "play.fill"
+    case Pause = "pause.fill"
+    case Stop = "stop.fill"
+}
+
 class PlaybackControlsToolbar: UIStackView {
-    
-    enum PlayPauseIcon: String {
-        case Play = "play.fill"
-        case Pause = "pause.fill"
-        case Stop = "stop.fill"
-    }
-    
+        
     weak var delegate: PlaybackControlsToolbarDelegate?
     let openTimerViewButton = UIButton()
     let playPauseButton = UIButton()
@@ -65,6 +65,10 @@ class PlaybackControlsToolbar: UIStackView {
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+// MARK: - PlaybackControlsToolbarDelegate
+extension PlaybackControlsToolbar {
     
     @objc func openTimerPickerController() {
         delegate?.openTimerViewButtonDidPress()
