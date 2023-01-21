@@ -11,6 +11,11 @@ import AVFoundation
 
 protocol MainPresenterOut: AnyObject {
     func togglePlayback()
+    func getSelectedPlayers() -> [String]
+    func getSelectedPlayersVolume() -> [String : Float]
+    func removeAllPlayers()
+    func removePlayerWith(playerName: String)
+    func setPlayerVolume(playerName: String, playerVolume: Float)
 }
 
 class CollectionManager: NSObject {
@@ -21,6 +26,7 @@ class CollectionManager: NSObject {
     private var audioSassion = AVAudioSession.sharedInstance()
     private var audioPlayers = [String: AVAudioPlayer]()
     private var selectedPlayers = [String]()
+    private var selectedPlayersVolume = [String : Float]()
     
     init(collectionView: UICollectionView) {
         self.collectionView = collectionView
@@ -147,11 +153,62 @@ extension CollectionManager: UICollectionViewDelegate {
 
 // MARK: - MainPresenterOut
 extension CollectionManager: MainPresenterOut {
-    
+           
     func togglePlayback() {
         for playerName in selectedPlayers {
             audioPlayers[playerName]?.toggle()
         }
         updateButtons()
+    }
+    
+    func getSelectedPlayers() -> [String] {
+        selectedPlayers
+    }
+    
+    func getSelectedPlayersVolume() -> [String : Float] {
+        selectedPlayersVolume
+    }
+    
+    func removeAllPlayers() {
+        audioPlayers = audioPlayers.mapValues{ player in
+            if player.isPlaying{
+                player.stop()
+            }
+            return player
+        }
+        selectedPlayers.removeAll()
+        selectedPlayersVolume.removeAll()
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
+        updateButtons()
+    }
+    
+    func setPlayerVolume(playerName: String, playerVolume: Float) {
+        if let player = audioPlayers[playerName] {
+            player.volume = playerVolume
+            selectedPlayersVolume[playerName] = playerVolume
+        }
+    }
+    
+    func removePlayerWith(playerName: String) {
+        if let player = audioPlayers[playerName] {
+            player.stop()
+            
+            for player in selectedPlayers {
+                if player == playerName, let playerIndex = selectedPlayers.firstIndex(of: player) {
+                    selectedPlayers.remove(at: playerIndex)
+                }
+            }
+            
+            if let playerIndex =  noises.firstIndex(of: playerName) {
+                let indexPath = IndexPath(item: playerIndex, section: 0)
+                DispatchQueue.main.async {
+                    self.collectionView.reloadItems(at: [indexPath])
+                }
+                
+            }
+            updateButtons()
+        }
     }
 }

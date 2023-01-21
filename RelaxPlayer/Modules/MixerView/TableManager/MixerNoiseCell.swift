@@ -16,12 +16,12 @@ class MixerNoiseCell: UITableViewCell {
     
     static let reuseId = "MixerNoiseCell"
     
+    weak var delegate: MixerNoiseCellDelegate?
     var noiseName = String()
-    var mixerStack = UIStackView()
+    var hStack = UIStackView()
     var iconImageView = UIImageView()
     var volumeSlider = UISlider()
     var deletePlayerButton = UIButton()
-    weak var delegate: MixerNoiseCellDelegate?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -33,53 +33,66 @@ class MixerNoiseCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    fileprivate func setupStack() {
-        contentView.addSubview(mixerStack)
-        mixerStack.translatesAutoresizingMaskIntoConstraints = false
+    private func setupStack() {
+        contentView.addSubview(hStack)
+        hStack.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            mixerStack.topAnchor.constraint(equalTo: self.topAnchor, constant: 5),
-            mixerStack.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 20),
-            mixerStack.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
-            mixerStack.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5),
+            hStack.topAnchor.constraint(equalTo: self.topAnchor, constant: 8),
+            hStack.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
+            hStack.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
+            hStack.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -8),
         ])
-        mixerStack.spacing = 15
-        mixerStack.alignment = .center
+        
+        hStack.spacing = 16
+        hStack.alignment = .center
         setupIconImage()
         setupVolumeSlider()
         setupDeletePlayerButton()
     }
     
-    fileprivate func setupIconImage() {
-        mixerStack.addArrangedSubview(iconImageView)
+    private func setupIconImage() {
+        hStack.addArrangedSubview(iconImageView)
         NSLayoutConstraint.activate([
-            iconImageView.heightAnchor.constraint(equalTo: mixerStack.heightAnchor),
-            iconImageView.widthAnchor.constraint(equalTo: iconImageView.heightAnchor)
+            iconImageView.heightAnchor.constraint(equalTo: hStack.heightAnchor),
+            iconImageView.widthAnchor.constraint(equalTo:  hStack.heightAnchor)
         ])
     }
     
-    fileprivate func setupVolumeSlider() {
-        mixerStack.addArrangedSubview(volumeSlider)
+    private func setupVolumeSlider() {
+        hStack.addArrangedSubview(volumeSlider)
         volumeSlider.minimumTrackTintColor = .white
         volumeSlider.maximumTrackTintColor = .gray
         volumeSlider.value = 1
         volumeSlider.addTarget(self, action: #selector(sliderChanged), for: .valueChanged)
     }
     
-    @objc fileprivate func sliderChanged() {
+    @objc
+    private func sliderChanged() {
         delegate?.changePlayerVolume(playerName: noiseName, playerVolume: volumeSlider.value)
     }
     
-    fileprivate func setupDeletePlayerButton() {
-        mixerStack.addArrangedSubview(deletePlayerButton)
-        var configuration = UIButton.Configuration.plain()
-        configuration.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
+    private func setupDeletePlayerButton() {
+        hStack.addArrangedSubview(deletePlayerButton)
+        NSLayoutConstraint.activate([
+            deletePlayerButton.heightAnchor.constraint(equalTo: hStack.heightAnchor),
+            deletePlayerButton.widthAnchor.constraint(equalTo:  hStack.heightAnchor)
+        ])
+        
+        var configuration = UIButton.Configuration.filled()
         configuration.image = UIImage(systemName: "xmark")
-        configuration.baseForegroundColor = .white
         deletePlayerButton.configuration = configuration
         deletePlayerButton.addTarget(self, action: #selector(deletePlayer), for: .touchUpInside)
     }
     
-    @objc fileprivate func deletePlayer() {
+    @objc
+    private func deletePlayer() {
         delegate?.deletePlayerButtonPrassed(playerName: self.noiseName)
+    }
+}
+
+extension MixerNoiseCell {
+    func configure(from noiseName: String) {
+        self.noiseName = noiseName
+        iconImageView.image = UIImage(named: noiseName)
     }
 }

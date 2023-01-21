@@ -9,7 +9,7 @@ import UIKit
 
 protocol MainViewIn: AnyObject {
     func present(view: UIViewController)
-    func updateButtons(isAudioPlaying: Bool)
+    func dismiss()
     func updatePlaybackControlsToolbar(with icon: PlayPauseIcon)
 }
 
@@ -58,23 +58,24 @@ extension MainView: PlaybackControlsToolbarDelegate {
     }
     
     func openMixerDidPress() {
-        presenter.openmixerViewController()
+        presenter.createMixerViewController()
     }
 }
 
 // MARK: - MainViewIn
 extension MainView: MainViewIn {
     
+    //    MainPresenter
     func present(view: UIViewController) {
         self.present(view, animated: true)
-    }
-
-    func updateButtons(isAudioPlaying: Bool) {
-        playbackControlsToolbar.playPauseButton.isEnabled = isAudioPlaying
-        playbackControlsToolbar.openMixerViewButton.isEnabled = isAudioPlaying
     }
     
     func updatePlaybackControlsToolbar(with icon: PlayPauseIcon) {
         playbackControlsToolbar.updateVisualState(withPlayPauseIcon: icon)
+    }
+    
+    //    MixerView
+    func dismiss() {
+        self.dismiss(animated: true)
     }
 }
