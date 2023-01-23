@@ -20,7 +20,6 @@ protocol MixerPresenterIn: AnyObject {
 class MixerPresenter {
     
     weak var view: MixerViewIn?
-    weak var mainPresenter: MainPresenterIn?
     private let tableManager: MixerPresenterOut
     
     init(tableManager: MixerPresenterOut) {
@@ -40,17 +39,17 @@ extension MixerPresenter: MixerViewOut {
 extension MixerPresenter: MixerPresenterIn {
     
     func tableViewCleaned() {
-        mainPresenter?.removeAllPlayers()
+        self.view?.removeAllPlayers()
         DispatchQueue.main.async {
             self.view?.backToMainView()
         }
     }
     
     func removePlayerWith(playerName: String) {
-        mainPresenter?.removePlayerWith(playerName: playerName)
+        view?.removePlayerWith(playerName: playerName)
     }
     
     func setPlayerVolume(playerName: String, playerVolume: Float) {
-        mainPresenter?.setPlayerVolume(playerName: playerName, playerVolume: playerVolume)
+        view?.setPlayerVolume(playerName: playerName, playerVolume: playerVolume)
     }
 }

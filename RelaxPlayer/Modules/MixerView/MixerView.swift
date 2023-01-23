@@ -9,11 +9,15 @@ import UIKit
 
 protocol MixerViewIn: AnyObject {
     func backToMainView()
+    
+    func removeAllPlayers()
+    func removePlayerWith(playerName: String)
+    func setPlayerVolume(playerName: String, playerVolume: Float)
 }
 
 class MixerView: UIViewController {
     
-    // MARK: - properties
+    // MARK: - Properties
     weak var mainView: MainViewIn?
     private let presenter: MixerViewOut
     private let tableView: UITableView
@@ -46,7 +50,7 @@ class MixerView: UIViewController {
         setupCleanButton()
     }
     
-    // MARK: - methods
+    // MARK: - Methods
     private func setupCleanButton() {
         view.addSubview(removeAllPlayersButton)
         removeAllPlayersButton.translatesAutoresizingMaskIntoConstraints = false
@@ -72,9 +76,20 @@ class MixerView: UIViewController {
 
 // MARK: - MixerViewIn
 extension MixerView: MixerViewIn {
-
+    
     func backToMainView() {
-        guard let mainView = mainView else { return }
-        mainView.dismiss()
+        mainView?.dismiss()
+    }
+    
+    func removeAllPlayers() {
+        mainView?.removeAllPlayers()
+    }
+    
+    func removePlayerWith(playerName: String) {
+        mainView?.removePlayerWith(playerName: playerName)
+    }
+    
+    func setPlayerVolume(playerName: String, playerVolume: Float) {
+        mainView?.setPlayerVolume(playerName: playerName, playerVolume: playerVolume)
     }
 }

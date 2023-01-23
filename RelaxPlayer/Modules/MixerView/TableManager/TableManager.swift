@@ -11,6 +11,7 @@ protocol MixerPresenterOut: AnyObject {
     func cleanTableView()
 }
 
+// MARK: - TableManager
 class TableManager: NSObject {
     
     weak var presenter: MixerPresenterIn?
@@ -33,7 +34,7 @@ class TableManager: NSObject {
     }
 }
 
-// MARK: - UITableViewDataSource
+// MARK: - UITableViewDataSource, UITableViewDelegate
 extension TableManager: UITableViewDataSource, UITableViewDelegate  {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -49,11 +50,11 @@ extension TableManager: UITableViewDataSource, UITableViewDelegate  {
             let noiseName = noises[indexPath.row]
             cell.delegate = self
             cell.configure(from: noiseName)
-//            
-//            if let volumeValue = selectedPlayersVolume[noiseName] {
-//                cell.volumeSlider.value = volumeValue
-//                print(cell.volumeSlider.value)
-//            }
+            
+            if let volumeValue = noisesVolume[noiseName] {
+                cell.volumeSlider.value = volumeValue
+                print(cell.volumeSlider.value)
+            }
             
             return cell
         }

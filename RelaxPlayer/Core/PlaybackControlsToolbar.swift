@@ -19,6 +19,7 @@ enum PlayPauseIcon: String {
     case Stop = "stop.fill"
 }
 
+// MARK: - PlaybackControlsToolbar
 class PlaybackControlsToolbar: UIStackView {
         
     weak var delegate: PlaybackControlsToolbarDelegate?

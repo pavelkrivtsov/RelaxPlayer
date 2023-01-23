@@ -9,12 +9,17 @@ import UIKit
 
 protocol MainViewIn: AnyObject {
     func present(view: UIViewController)
-    func dismiss()
     func updatePlaybackControlsToolbar(with icon: PlayPauseIcon)
+    func dismiss()
+    func removeAllPlayers()
+    func removePlayerWith(playerName: String)
+    func setPlayerVolume(playerName: String, playerVolume: Float)
 }
 
+// MARK: - MainView
 class MainView: UIViewController {
     
+    // MARK: - Properties
     private let presenter: MainViewOut
     private let collectionView: UICollectionView
     private var playbackControlsToolbar = PlaybackControlsToolbar()
@@ -50,7 +55,7 @@ class MainView: UIViewController {
 extension MainView: PlaybackControlsToolbarDelegate {
     
     func openTimerViewButtonDidPress() {
-        presenter.openTimePickerController()
+        presenter.createTimePickerController()
     }
     
     func playPauseButtonDidPress() {
@@ -77,5 +82,17 @@ extension MainView: MainViewIn {
     //    MixerView
     func dismiss() {
         self.dismiss(animated: true)
+    }
+    
+    func removeAllPlayers() {
+        presenter.removeAllPlayers()
+    }
+    
+    func removePlayerWith(playerName: String) {
+        presenter.removePlayerWith(playerName: playerName)
+    }
+    
+    func setPlayerVolume(playerName: String, playerVolume: Float) {
+        presenter.setPlayerVolume(playerName: playerName, playerVolume: playerVolume)
     }
 }
