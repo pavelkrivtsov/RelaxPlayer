@@ -1,5 +1,5 @@
 //
-//  MixerView.swift
+//  MixerVС.swift
 //  RelaxPlayer
 //
 //  Created by Павел Кривцов on 20.01.2023.
@@ -7,25 +7,25 @@
 
 import UIKit
 
-protocol MixerViewIn: AnyObject {
+protocol MixerVСIn: AnyObject {
     func backToMainView()
     
     func removeAllPlayers()
-    func removePlayerWith(playerName: String)
-    func setPlayerVolume(playerName: String, playerVolume: Float)
+    func removePlayer(name: String)
+    func setPlayerVolume(name: String, volume: Float)
 }
 
-class MixerView: UIViewController {
+class MixerVС: UIViewController {
     
     // MARK: - Properties
-    weak var mainView: MainViewIn?
-    private let presenter: MixerViewOut
+    weak var mainView: MainVСIn?
+    private let presenter: MixerVСOut
     private let tableView: UITableView
     private var removeAllPlayersButton = UIButton()
     private let backgroundBlurView = UIVisualEffectView()
 
     // MARK: - init
-    init(presenter: MixerViewOut, tableView: UITableView) {
+    init(presenter: MixerVСOut, tableView: UITableView) {
         self.presenter = presenter
         self.tableView = tableView
         super.init(nibName: nil, bundle: nil)
@@ -75,7 +75,7 @@ class MixerView: UIViewController {
 }
 
 // MARK: - MixerViewIn
-extension MixerView: MixerViewIn {
+extension MixerVС: MixerVСIn {
     
     func backToMainView() {
         mainView?.dismiss()
@@ -85,11 +85,11 @@ extension MixerView: MixerViewIn {
         mainView?.removeAllPlayers()
     }
     
-    func removePlayerWith(playerName: String) {
-        mainView?.removePlayerWith(playerName: playerName)
+    func removePlayer(name: String) {
+        mainView?.removePlayer(name: name)
     }
     
-    func setPlayerVolume(playerName: String, playerVolume: Float) {
-        mainView?.setPlayerVolume(playerName: playerName, playerVolume: playerVolume)
+    func setPlayerVolume(name: String, volume: Float) {
+        mainView?.setPlayerVolume(name: name, volume: volume)
     }
 }

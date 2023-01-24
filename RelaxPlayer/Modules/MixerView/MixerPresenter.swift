@@ -7,19 +7,19 @@
 
 import Foundation
 
-protocol MixerViewOut: AnyObject {
+protocol MixerVСOut: AnyObject {
     func cleanTableView()
 }
 
 protocol MixerPresenterIn: AnyObject {
     func tableViewCleaned()
-    func removePlayerWith(playerName: String)
-    func setPlayerVolume(playerName: String, playerVolume: Float)
+    func removePlayer(name: String)
+    func setPlayerVolume(name: String, volume: Float)
 }
 
 class MixerPresenter {
     
-    weak var view: MixerViewIn?
+    weak var view: MixerVСIn?
     private let tableManager: MixerPresenterOut
     
     init(tableManager: MixerPresenterOut) {
@@ -28,7 +28,7 @@ class MixerPresenter {
 }
 
 // MARK: - MixerViewOut
-extension MixerPresenter: MixerViewOut {
+extension MixerPresenter: MixerVСOut {
     
     func cleanTableView() {
         tableManager.cleanTableView()
@@ -39,17 +39,17 @@ extension MixerPresenter: MixerViewOut {
 extension MixerPresenter: MixerPresenterIn {
     
     func tableViewCleaned() {
-        self.view?.removeAllPlayers()
+        view?.removeAllPlayers()
         DispatchQueue.main.async {
             self.view?.backToMainView()
         }
     }
     
-    func removePlayerWith(playerName: String) {
-        view?.removePlayerWith(playerName: playerName)
+    func removePlayer(name: String) {
+        view?.removePlayer(name: name)
     }
     
-    func setPlayerVolume(playerName: String, playerVolume: Float) {
-        view?.setPlayerVolume(playerName: playerName, playerVolume: playerVolume)
+    func setPlayerVolume(name: String, volume: Float) {
+        view?.setPlayerVolume(name: name, volume: volume)
     }
 }
