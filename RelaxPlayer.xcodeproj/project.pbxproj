@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1E008FA227D3F67E00010A37 /* RelaxTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E008FA127D3F67E00010A37 /* RelaxTimer.swift */; };
 		1E1D9AB42970BF5000F6B602 /* MainAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E1D9AB32970BF5000F6B602 /* MainAssembly.swift */; };
 		1E1D9AB62970BF9400F6B602 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E1D9AB52970BF9400F6B602 /* MainView.swift */; };
 		1E1D9AB82970BFA200F6B602 /* MainPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E1D9AB72970BFA200F6B602 /* MainPresenter.swift */; };
@@ -50,7 +49,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1E008FA127D3F67E00010A37 /* RelaxTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelaxTimer.swift; sourceTree = "<group>"; };
 		1E1D9AB32970BF5000F6B602 /* MainAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAssembly.swift; sourceTree = "<group>"; };
 		1E1D9AB52970BF9400F6B602 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		1E1D9AB72970BFA200F6B602 /* MainPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPresenter.swift; sourceTree = "<group>"; };
@@ -126,7 +124,6 @@
 		1E3B8A2627F4A8B00016612A /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				1E008FA127D3F67E00010A37 /* RelaxTimer.swift */,
 				1E6D369C27BFAB2900EA87BA /* PlaybackControlsToolbar.swift */,
 				1E6D36A227BFE88D00EA87BA /* AVAudioPlayerUtils.swift */,
 			);
@@ -349,7 +346,6 @@
 			files = (
 				1E1D9ABA2970C1DB00F6B602 /* CollectionManager.swift in Sources */,
 				1E2C22342971E80A0025876F /* MainNoiseCell.swift in Sources */,
-				1E008FA227D3F67E00010A37 /* RelaxTimer.swift in Sources */,
 				1E650C53297B090600B9C735 /* MixerAssembly.swift in Sources */,
 				1E1D9AB62970BF9400F6B602 /* MainView.swift in Sources */,
 				1E650C55297B091200B9C735 /* MixerPresenter.swift in Sources */,
