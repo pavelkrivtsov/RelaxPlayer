@@ -9,19 +9,19 @@ import UIKit
 import AVFoundation
 
 
-protocol MainPresenterOut: AnyObject {
+protocol CollectionManagerIn: AnyObject {
     func togglePlayback()
     func getSelectedPlayers() -> [String]
     func getSelectedPlayersVolume() -> [String : Float]
     func removeAllPlayers()
-    func removePlayerWith(playerName: String)
-    func setPlayerVolume(playerName: String, playerVolume: Float)
+    func removePlayer(with name: String)
+    func setPlayerVolume(name: String, volume: Float)
 }
 
 // MARK: - CollectionManager
 class CollectionManager: NSObject {
     
-    weak var presenter: MainPresenterIn?
+    weak var presenter: CollectionManagerOut?
     private let collectionView: UICollectionView
     private var noises = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
     private var audioSassion = AVAudioSession.sharedInstance()
@@ -29,6 +29,7 @@ class CollectionManager: NSObject {
     private var selectedPlayers = [String]()
     private var selectedPlayersVolume = [String : Float]()
     
+    // MARK: - Init
     init(collectionView: UICollectionView) {
         self.collectionView = collectionView
         super.init()
@@ -40,6 +41,7 @@ class CollectionManager: NSObject {
         self.collectionView.backgroundColor = .clear
     }
     
+    // MARK: - Private mathods
     private func createNoisesSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                               heightDimension: .fractionalHeight(1))
@@ -154,8 +156,8 @@ extension CollectionManager: UICollectionViewDelegate {
     }
 }
 
-// MARK: - MainPresenterOut
-extension CollectionManager: MainPresenterOut {
+// MARK: - CollectionManagerIn
+extension CollectionManager: CollectionManagerIn {
            
     func togglePlayback() {
         for playerName in selectedPlayers {
@@ -187,8 +189,8 @@ extension CollectionManager: MainPresenterOut {
         updateButtons()
     }
     
-    func removePlayerWith(playerName: String) {
-        guard let  player = audioPlayers[playerName] else { return }
+    func removePlayer(with playerName: String) {
+        guard let player = audioPlayers[playerName] else { return }
         player.stop()
         for player in selectedPlayers {
             if player == playerName, let playerIndex = selectedPlayers.firstIndex(of: player) {
@@ -205,10 +207,10 @@ extension CollectionManager: MainPresenterOut {
         updateButtons()
     }
     
-    func setPlayerVolume(playerName: String, playerVolume: Float) {
-        if let player = audioPlayers[playerName] {
-            player.volume = playerVolume
-            selectedPlayersVolume[playerName] = playerVolume
+    func setPlayerVolume(name: String, volume: Float) {
+        if let player = audioPlayers[name] {
+            player.volume = volume
+            selectedPlayersVolume[name] = volume
         }
     }
 }

@@ -1,5 +1,5 @@
 //
-//  MixerVС.swift
+//  MixerViewController.swift
 //  RelaxPlayer
 //
 //  Created by Павел Кривцов on 20.01.2023.
@@ -7,26 +7,22 @@
 
 import UIKit
 
-protocol MixerVСIn: AnyObject {
-    func backToMainView()
-    
+protocol TableManagerOut: AnyObject {
     func removeAllPlayers()
     func removePlayer(name: String)
     func setPlayerVolume(name: String, volume: Float)
 }
 
-class MixerVС: UIViewController {
+class MixerViewController: UIViewController {
     
     // MARK: - Properties
-    weak var mainView: MainVСIn?
-    private let presenter: MixerVСOut
+    weak var presenter: MixerViewControllerOut?
+    private let tableManager: TableManagerIn
     private let tableView: UITableView
-    private var removeAllPlayersButton = UIButton()
-    private let backgroundBlurView = UIVisualEffectView()
-
+   
     // MARK: - init
-    init(presenter: MixerVСOut, tableView: UITableView) {
-        self.presenter = presenter
+    init(tableManager: TableManagerIn, tableView: UITableView) {
+        self.tableManager = tableManager
         self.tableView = tableView
         super.init(nibName: nil, bundle: nil)
     }
@@ -39,6 +35,7 @@ class MixerVС: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let backgroundBlurView = UIVisualEffectView()
         view.addSubview(backgroundBlurView)
         backgroundBlurView.frame = view.bounds
         let blurEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
@@ -50,8 +47,9 @@ class MixerVС: UIViewController {
         setupCleanButton()
     }
     
-    // MARK: - Methods
+    // MARK: - Private Methods
     private func setupCleanButton() {
+        let removeAllPlayersButton = UIButton()
         view.addSubview(removeAllPlayersButton)
         removeAllPlayersButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -63,33 +61,29 @@ class MixerVС: UIViewController {
         configuration.image = UIImage(systemName: "trash")
         configuration.contentInsets = .init(top: 16, leading: 16, bottom: 16, trailing: 16)
         configuration.cornerStyle = .capsule
-        configuration.baseBackgroundColor = .red
+        configuration.baseBackgroundColor = .systemRed
         removeAllPlayersButton.configuration = configuration
         removeAllPlayersButton.addTarget(self, action: #selector(cleanTableView), for: .touchUpInside)
     }
     
     @objc
     private func cleanTableView() {
-        presenter.cleanTableView()
+        tableManager.cleanTableView()
     }
 }
 
-// MARK: - MixerViewIn
-extension MixerVС: MixerVСIn {
-    
-    func backToMainView() {
-        mainView?.dismiss()
-    }
+// MARK: - TableManagerOut
+extension MixerViewController: TableManagerOut {
     
     func removeAllPlayers() {
-        mainView?.removeAllPlayers()
+        presenter?.removeAllPlayers()
     }
     
     func removePlayer(name: String) {
-        mainView?.removePlayer(name: name)
+        presenter?.removePlayer(name: name)
     }
     
     func setPlayerVolume(name: String, volume: Float) {
-        mainView?.setPlayerVolume(name: name, volume: volume)
+        presenter?.setPlayerVolume(name: name, volume: volume)
     }
 }

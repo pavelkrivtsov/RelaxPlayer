@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol PlaybackControlsToolbarDelegate: AnyObject {
+protocol PlaybackControlsToolbarOut: AnyObject {
     func openTimerViewButtonDidPress()
     func playPauseButtonDidPress()
     func openMixerDidPress()
@@ -22,15 +22,15 @@ enum PlayPauseIcon: String {
 // MARK: - PlaybackControlsToolbar
 class PlaybackControlsToolbar: UIStackView {
         
-    weak var delegate: PlaybackControlsToolbarDelegate?
-    let openTimerViewButton = UIButton()
-    let playPauseButton = UIButton()
-    let openMixerViewButton = UIButton()
+    weak var view: PlaybackControlsToolbarOut?
+    private let openTimerViewButton = UIButton()
+    private let playPauseButton = UIButton()
+    private let openMixerViewButton = UIButton()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
     
-        backgroundColor = .systemGray
+        backgroundColor = UIColor(named: "foregroundColor")
         layer.cornerRadius = 20
         clipsToBounds = true
         spacing = 20
@@ -68,19 +68,22 @@ class PlaybackControlsToolbar: UIStackView {
     }
 }
 
-// MARK: - PlaybackControlsToolbarDelegate
+// MARK: - PlaybackControlsToolbarOut
 extension PlaybackControlsToolbar {
     
-    @objc func openTimerPickerController() {
-        delegate?.openTimerViewButtonDidPress()
+    @objc
+    private func openTimerPickerController() {
+        view?.openTimerViewButtonDidPress()
     }
     
-    @objc func togglePlayback() {
-        delegate?.playPauseButtonDidPress()
+    @objc
+    private func togglePlayback() {
+        view?.playPauseButtonDidPress()
     }
     
-    @objc func openMixerViewController() {
-        delegate?.openMixerDidPress()
+    @objc
+    private func openMixerViewController() {
+        view?.openMixerDidPress()
     }
 }
 

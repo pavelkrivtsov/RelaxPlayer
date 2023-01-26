@@ -7,14 +7,14 @@
 
 import UIKit
 
-protocol MixerPresenterOut: AnyObject {
+protocol TableManagerIn: AnyObject {
     func cleanTableView()
 }
 
 // MARK: - TableManager
 class TableManager: NSObject {
     
-    weak var presenter: MixerPresenterIn?
+    weak var view: TableManagerOut?
     private let tableView: UITableView
     private var noises = [String]()
     private var noisesVolume: [String : Float]
@@ -39,7 +39,7 @@ extension TableManager: UITableViewDataSource, UITableViewDelegate  {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if noises.isEmpty {
-            presenter?.tableViewCleaned()
+            view?.removeAllPlayers()
         }
         return noises.count
     }
@@ -48,7 +48,7 @@ extension TableManager: UITableViewDataSource, UITableViewDelegate  {
         if let cell = tableView.dequeueReusableCell(withIdentifier: MixerNoiseCell.reuseId,
                                                     for: indexPath) as? MixerNoiseCell {
             let noiseName = noises[indexPath.row]
-            cell.delegate = self
+            cell.tableManager = self
             cell.configure(from: noiseName)
             
             if let volumeValue = noisesVolume[noiseName] {
@@ -66,8 +66,8 @@ extension TableManager: UITableViewDataSource, UITableViewDelegate  {
     }
 }
 
-// MARK: - MixerPresenterOut
-extension TableManager: MixerPresenterOut {
+// MARK: - TableManagerIn
+extension TableManager: TableManagerIn {
     
     func cleanTableView() {
         noises.removeAll()
@@ -77,22 +77,22 @@ extension TableManager: MixerPresenterOut {
     }
 }
 
-// MARK: - MixerNoiseCellDelegate
-extension TableManager: MixerNoiseCellDelegate {
+// MARK: - MixerNoiseCellOut
+extension TableManager: MixerNoiseCellOut {
     
-    func changePlayerVolume(playerName: String, playerVolume: Float) {
-        presenter?.setPlayerVolume(playerName: playerName, playerVolume: playerVolume)
+    func changePlayerVolume(name: String, volume: Float) {
+        view?.setPlayerVolume(name: name, volume: volume)
     }
     
-    func deletePlayerButtonPrassed(playerName: String) {
-        if let playerNameIndex = noises.firstIndex(of: playerName) {
-            noises = noises.filter {$0 != playerName}
-            presenter?.removePlayerWith(playerName: playerName)
+    func removePlayer(name: String) {
+        if let playerNameIndex = noises.firstIndex(of: name) {
+           
             let indexPath = IndexPath(item: playerNameIndex, section: 0)
-            
             DispatchQueue.main.async {
                 self.tableView.deleteRows(at: [indexPath], with: .automatic)
             }
+            noises = noises.filter {$0 != name}
+            view?.removePlayer(name: name)
         }
     }
 }

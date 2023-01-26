@@ -7,25 +7,24 @@
 
 import UIKit
 
-protocol MainViewIn: AnyObject {
+protocol MainViewControllerIn: AnyObject {
     func present(view: UIViewController)
-    func updatePlaybackControlsToolbar(with icon: PlayPauseIcon)
     func dismiss()
-    func removeAllPlayers()
-    func removePlayerWith(playerName: String)
-    func setPlayerVolume(playerName: String, playerVolume: Float)
+    func updatePlaybackControlsToolbar(with icon: PlayPauseIcon)
+    func setTimeLabelText(with seconds: Int)
+    func hideTimeLabel()
 }
 
 // MARK: - MainView
-class MainView: UIViewController {
+class MainViewController: UIViewController {
     
     // MARK: - Properties
-    private let presenter: MainViewOut
+    private let presenter: MainViewControllerOut
     private let collectionView: UICollectionView
-    private var playbackControlsToolbar = PlaybackControlsToolbar()
+    private let playbackControlsToolbar = PlaybackControlsToolbar()
     
     // MARK: - init
-    init(presenter: MainViewOut, collectionView: UICollectionView) {
+    init(presenter: MainViewControllerOut, collectionView: UICollectionView) {
         self.presenter = presenter
         self.collectionView = collectionView
         super.init(nibName: nil, bundle: nil)
@@ -37,10 +36,12 @@ class MainView: UIViewController {
     
     // MARK: - viewDidLoad
     override func viewDidLoad() {
+        view.backgroundColor = UIColor(named: "backgroundColor")
+        
         view.addSubview(collectionView)
         collectionView.frame = view.bounds
         
-        playbackControlsToolbar.delegate = self
+        playbackControlsToolbar.view = self
         view.addSubview(playbackControlsToolbar)
         playbackControlsToolbar.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -51,8 +52,8 @@ class MainView: UIViewController {
     }
 }
 
-// MARK: - PlaybackControlsToolbarDelegate
-extension MainView: PlaybackControlsToolbarDelegate {
+// MARK: - PlaybackControlsToolbarOut
+extension MainViewController: PlaybackControlsToolbarOut {
     
     func openTimerViewButtonDidPress() {
         presenter.createTimePickerController()
@@ -68,31 +69,25 @@ extension MainView: PlaybackControlsToolbarDelegate {
 }
 
 // MARK: - MainViewIn
-extension MainView: MainViewIn {
-    
-    //    MainPresenter
+extension MainViewController: MainViewControllerIn {
+
     func present(view: UIViewController) {
         self.present(view, animated: true)
+    }
+    
+    func dismiss() {
+        self.dismiss(animated: true)
     }
     
     func updatePlaybackControlsToolbar(with icon: PlayPauseIcon) {
         playbackControlsToolbar.updateVisualState(withPlayPauseIcon: icon)
     }
     
-    //    MixerView
-    func dismiss() {
-        self.dismiss(animated: true)
+    func setTimeLabelText(with seconds: Int) {
+        playbackControlsToolbar.setTimeLabelText(with: seconds)
     }
-    
-    func removeAllPlayers() {
-        presenter.removeAllPlayers()
-    }
-    
-    func removePlayerWith(playerName: String) {
-        presenter.removePlayerWith(playerName: playerName)
-    }
-    
-    func setPlayerVolume(playerName: String, playerVolume: Float) {
-        presenter.setPlayerVolume(playerName: playerName, playerVolume: playerVolume)
+
+    func hideTimeLabel() {
+        playbackControlsToolbar.hideTimeLabel()
     }
 }

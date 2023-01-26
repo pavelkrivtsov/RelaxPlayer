@@ -7,16 +7,16 @@
 
 import UIKit
 
-protocol MixerNoiseCellDelegate: AnyObject {
-    func changePlayerVolume(playerName: String, playerVolume: Float)
-    func deletePlayerButtonPrassed(playerName: String)
+protocol MixerNoiseCellOut: AnyObject {
+    func changePlayerVolume(name: String, volume: Float)
+    func removePlayer(name: String)
 }
 
 class MixerNoiseCell: UITableViewCell {
     
     static let reuseId = "MixerNoiseCell"
     
-    weak var delegate: MixerNoiseCellDelegate?
+    weak var tableManager: MixerNoiseCellOut?
     var noiseName = String()
     var hStack = UIStackView()
     var iconImageView = UIImageView()
@@ -25,7 +25,7 @@ class MixerNoiseCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = .systemGray
+        backgroundColor = UIColor(named: "foregroundColor")
         setupStack()
     }
     
@@ -56,6 +56,7 @@ class MixerNoiseCell: UITableViewCell {
             iconImageView.heightAnchor.constraint(equalTo: hStack.heightAnchor),
             iconImageView.widthAnchor.constraint(equalTo:  hStack.heightAnchor)
         ])
+        iconImageView.image = UIImage(systemName: "exclamationmark.triangle.fill")
     }
     
     private func setupVolumeSlider() {
@@ -68,7 +69,7 @@ class MixerNoiseCell: UITableViewCell {
     
     @objc
     private func sliderChanged() {
-        delegate?.changePlayerVolume(playerName: noiseName, playerVolume: volumeSlider.value)
+        tableManager?.changePlayerVolume(name: noiseName, volume: volumeSlider.value)
     }
     
     private func setupDeletePlayerButton() {
@@ -81,12 +82,12 @@ class MixerNoiseCell: UITableViewCell {
         var configuration = UIButton.Configuration.filled()
         configuration.image = UIImage(systemName: "xmark")
         deletePlayerButton.configuration = configuration
-        deletePlayerButton.addTarget(self, action: #selector(deletePlayer), for: .touchUpInside)
+        deletePlayerButton.addTarget(self, action: #selector(removePlayer), for: .touchUpInside)
     }
     
     @objc
-    private func deletePlayer() {
-        delegate?.deletePlayerButtonPrassed(playerName: self.noiseName)
+    private func removePlayer() {
+        tableManager?.removePlayer(name: self.noiseName)
     }
 }
 

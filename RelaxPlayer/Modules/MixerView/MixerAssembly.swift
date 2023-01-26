@@ -11,15 +11,13 @@ class MixerAssembly {
     
     static func assemble(noises: [String],
                          noisesVolume: [String : Float],
-                         mianView: MainVСIn? = nil) -> UIViewController {
+                         presenter: MixerViewControllerOut) -> UIViewController {
         
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
         let tableManager = TableManager(tableView: tableView, noises: noises, noisesVolume: noisesVolume)
-        let presenter = MixerPresenter(tableManager: tableManager)
-        tableManager.presenter = presenter
-        let view = MixerVС(presenter: presenter, tableView: tableView)
-        view.mainView = mianView
-        presenter.view = view
+        let view = MixerViewController(tableManager: tableManager, tableView: tableView)
+        view.presenter = presenter
+        tableManager.view = view
         return view
     }
 }

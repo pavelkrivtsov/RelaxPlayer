@@ -23,9 +23,12 @@ class MainNoiseCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+extension MainNoiseCell {
     
     func configure(imageWith icon: String, isSelected: Bool) {
-        backgroundColor = isSelected ? .systemGray : .clear
+        backgroundColor = isSelected ? .systemGray : UIColor(named: "foregroundColor")
         iconImageView.image = UIImage(named: icon)
     }
 }

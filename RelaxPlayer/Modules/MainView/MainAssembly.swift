@@ -12,9 +12,11 @@ class MainAssembly {
     static func assemble() -> UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
         let collectionManager = CollectionManager(collectionView: collectionView)
-        let presenter = MainPresenter(collectionManager: collectionManager)
+        let timerManager = TimerManager()
+        let presenter = MainPresenter(collectionManager: collectionManager, timerManager: timerManager)
+        timerManager.presenter = presenter
         collectionManager.presenter = presenter
-        let view = MainView(presenter: presenter, collectionView: collectionView)
+        let view = MainViewController(presenter: presenter, collectionView: collectionView)
         presenter.view = view
         return view
     }

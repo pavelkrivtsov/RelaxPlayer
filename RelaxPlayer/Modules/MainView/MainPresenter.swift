@@ -7,39 +7,59 @@
 
 import Foundation
 
-protocol MainViewOut: AnyObject {
+protocol MainViewControllerOut: AnyObject {
     func createTimePickerController()
     func togglePlayback()
     func createMixerViewController()
-    func removeAllPlayers()
-    func removePlayerWith(playerName: String)
-    func setPlayerVolume(playerName: String, playerVolume: Float)
 }
 
-protocol MainPresenterIn: AnyObject {
+protocol CollectionManagerOut: AnyObject {
     func updateButtons(isAudioPlaying: Bool, isPlayerSelected: Bool)
 }
+
+protocol MixerViewControllerOut: AnyObject {
+    func removeAllPlayers()
+    func removePlayer(name: String)
+    func setPlayerVolume(name: String, volume: Float)
+}
+
+protocol TimePickerViewControllerOut: AnyObject {
+    func getFromTimePicker(selectedSeconds: Int)
+    func togglePlayPause()
+}
+
+protocol TimerManagerOut: AnyObject {
+    func getRemainingSeconds(_ seconds: Int)
+    func timerIsFinished()
+}
+
 
 // MARK: - MainPresenter
 class MainPresenter {
     
-    weak var view: MainViewIn?
-    private var collectionManager: MainPresenterOut
-
-    init(collectionManager: MainPresenterOut) {
+    weak var view: MainViewControllerIn?
+    private let collectionManager: CollectionManagerIn
+    private let timerManager: TimerManagerIn
+    
+    private lazy var timePickerVC = TimePickerViewController()
+    
+    private var isTimerActive = false
+    private var selectedSeconds = 60
+    
+    init(collectionManager: CollectionManagerIn,
+         timerManager: TimerManagerIn) {
         self.collectionManager = collectionManager
+        self.timerManager = timerManager
     }
 }
 
-// MARK: - MainViewOut
-extension MainPresenter: MainViewOut {
-    
-//    mian view
+// MARK: - MainViewControllerOut
+extension MainPresenter: MainViewControllerOut {
+
     func createTimePickerController() {
-        let timePickerVC = TimePickerController()
-    
+        timePickerVC.presenter = self
         DispatchQueue.main.async {
-            self.view?.present(view: timePickerVC)
+            self.view?.present(view: self.timePickerVC)
         }
     }
     
@@ -50,29 +70,18 @@ extension MainPresenter: MainViewOut {
     func createMixerViewController() {
         let noises = collectionManager.getSelectedPlayers()
         let noisesVolume = collectionManager.getSelectedPlayersVolume()
-        let mixer = MixerAssembly.assemble(with: noises,
-                                           with: noisesVolume,
-                                           mianView: view)
+        
         DispatchQueue.main.async {
-            self.view?.present(view: mixer)
+            let mixerView = MixerAssembly.assemble(noises: noises,
+                                                   noisesVolume: noisesVolume,
+                                                   presenter: self)
+            self.view?.present(view: mixerView)
         }
-    }
-
-    func removeAllPlayers() {
-        collectionManager.removeAllPlayers()
-    }
-    
-    func removePlayerWith(playerName: String) {
-        collectionManager.removePlayerWith(playerName: playerName)
-    }
-    
-    func setPlayerVolume(playerName: String, playerVolume: Float) {
-        collectionManager.setPlayerVolume(playerName: playerName, playerVolume: playerVolume)
     }
 }
 
-// MARK: - MainPresenterIn
-extension MainPresenter: MainPresenterIn {
+// MARK: - CollectionManagerOut
+extension MainPresenter: CollectionManagerOut {
     
     func updateButtons(isAudioPlaying: Bool, isPlayerSelected: Bool) {
         DispatchQueue.main.async {
@@ -82,5 +91,60 @@ extension MainPresenter: MainPresenterIn {
                 self.view?.updatePlaybackControlsToolbar(with: isPlayerSelected ? .Play : .Stop)
             }
         }
+    }
+}
+
+// MARK: - MixerViewControllerOut
+extension MainPresenter: MixerViewControllerOut {
+    
+    func removeAllPlayers() {
+        collectionManager.removeAllPlayers()
+        view?.dismiss()
+    }
+    
+    func removePlayer(name: String) {
+        collectionManager.removePlayer(with: name)
+    }
+    
+    func setPlayerVolume(name: String, volume: Float) {
+        collectionManager.setPlayerVolume(name: name, volume: volume)
+    }
+}
+
+// MARK: - TimePickerViewControllerOut
+extension MainPresenter: TimePickerViewControllerOut {
+    
+    func getFromTimePicker(selectedSeconds: Int) {
+        self.selectedSeconds = selectedSeconds
+    }
+    
+    func togglePlayPause() {
+        isTimerActive.toggle()
+    
+        if isTimerActive {
+            timerManager.startTimer(with: selectedSeconds)
+            timePickerVC.prepareCountdownMode(with: selectedSeconds)
+            view?.setTimeLabelText(with: selectedSeconds)
+        } else {
+            timerManager.cancelTimer()
+            timePickerVC.stopCountdownMode()
+            view?.hideTimeLabel()
+        }
+    }
+}
+
+// MARK: - TimerManagerOut
+extension MainPresenter: TimerManagerOut {
+    
+    func getRemainingSeconds(_ seconds: Int) {
+        view?.setTimeLabelText(with: seconds)
+        timePickerVC.startCountdownMode(with: seconds)
+    }
+    
+    func timerIsFinished() {
+        isTimerActive.toggle()
+        timerManager.cancelTimer()
+        timePickerVC.stopCountdownMode()
+        collectionManager.removeAllPlayers()
     }
 }
