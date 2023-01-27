@@ -142,7 +142,7 @@ extension CollectionManager: UICollectionViewDelegate {
         do {
             try audioSassion.setActive(true)
             for (name, player) in players {
-                if selectedPlayersVolume.keys.contains(name) && player.isPlaying == false {
+                if selectedPlayers.contains(name) && player.isPlaying == false {
                     player.play()
                 }
             }
@@ -152,8 +152,8 @@ extension CollectionManager: UICollectionViewDelegate {
     }
     
     private func removePlayerFromSelected(with name: String) {
-        if let playerIndex = selectedPlayersVolume.index(forKey: name) {
-            selectedPlayersVolume.remove(at: playerIndex)
+        if let playerIndex = selectedPlayers.firstIndex(of: name) {
+            selectedPlayers.remove(at: playerIndex)
         }
     }
 }
@@ -179,6 +179,7 @@ extension CollectionManager: CollectionManagerIn {
     func removeAllPlayers() {
         do {
             selectedPlayers.removeAll()
+            selectedPlayersVolume.removeAll()
             players = players.mapValues{ player in
                 if player.isPlaying{
                     player.stop()
