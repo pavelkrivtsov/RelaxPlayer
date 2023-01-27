@@ -68,12 +68,12 @@ extension MainPresenter: MainViewControllerOut {
     }
     
     func createMixerViewController() {
-        let noises = collectionManager.getSelectedPlayers()
-        let noisesVolume = collectionManager.getSelectedPlayersVolume()
+        let players = collectionManager.getSelectedPlayers()
+        let playersVolume = collectionManager.getSelectedPlayersVolume()
         
         DispatchQueue.main.async {
-            let mixerView = MixerAssembly.assemble(noises: noises,
-                                                   noisesVolume: noisesVolume,
+            let mixerView = MixerAssembly.assemble(players: players,
+                                                   playersVolume: playersVolume,
                                                    presenter: self)
             self.view?.present(view: mixerView)
         }
@@ -103,7 +103,7 @@ extension MainPresenter: MixerViewControllerOut {
     }
     
     func removePlayer(name: String) {
-        collectionManager.removePlayer(with: name)
+        collectionManager.removePlayer(name: name)
     }
     
     func setPlayerVolume(name: String, volume: Float) {
@@ -143,8 +143,7 @@ extension MainPresenter: TimerManagerOut {
     
     func timerIsFinished() {
         isTimerActive.toggle()
-        timerManager.cancelTimer()
         timePickerVC.stopCountdownMode()
-        collectionManager.removeAllPlayers()
+        removeAllPlayers()
     }
 }

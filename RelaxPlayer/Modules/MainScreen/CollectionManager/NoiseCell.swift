@@ -1,5 +1,5 @@
 //
-//  MainNoiseCell.swift
+//  NoiseCell.swift
 //  RelaxPlayer
 //
 //  Created by Павел Кривцов on 13.01.2023.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MainNoiseCell: UICollectionViewCell {
+class NoiseCell: UICollectionViewCell {
     
     static let reuseId = "MainNoiseCell"
     private let iconImageView = UIImageView()
@@ -25,7 +25,7 @@ class MainNoiseCell: UICollectionViewCell {
     }
 }
 
-extension MainNoiseCell {
+extension NoiseCell {
     
     func configure(imageWith icon: String, isSelected: Bool) {
         backgroundColor = isSelected ? .systemGray : UIColor(named: "foregroundColor")

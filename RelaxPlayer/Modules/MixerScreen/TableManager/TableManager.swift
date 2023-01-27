@@ -16,18 +16,18 @@ class TableManager: NSObject {
     
     weak var view: TableManagerOut?
     private let tableView: UITableView
-    private var noises = [String]()
-    private var noisesVolume: [String : Float]
+    private var players = [String]()
+    private var playersVolume: [String : Float]
     
-    init(tableView: UITableView, noises: [String], noisesVolume: [String : Float]) {
+    init(tableView: UITableView, players: [String], playersVolume: [String : Float]) {
         self.tableView = tableView
-        self.noises = noises
-        self.noisesVolume = noisesVolume
+        self.players = players
+        self.playersVolume = playersVolume
         super.init()
         
         self.tableView.dataSource = self
         self.tableView.delegate = self
-        self.tableView.register(MixerNoiseCell.self, forCellReuseIdentifier: MixerNoiseCell.reuseId)
+        self.tableView.register(MixerCell.self, forCellReuseIdentifier: MixerCell.reuseId)
         self.tableView.separatorInset = .zero
         self.tableView.allowsSelection = false
         self.tableView.backgroundColor = .clear
@@ -38,20 +38,20 @@ class TableManager: NSObject {
 extension TableManager: UITableViewDataSource, UITableViewDelegate  {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if noises.isEmpty {
+        if players.isEmpty {
             view?.removeAllPlayers()
         }
-        return noises.count
+        return players.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: MixerNoiseCell.reuseId,
-                                                    for: indexPath) as? MixerNoiseCell {
-            let noiseName = noises[indexPath.row]
+        if let cell = tableView.dequeueReusableCell(withIdentifier: MixerCell.reuseId,
+                                                    for: indexPath) as? MixerCell {
+            let player = players[indexPath.row]
             cell.tableManager = self
-            cell.configure(from: noiseName)
+            cell.configure(from: player)
             
-            if let volumeValue = noisesVolume[noiseName] {
+            if let volumeValue = playersVolume[player] {
                 cell.volumeSlider.value = volumeValue
                 print(cell.volumeSlider.value)
             }
@@ -70,28 +70,28 @@ extension TableManager: UITableViewDataSource, UITableViewDelegate  {
 extension TableManager: TableManagerIn {
     
     func cleanTableView() {
-        noises.removeAll()
+        players.removeAll()
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
     }
 }
 
-// MARK: - MixerNoiseCellOut
-extension TableManager: MixerNoiseCellOut {
+// MARK: - MixerCellOut
+extension TableManager: MixerCellOut {
     
     func changePlayerVolume(name: String, volume: Float) {
         view?.setPlayerVolume(name: name, volume: volume)
     }
     
     func removePlayer(name: String) {
-        if let playerNameIndex = noises.firstIndex(of: name) {
+        if let playerNameIndex = players.firstIndex(of: name) {
            
             let indexPath = IndexPath(item: playerNameIndex, section: 0)
             DispatchQueue.main.async {
                 self.tableView.deleteRows(at: [indexPath], with: .automatic)
             }
-            noises = noises.filter {$0 != name}
+            players = players.filter {$0 != name}
             view?.removePlayer(name: name)
         }
     }

@@ -24,6 +24,7 @@ class TimerManager: NSObject {
         presenter?.getRemainingSeconds(seconds)
         if seconds == 0 {
             presenter?.timerIsFinished()
+            cancelTimer()
         }
     }
 }

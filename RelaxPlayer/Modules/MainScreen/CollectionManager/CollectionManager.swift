@@ -14,7 +14,7 @@ protocol CollectionManagerIn: AnyObject {
     func getSelectedPlayers() -> [String]
     func getSelectedPlayersVolume() -> [String : Float]
     func removeAllPlayers()
-    func removePlayer(with name: String)
+    func removePlayer(name: String)
     func setPlayerVolume(name: String, volume: Float)
 }
 
@@ -23,9 +23,10 @@ class CollectionManager: NSObject {
     
     weak var presenter: CollectionManagerOut?
     private let collectionView: UICollectionView
-    private var noises = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+    
+    private var noiseNames = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
     private var audioSassion = AVAudioSession.sharedInstance()
-    private var audioPlayers = [String: AVAudioPlayer]()
+    private var players = [String: AVAudioPlayer]()
     private var selectedPlayers = [String]()
     private var selectedPlayersVolume = [String : Float]()
     
@@ -35,7 +36,7 @@ class CollectionManager: NSObject {
         super.init()
         
         self.collectionView.collectionViewLayout = UICollectionViewCompositionalLayout(section: createNoisesSection())
-        self.collectionView.register(MainNoiseCell.self, forCellWithReuseIdentifier: MainNoiseCell.reuseId)
+        self.collectionView.register(NoiseCell.self, forCellWithReuseIdentifier: NoiseCell.reuseId)
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
         self.collectionView.backgroundColor = .clear
@@ -58,7 +59,7 @@ class CollectionManager: NSObject {
     
     private func updateButtons() {
 
-        let isAudioPlaying = audioPlayers
+        let isAudioPlaying = players
             .values
             .filter { $0.isPlaying }
             .count > 0
@@ -74,15 +75,15 @@ class CollectionManager: NSObject {
 extension CollectionManager: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        noises.count
+        noiseNames.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainNoiseCell.reuseId,
-                                                         for: indexPath) as? MainNoiseCell {
-            let noise = noises[indexPath.item]
-            let player = audioPlayers[noise]
-            cell.configure(imageWith: noise, isSelected: player?.isPlaying ?? false)
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NoiseCell.reuseId,
+                                                         for: indexPath) as? NoiseCell {
+            let name = noiseNames[indexPath.item]
+            let player = players[name]
+            cell.configure(imageWith: name, isSelected: player?.isPlaying ?? false)
             return cell
         }
         return UICollectionViewCell()
@@ -95,64 +96,65 @@ extension CollectionManager: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
         guard collectionView.cellForItem(at: indexPath) != nil else { return }
-        let noise = noises[indexPath.item]
+        let name = noiseNames[indexPath.item]
         
-        if let audioPlayer = audioPlayers[noise] {
-            if audioPlayer.isPlaying {
-                audioPlayer.stop()
-                audioPlayer.volume = 1
-                selectedPlayersVolume[noise] = 1
-                
-                for player in selectedPlayers {
-                    if player == noise, let playerIndex = selectedPlayers.firstIndex(of: player) {
-                        selectedPlayers.remove(at: playerIndex)
-                    }
-                }
+        if let player = players[name] {
+            if player.isPlaying {
+                player.stop()
+                removePlayerFromSelected(with: name)
             } else {
-                if selectedPlayers.contains(noise) {
-                    for player in selectedPlayers {
-                        if player == noise, let playerIndex = selectedPlayers.firstIndex(of: player) {
-                            selectedPlayers.remove(at: playerIndex)
-                        }
-                    }
+                if selectedPlayers.contains(name) {
+                    removePlayerFromSelected(with: name)
                 } else {
-                    do {
-                        try audioSassion.setActive(true)
-                        audioPlayer.play()
-                    } catch {
-                        print(error.localizedDescription)
-                    }
-                    
-                    selectedPlayers.append(noise)
-                    for (noise, player) in audioPlayers {
-                        if selectedPlayers.contains(noise) && player.isPlaying == false {
-                            player.play()
-                        }
-                    }
+                    player.volume = 1
+                    selectedPlayers.append(name)
+                    selectedPlayersVolume[name] = 1
+                    activateSelectedPlayers()
                 }
             }
         } else {
-            do {
-                guard let audioPath = Bundle.main.path(forResource: noise, ofType: "mp3") else { return }
-                let audioPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: audioPath))
-                try audioSassion.setActive(true)
-                audioPlayer.volume = 1
-                audioPlayer.numberOfLoops = -1
-                audioPlayer.play()
-                audioPlayers[noise] = audioPlayer
-                selectedPlayers.append(noise)
-            } catch {
-                print(error.localizedDescription)
-            }
-            for (noise, player) in audioPlayers {
-                if selectedPlayers.contains(noise) && player.isPlaying == false {
-                    player.play()
-                }
-            }
+            createPlayer(with: name)
+            selectedPlayers.append(name)
+            selectedPlayersVolume[name] = 1
+            activateSelectedPlayers()
         }
         
         updateButtons()
-        collectionView.reloadItems(at: [indexPath])
+        DispatchQueue.main.async {
+            self.collectionView.reloadItems(at: [indexPath])
+        }
+    }
+    
+    private func createPlayer(with name: String) {
+        do {
+            guard let audioPath = Bundle.main.path(forResource: name, ofType: "mp3") else { return }
+            let player = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: audioPath))
+            player.numberOfLoops = -1
+            player.volume = 1
+            player.prepareToPlay()
+            players[name] = player
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    private func activateSelectedPlayers() {
+        do {
+            try audioSassion.setActive(true)
+            for (name, player) in players {
+                if selectedPlayersVolume.keys.contains(name) && player.isPlaying == false {
+                    player.play()
+                }
+            }
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    private func removePlayerFromSelected(with name: String) {
+        if let playerIndex = selectedPlayersVolume.index(forKey: name) {
+            selectedPlayersVolume.remove(at: playerIndex)
+        }
     }
 }
 
@@ -161,7 +163,7 @@ extension CollectionManager: CollectionManagerIn {
            
     func togglePlayback() {
         for playerName in selectedPlayers {
-            audioPlayers[playerName]?.toggle()
+            players[playerName]?.toggle()
         }
         updateButtons()
     }
@@ -175,40 +177,41 @@ extension CollectionManager: CollectionManagerIn {
     }
     
     func removeAllPlayers() {
-        audioPlayers = audioPlayers.mapValues{ player in
-            if player.isPlaying{
-                player.stop()
+        do {
+            selectedPlayers.removeAll()
+            players = players.mapValues{ player in
+                if player.isPlaying{
+                    player.stop()
+                }
+                return player
             }
-            return player
+            
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
+            updateButtons()
+            try audioSassion.setActive(false)
+        } catch {
+            print(error.localizedDescription)
         }
-        selectedPlayers.removeAll()
-        selectedPlayersVolume.removeAll()
-        DispatchQueue.main.async {
-            self.collectionView.reloadData()
-        }
-        updateButtons()
     }
     
-    func removePlayer(with playerName: String) {
-        guard let player = audioPlayers[playerName] else { return }
+    func removePlayer(name: String) {
+        guard let player = players[name] else { return }
         player.stop()
-        for player in selectedPlayers {
-            if player == playerName, let playerIndex = selectedPlayers.firstIndex(of: player) {
-                selectedPlayers.remove(at: playerIndex)
-            }
-        }
+        removePlayerFromSelected(with: name)
+        updateButtons()
         
-        if let playerIndex = noises.firstIndex(of: playerName) {
+        if let playerIndex = noiseNames.firstIndex(of: name) {
             let indexPath = IndexPath(item: playerIndex, section: 0)
             DispatchQueue.main.async {
                 self.collectionView.reloadItems(at: [indexPath])
             }
         }
-        updateButtons()
     }
     
     func setPlayerVolume(name: String, volume: Float) {
-        if let player = audioPlayers[name] {
+        if let player = players[name] {
             player.volume = volume
             selectedPlayersVolume[name] = volume
         }

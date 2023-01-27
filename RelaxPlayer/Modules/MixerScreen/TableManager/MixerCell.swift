@@ -1,5 +1,5 @@
 //
-//  MixerNoiseCell.swift
+//  MixerCell.swift
 //  RelaxPlayer
 //
 //  Created by Павел Кривцов on 06.02.2022.
@@ -7,17 +7,17 @@
 
 import UIKit
 
-protocol MixerNoiseCellOut: AnyObject {
+protocol MixerCellOut: AnyObject {
     func changePlayerVolume(name: String, volume: Float)
     func removePlayer(name: String)
 }
 
-class MixerNoiseCell: UITableViewCell {
+class MixerCell: UITableViewCell {
     
-    static let reuseId = "MixerNoiseCell"
+    static let reuseId = "MixerCell"
     
-    weak var tableManager: MixerNoiseCellOut?
-    var noiseName = String()
+    weak var tableManager: MixerCellOut?
+    var playerName = String()
     var hStack = UIStackView()
     var iconImageView = UIImageView()
     var volumeSlider = UISlider()
@@ -63,13 +63,13 @@ class MixerNoiseCell: UITableViewCell {
         hStack.addArrangedSubview(volumeSlider)
         volumeSlider.minimumTrackTintColor = .white
         volumeSlider.maximumTrackTintColor = .gray
-        volumeSlider.value = 1
+        volumeSlider.minimumValue = 0.1
         volumeSlider.addTarget(self, action: #selector(sliderChanged), for: .valueChanged)
     }
     
     @objc
     private func sliderChanged() {
-        tableManager?.changePlayerVolume(name: noiseName, volume: volumeSlider.value)
+        tableManager?.changePlayerVolume(name: playerName, volume: volumeSlider.value)
     }
     
     private func setupDeletePlayerButton() {
@@ -87,13 +87,13 @@ class MixerNoiseCell: UITableViewCell {
     
     @objc
     private func removePlayer() {
-        tableManager?.removePlayer(name: self.noiseName)
+        tableManager?.removePlayer(name: self.playerName)
     }
 }
 
-extension MixerNoiseCell {
+extension MixerCell {
     func configure(from noiseName: String) {
-        self.noiseName = noiseName
+        self.playerName = noiseName
         iconImageView.image = UIImage(named: noiseName)
     }
 }
