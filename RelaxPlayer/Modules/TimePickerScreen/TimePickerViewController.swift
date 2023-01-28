@@ -17,6 +17,10 @@ class TimePickerViewController: UIViewController {
     private let backgroundBlurView = UIVisualEffectView()
     private var configuration = UIButton.Configuration.filled()
     
+    var isTimerActive = Bool()
+    private var seconds = Int()
+    private var value = Double()
+    
     // MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,7 +34,24 @@ class TimePickerViewController: UIViewController {
         setupPlayPauseButton()
     }
     
-    // MARK: - Methods
+    // MARK: - viewWillAppear
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if isTimerActive {
+            DispatchQueue.main.async {
+                self.timePickerView.startCountdownMode(seconds: self.seconds, value: self.value)
+            }
+        }
+    }
+    
+    // MARK: - viewDidLayoutSubviews
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        timePickerView.createBackgroundShapeLayer()
+        timePickerView.createForegroundShapeLayer()
+    }
+    
+    // MARK: - Private methods
     private func setupTimePickerView() {
         view.addSubview(timePickerView)
         NSLayoutConstraint.activate([
@@ -62,18 +83,12 @@ class TimePickerViewController: UIViewController {
     }
 }
 
-// MARK: - TimePickerViewOut
-extension TimePickerViewController: TimePickerViewOut {
-    
-    func getFromTimePicker(selectedSeconds: Int) {
-        presenter?.getFromTimePicker(selectedSeconds: selectedSeconds)
-    }
-}
-
 extension TimePickerViewController {
     
-    func startCountdownMode(with seconds: Int) {
-        timePickerView.startCountdownMode(with: seconds)
+    func startCountdownMode(seconds: Int, value: Double) {
+        self.seconds = seconds
+        self.value = value
+        timePickerView.startCountdownMode(seconds: seconds, value: value)
     }
     
     func prepareCountdownMode(with seconds: Int) {
@@ -92,3 +107,13 @@ extension TimePickerViewController {
         playPauseButton.configuration = configuration
     }
 }
+
+// MARK: - TimePickerViewOut
+extension TimePickerViewController: TimePickerViewOut {
+    
+    func getFromTimePicker(selectedSeconds: Int) {
+        presenter?.getFromTimePicker(selectedSeconds: selectedSeconds)
+    }
+}
+
+

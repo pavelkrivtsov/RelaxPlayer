@@ -16,19 +16,15 @@ class TimePickerView: UIView {
     weak var view: TimePickerViewOut?
     private var timePicker = UIDatePicker()
     private var timeLabel = UILabel()
-//    private var foregroundShapeLayer = CAShapeLayer()
-//    private var backgroundShapeLayer = CAShapeLayer()
+    private var foregroundShapeLayer = CAShapeLayer()
+    private var backgroundShapeLayer = CAShapeLayer()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         translatesAutoresizingMaskIntoConstraints = false
         heightAnchor.constraint(equalTo: self.widthAnchor).isActive = true
-        
         setupTimePicker()
         setupTimeLabel()
-//        createBackgroundShapeLayer()
-//        createForegroundShapeLayer()
-        
     }
     
     required init?(coder: NSCoder) {
@@ -78,97 +74,71 @@ class TimePickerView: UIView {
         return NSString(format: "%0.2d:%0.2d:%0.2d", hours, minutes, seconds) as String
     }
     
-//    private func createForegroundShapeLayer() {
-//        let center = CGPoint(x: frame.width / 2, y: frame.height / 2)
-//        let radius = frame.width / 2 - foregroundShapeLayer.lineWidth / 2
-//        let startAngle = 3 * CGFloat.pi / 2
-//        let endAngle = 2 * -CGFloat.pi + startAngle
-//        let circlePath = UIBezierPath(arcCenter: center,
-//                                      radius: radius,
-//                                      startAngle: startAngle,
-//                                      endAngle: endAngle,
-//                                      clockwise: false)
-//        foregroundShapeLayer.path = circlePath.cgPath
-//        foregroundShapeLayer.lineWidth = 30
-//        foregroundShapeLayer.fillColor = UIColor.clear.cgColor
-//        foregroundShapeLayer.lineCap = CAShapeLayerLineCap.round
-//        foregroundShapeLayer.strokeColor = UIColor.orange.cgColor
-//        layer.addSublayer(foregroundShapeLayer)
-//    }
-    
-//    private func createBackgroundShapeLayer() {
-//        let center = CGPoint(x: frame.width / 2, y: frame.height / 2)
-//        let radius = frame.width / 2 - foregroundShapeLayer.lineWidth / 2
-//        let startAngle = 3 * CGFloat.pi / 2
-//        let endAngle = 2 * -CGFloat.pi + startAngle
-//        let circlePath = UIBezierPath(arcCenter: center,
-//                                      radius: radius,
-//                                      startAngle: startAngle,
-//                                      endAngle: endAngle,
-//                                      clockwise: false)
-//        backgroundShapeLayer.path = circlePath.cgPath
-//        backgroundShapeLayer.lineWidth = 30
-//        backgroundShapeLayer.fillColor = UIColor.clear.cgColor
-//        backgroundShapeLayer.lineCap = CAShapeLayerLineCap.round
-//        backgroundShapeLayer.strokeColor = UIColor.systemGray2.cgColor
-//        layer.addSublayer(backgroundShapeLayer)
-//    }
+    private func startAnimation(by value: Double, with selectedSeconds: Int) {
+        let basicAnimation = CABasicAnimation(keyPath: #keyPath(CAShapeLayer.strokeStart))
+        basicAnimation.fromValue = value
+        basicAnimation.toValue = 1
+        basicAnimation.duration = CFTimeInterval(selectedSeconds)
+        foregroundShapeLayer.add(basicAnimation, forKey: nil)
+    }
 }
 
 extension TimePickerView {
-
-    func startCountdownMode(with seconds: Int) {
-        timeLabel.text = makeTimeText(with: seconds)
     
+    func startCountdownMode(seconds: Int, value: Double) {
+        timeLabel.text = makeTimeText(with: seconds)
+        startAnimation(by: value, with: seconds)
     }
     
     func prepareCountdownMode(with seconds: Int) {
         timePicker.isHidden = true
+        foregroundShapeLayer.isHidden = false
+        backgroundShapeLayer.isHidden = false
         timeLabel.isHidden = false
         timeLabel.text = makeTimeText(with: seconds)
-        
     }
 
     func stopCountdownMode() {
-        timePicker.isHidden = false
+        foregroundShapeLayer.removeAllAnimations()
+        foregroundShapeLayer.isHidden = true
+        backgroundShapeLayer.isHidden = true
         timeLabel.isHidden = true
+        timePicker.isHidden = false
     }
     
-    
-    //    func setDisplayMode(isTimerActive: Bool) {
-    //        timePicker.isHidden = isTimerActive ? true : false
-    //        timeLabel.isHidden = isTimerActive ? false : true
-    //        foregroundShapeLayer.isHidden = isTimerActive ? false : true
-    //        backgroundShapeLayer.isHidden = isTimerActive ? false : true
-    //    }
-    
-//    func setLastSelectedTime(from seconds: Int) {
-//        let hours = seconds / 3600
-//        let minutes = seconds / 60 % 60
-//        let seconds = seconds % 60
-//
-//        let dateComp : NSDateComponents = NSDateComponents()
-//        dateComp.hour = hours
-//        dateComp.minute = minutes
-//        dateComp.second = seconds
-//        let calendar : NSCalendar = NSCalendar(calendarIdentifier: NSCalendar.Identifier.gregorian)!
-//        let date : NSDate = calendar.date(from: dateComp as DateComponents)! as NSDate
-//        timePicker.setDate(date as Date, animated: false)
-//    }
-    
-//    func startAnimation(by value: Double, with selectedSeconds: Int) {
-//        let basicAnimation = CABasicAnimation(keyPath: #keyPath(CAShapeLayer.strokeStart))
-//        basicAnimation.toValue = 1
-//        basicAnimation.fromValue = value
-//        basicAnimation.duration = CFTimeInterval(selectedSeconds)
-//        foregroundShapeLayer.add(basicAnimation, forKey: nil)
-//    }
-//
-//    func startAnimation(with selectedSeconds: Int) {
-//        let basicAnimation = CABasicAnimation(keyPath: #keyPath(CAShapeLayer.strokeStart))
-//        basicAnimation.toValue = 1
-//        basicAnimation.fromValue = 0
-//        basicAnimation.duration = CFTimeInterval(selectedSeconds)
-//        foregroundShapeLayer.add(basicAnimation, forKey: nil)
-//    }
+    func createForegroundShapeLayer() {
+        let center = CGPoint(x: frame.width / 2, y: frame.height / 2)
+        let radius = frame.width / 2 - foregroundShapeLayer.lineWidth / 2
+        let startAngle = 3 * CGFloat.pi / 2
+        let endAngle = 2 * -CGFloat.pi + startAngle
+        let circlePath = UIBezierPath(arcCenter: center,
+                                      radius: radius,
+                                      startAngle: startAngle,
+                                      endAngle: endAngle,
+                                      clockwise: false)
+        foregroundShapeLayer.path = circlePath.cgPath
+        foregroundShapeLayer.lineWidth = 30
+        foregroundShapeLayer.fillColor = UIColor.clear.cgColor
+        foregroundShapeLayer.lineCap = CAShapeLayerLineCap.round
+        foregroundShapeLayer.strokeColor = UIColor.orange.cgColor
+        layer.addSublayer(foregroundShapeLayer)
+    }
+
+    func createBackgroundShapeLayer() {
+        let center = CGPoint(x: frame.width / 2, y: frame.height / 2)
+        let radius = frame.width / 2 - foregroundShapeLayer.lineWidth / 2
+        let startAngle = 3 * CGFloat.pi / 2
+        let endAngle = 2 * -CGFloat.pi + startAngle
+        let circlePath = UIBezierPath(arcCenter: center,
+                                      radius: radius,
+                                      startAngle: startAngle,
+                                      endAngle: endAngle,
+                                      clockwise: false)
+        backgroundShapeLayer.path = circlePath.cgPath
+        backgroundShapeLayer.lineWidth = 30
+        backgroundShapeLayer.fillColor = UIColor.clear.cgColor
+        backgroundShapeLayer.lineCap = CAShapeLayerLineCap.round
+        backgroundShapeLayer.strokeColor = UIColor.systemGray2.cgColor
+        layer.addSublayer(backgroundShapeLayer)
+    }
 }

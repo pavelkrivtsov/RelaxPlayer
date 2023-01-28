@@ -42,7 +42,6 @@ class MainPresenter {
     private let timerManager: TimerManagerIn
     
     private lazy var timePickerVC = TimePickerViewController()
-    
     private var isTimerActive = false
     private var selectedSeconds = 60
     
@@ -58,6 +57,7 @@ extension MainPresenter: MainViewControllerOut {
 
     func createTimePickerController() {
         timePickerVC.presenter = self
+        timePickerVC.isTimerActive = isTimerActive
         DispatchQueue.main.async {
             self.view?.present(view: self.timePickerVC)
         }
@@ -123,12 +123,16 @@ extension MainPresenter: TimePickerViewControllerOut {
     
         if isTimerActive {
             timerManager.startTimer(with: selectedSeconds)
-            timePickerVC.prepareCountdownMode(with: selectedSeconds)
-            view?.setTimeLabelText(with: selectedSeconds)
+            DispatchQueue.main.async {
+                self.timePickerVC.prepareCountdownMode(with: self.selectedSeconds)
+                self.view?.setTimeLabelText(with: self.selectedSeconds)
+            }
         } else {
             timerManager.cancelTimer()
-            timePickerVC.stopCountdownMode()
-            view?.hideTimeLabel()
+            DispatchQueue.main.async {
+                self.timePickerVC.stopCountdownMode()
+                self.view?.hideTimeLabel()
+            }
         }
     }
 }
@@ -137,13 +141,19 @@ extension MainPresenter: TimePickerViewControllerOut {
 extension MainPresenter: TimerManagerOut {
     
     func getRemainingSeconds(_ seconds: Int) {
-        view?.setTimeLabelText(with: seconds)
-        timePickerVC.startCountdownMode(with: seconds)
+        let currentValue = 1 - (Double(seconds) / Double(selectedSeconds))
+        
+        DispatchQueue.main.async {
+            self.view?.setTimeLabelText(with: seconds)
+            self.timePickerVC.startCountdownMode(seconds: seconds, value: currentValue)
+        }
     }
     
     func timerIsFinished() {
         isTimerActive.toggle()
-        timePickerVC.stopCountdownMode()
         removeAllPlayers()
+        DispatchQueue.main.async {
+            self.timePickerVC.stopCountdownMode()
+        }
     }
 }

@@ -103,32 +103,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "3E5E3353-115C-46A0-929B-BD39F2E12B25"
-            shouldBeEnabled = "No"
+            uuid = "C6A8C9DD-8A23-4DFF-B04D-51B917D5CBD9"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "RelaxPlayer/Modules/MainScreen/CollectionManager/CollectionManager.swift"
+            filePath = "RelaxPlayer/Modules/TimePickerScreen/TimePickerView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "137"
-            endingLineNumber = "137"
-            landmarkName = "createPlayer(with:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "36BFA593-BC10-4D47-B811-1DAADE50C9BA"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "RelaxPlayer/Modules/MainScreen/CollectionManager/CollectionManager.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "150"
-            endingLineNumber = "150"
-            landmarkName = "activateSelectedPlayers()"
+            startingLineNumber = "78"
+            endingLineNumber = "78"
+            landmarkName = "startAnimation(by:with:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
