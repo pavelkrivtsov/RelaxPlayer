@@ -15,9 +15,14 @@ class TimePickerView: UIView {
     
     weak var view: TimePickerViewOut?
     private var timePicker = UIDatePicker()
-    private var timeLabel = UILabel()
+    private var timerLabel = UILabel()
+    
     private var foregroundShapeLayer = CAShapeLayer()
     private var backgroundShapeLayer = CAShapeLayer()
+    
+    private var endTimeStack = UIStackView()
+    private let bellImageView = UIImageView(image: UIImage(systemName: "bell.fill"))
+    private var endTimeLabel = UILabel()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,6 +30,7 @@ class TimePickerView: UIView {
         heightAnchor.constraint(equalTo: self.widthAnchor).isActive = true
         setupTimePicker()
         setupTimeLabel()
+        setupEndTimeStack()
     }
     
     required init?(coder: NSCoder) {
@@ -37,24 +43,45 @@ class TimePickerView: UIView {
         NSLayoutConstraint.activate([
             timePicker.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             timePicker.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            timePicker.topAnchor.constraint(equalTo: self.topAnchor),
-            timePicker.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+            timePicker.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            timePicker.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+            timePicker.heightAnchor.constraint(equalTo: timePicker.widthAnchor, multiplier: 0.75)
         ])
         timePicker.datePickerMode = .countDownTimer
         timePicker.addTarget(self, action: #selector(setNewValue), for: .valueChanged)
+        
+        timePicker.backgroundColor = UIColor(named: "foregroundColor")
+        timePicker.layer.cornerRadius = 15
+        timePicker.clipsToBounds = true
     }
     
     private func setupTimeLabel() {
-        self.addSubview(timeLabel)
-        timeLabel.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(timerLabel)
+        timerLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            timeLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            timeLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            timeLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            timeLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor)
+            timerLabel.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.5),
+            timerLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            timerLabel.bottomAnchor.constraint(equalTo: self.centerYAnchor)
         ])
-        timeLabel.textAlignment = .center
-        timeLabel.font = .systemFont(ofSize: 35)
+        timerLabel.textAlignment = .center
+        timerLabel.font = .boldSystemFont(ofSize: 35)
+    }
+    
+    private func setupEndTimeStack() {
+        self.addSubview(endTimeStack)
+        endTimeStack.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            endTimeStack.topAnchor.constraint(equalTo: self.centerYAnchor, constant: 16),
+            endTimeStack.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+        ])
+        endTimeStack.distribution = .fillProportionally
+        endTimeStack.spacing = 4
+        
+        endTimeStack.addArrangedSubview(bellImageView)
+        bellImageView.tintColor = .secondaryLabel
+        
+        endTimeStack.addArrangedSubview(endTimeLabel)
+        endTimeLabel.textColor = .secondaryLabel
     }
     
     @objc
@@ -81,12 +108,19 @@ class TimePickerView: UIView {
         basicAnimation.duration = CFTimeInterval(selectedSeconds)
         foregroundShapeLayer.add(basicAnimation, forKey: nil)
     }
+    
+    private func calculateEndTime(with seconds: Int) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm"
+        let endTime = dateFormatter.string(from: Date() + TimeInterval(seconds))
+        return endTime
+    }
 }
 
 extension TimePickerView {
     
     func startCountdownMode(seconds: Int, value: Double) {
-        timeLabel.text = makeTimeText(with: seconds)
+        timerLabel.text = makeTimeText(with: seconds)
         startAnimation(by: value, with: seconds)
     }
     
@@ -94,15 +128,18 @@ extension TimePickerView {
         timePicker.isHidden = true
         foregroundShapeLayer.isHidden = false
         backgroundShapeLayer.isHidden = false
-        timeLabel.isHidden = false
-        timeLabel.text = makeTimeText(with: seconds)
+        timerLabel.isHidden = false
+        endTimeStack.isHidden = false
+        endTimeLabel.text = calculateEndTime(with: seconds)
+        timerLabel.text = makeTimeText(with: seconds)
     }
 
     func stopCountdownMode() {
         foregroundShapeLayer.removeAllAnimations()
         foregroundShapeLayer.isHidden = true
         backgroundShapeLayer.isHidden = true
-        timeLabel.isHidden = true
+        timerLabel.isHidden = true
+        endTimeStack.isHidden = true
         timePicker.isHidden = false
     }
     
