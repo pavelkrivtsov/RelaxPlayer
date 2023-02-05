@@ -7,60 +7,73 @@
 
 import UIKit
 
-// MARK: - TimePickerVC
+protocol TimePickerViewControllerDelegate: AnyObject {
+    func getSelectedSeconds(_ selectedSeconds: Int)
+    func cancelTimer()
+}
+
 class TimePickerViewController: UIViewController {
     
-    // MARK: - Properties
-    weak var presenter: TimePickerViewControllerOut?
+    weak var delegate: TimePickerViewControllerDelegate?
     private var timePickerView = TimePickerView()
     private var playPauseButton = UIButton()
-    private let backgroundBlurView = UIVisualEffectView()
     private var configuration = UIButton.Configuration.filled()
+    private var isTimerActive = Bool()
+    private var selectedSeconds = Int()
+    private var remainingSeconds = Int()
+ 
+    init(isTimerActive: Bool, selectedSeconds: Int, remainingSeconds: Int) {
+        self.isTimerActive = isTimerActive
+        self.selectedSeconds = selectedSeconds
+        self.remainingSeconds = remainingSeconds
+        super.init(nibName: nil, bundle: nil)
+    }
     
-    var isTimerActive = Bool()
-    private var seconds = Int()
-    private var value = Double()
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
-    // MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-    
+        navigationController?.navigationBar.backgroundColor = UIColor(named: "foregroundColor")
+        navigationItem.titleView = UIImageView(image: UIImage(systemName: "timer"))
+        navigationItem.titleView?.tintColor = .white
+        
+        let backgroundBlurView = UIVisualEffectView()
         view.addSubview(backgroundBlurView)
         backgroundBlurView.frame = view.bounds
         let blurEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
         backgroundBlurView.effect = blurEffect
         
-        setupTimePickerView()
+        setupTimePicker()
         setupPlayPauseButton()
     }
     
-    // MARK: - viewWillAppear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if isTimerActive {
-            DispatchQueue.main.async {
-                self.timePickerView.startCountdownMode(seconds: self.seconds, value: self.value)
-            }
+            prepareCountdownMode(with: remainingSeconds)
+            let currentValue = 1 - (Double(remainingSeconds) / Double(selectedSeconds))
+            startCountdownMode(seconds: remainingSeconds, value: currentValue)
         }
     }
     
-    // MARK: - viewDidLayoutSubviews
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         timePickerView.createBackgroundShapeLayer()
         timePickerView.createForegroundShapeLayer()
     }
     
-    // MARK: - Private methods
-    private func setupTimePickerView() {
+    private func setupTimePicker() {
         view.addSubview(timePickerView)
+        timePickerView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             timePickerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             timePickerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
             timePickerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             timePickerView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
         ])
-        timePickerView.view = self
+        timePickerView.delegate = self
     }
     
     private func setupPlayPauseButton() {
@@ -79,41 +92,42 @@ class TimePickerViewController: UIViewController {
     
     @objc
     private func playPauseButtonPressed() {
-        presenter?.togglePlayPause()
+        isTimerActive.toggle()
+        if isTimerActive {
+            delegate?.getSelectedSeconds(selectedSeconds)
+            prepareCountdownMode(with: selectedSeconds)
+        } else {
+            delegate?.cancelTimer()
+            stopCountdownMode()
+        }
+        playPauseButton.configuration?.image = UIImage(systemName: isTimerActive ? "stop" : "play")
+    }
+    
+    private func prepareCountdownMode(with seconds: Int) {
+        timePickerView.prepareCountdownMode(with: seconds)
+        configuration.image = UIImage(systemName: "stop")
+        configuration.baseBackgroundColor = .systemRed
+        playPauseButton.configuration = configuration
     }
 }
 
 extension TimePickerViewController {
     
     func startCountdownMode(seconds: Int, value: Double) {
-        self.seconds = seconds
-        self.value = value
         timePickerView.startCountdownMode(seconds: seconds, value: value)
     }
-    
-    func prepareCountdownMode(with seconds: Int) {
-        timePickerView.prepareCountdownMode(with: seconds)
-        
-        configuration.image = UIImage(systemName: "stop")
-        configuration.baseBackgroundColor = .systemRed
-        playPauseButton.configuration = configuration
-    }
-        
+
     func stopCountdownMode() {
         timePickerView.stopCountdownMode()
-
         configuration.image = UIImage(systemName: "play")
         configuration.baseBackgroundColor = .systemBlue
         playPauseButton.configuration = configuration
     }
 }
 
-// MARK: - TimePickerViewOut
-extension TimePickerViewController: TimePickerViewOut {
-    
-    func getFromTimePicker(selectedSeconds: Int) {
-        presenter?.getFromTimePicker(selectedSeconds: selectedSeconds)
+// MARK: - TimePickerViewDelegate
+extension TimePickerViewController: TimePickerViewDelegate {
+    func getSelectedSeconds(_ seconds: Int) {
+        self.selectedSeconds = seconds
     }
 }
-
-

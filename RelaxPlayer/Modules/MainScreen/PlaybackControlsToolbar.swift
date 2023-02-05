@@ -7,55 +7,54 @@
 
 import UIKit
 
-protocol PlaybackControlsToolbarOut: AnyObject {
+protocol PlaybackControlsToolbarDelegate: AnyObject {
     func openTimerViewButtonDidPress()
     func playPauseButtonDidPress()
     func openMixerDidPress()
 }
 
-enum PlayPauseIcon: String {
-    case Play = "play.fill"
-    case Pause = "pause.fill"
-    case Stop = "stop.fill"
-}
-
-// MARK: - PlaybackControlsToolbar
 class PlaybackControlsToolbar: UIStackView {
+    
+    enum PlayPauseIcon: String {
+        case Play = "play.fill"
+        case Pause = "pause.fill"
+        case Stop = "stop.fill"
+    }
         
-    weak var view: PlaybackControlsToolbarOut?
+    weak var delegate: PlaybackControlsToolbarDelegate?
     private let openTimerViewButton = UIButton()
-    private let playPauseButton = UIButton()
-    private let openMixerViewButton = UIButton()
+    let playPauseButton = UIButton()
+    let openMixerViewButton = UIButton()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
     
         backgroundColor = UIColor(named: "foregroundColor")
-        layer.cornerRadius = 20
+        layer.cornerRadius = 24
         clipsToBounds = true
-        spacing = 20
+        spacing = 24
         distribution = .fillEqually
         
         addArrangedSubview(openTimerViewButton)
-        var timerButtonconfiguration = UIButton.Configuration.plain()
-        timerButtonconfiguration.image = UIImage(systemName: "timer")
-        timerButtonconfiguration.baseForegroundColor = .white
-        openTimerViewButton.configuration = timerButtonconfiguration
+        var timerButtonConfiguration = UIButton.Configuration.plain()
+        timerButtonConfiguration.image = UIImage(systemName: "timer")
+        timerButtonConfiguration.baseForegroundColor = .white
+        openTimerViewButton.configuration = timerButtonConfiguration
         openTimerViewButton.addTarget(self, action: #selector(openTimerPickerController), for: .touchUpInside)
         
         addArrangedSubview(playPauseButton)
-        var playPauseButtonconfiguration = UIButton.Configuration.plain()
-        playPauseButtonconfiguration.image = UIImage(systemName: "stop.fill")
-        playPauseButtonconfiguration.baseForegroundColor = .white
-        playPauseButton.configuration = playPauseButtonconfiguration
+        var playPauseButtonConfiguration = UIButton.Configuration.plain()
+        playPauseButtonConfiguration.image = UIImage(systemName: "stop.fill")
+        playPauseButtonConfiguration.baseForegroundColor = .white
+        playPauseButton.configuration = playPauseButtonConfiguration
         playPauseButton.isEnabled = false
         playPauseButton.addTarget(self, action: #selector(togglePlayback), for: .touchUpInside)
         
         addArrangedSubview(openMixerViewButton)
-        var mixerButtonconfiguration = UIButton.Configuration.plain()
-        mixerButtonconfiguration.image = UIImage(systemName: "slider.horizontal.3")
-        mixerButtonconfiguration.baseForegroundColor = .white
-        openMixerViewButton.configuration = mixerButtonconfiguration
+        var mixerButtonConfiguration = UIButton.Configuration.plain()
+        mixerButtonConfiguration.image = UIImage(systemName: "slider.horizontal.3")
+        mixerButtonConfiguration.baseForegroundColor = .white
+        openMixerViewButton.configuration = mixerButtonConfiguration
         openMixerViewButton.isEnabled = false
         openMixerViewButton.addTarget(self, action: #selector(openMixerViewController), for: .touchUpInside)
         
@@ -66,28 +65,21 @@ class PlaybackControlsToolbar: UIStackView {
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-}
-
-// MARK: - PlaybackControlsToolbarOut
-extension PlaybackControlsToolbar {
     
     @objc
     private func openTimerPickerController() {
-        view?.openTimerViewButtonDidPress()
+        delegate?.openTimerViewButtonDidPress()
     }
     
     @objc
     private func togglePlayback() {
-        view?.playPauseButtonDidPress()
+        delegate?.playPauseButtonDidPress()
     }
     
     @objc
     private func openMixerViewController() {
-        view?.openMixerDidPress()
+        delegate?.openMixerDidPress()
     }
-}
-
-extension PlaybackControlsToolbar {
     
     private func makeTimeText(with remainingSeconds: Int) -> String {
         let hours = remainingSeconds / 3600
@@ -99,7 +91,10 @@ extension PlaybackControlsToolbar {
         }
         return NSString(format: "%0.2d:%0.2d:%0.2d", hours, minutes, seconds) as String
     }
-    
+}
+
+extension PlaybackControlsToolbar {
+        
     func hideTimeLabel() {
         openTimerViewButton.configuration?.subtitle = nil
         openTimerViewButton.configuration?.imagePlacement = .leading

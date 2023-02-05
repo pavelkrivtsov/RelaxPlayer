@@ -9,7 +9,7 @@ import UIKit
 
 class NoiseCell: UICollectionViewCell {
     
-    static let reuseId = "MainNoiseCell"
+    static let reuseId = "NoiseCell"
     private let iconImageView = UIImageView()
     
     override init(frame: CGRect) {

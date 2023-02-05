@@ -7,8 +7,8 @@
 
 import UIKit
 
-protocol MixerCellOut: AnyObject {
-    func changePlayerVolume(name: String, volume: Float)
+protocol MixerCellDelegate: AnyObject {
+    func setPlayerVolume(name: String, volume: Float)
     func removePlayer(name: String)
 }
 
@@ -16,12 +16,12 @@ class MixerCell: UITableViewCell {
     
     static let reuseId = "MixerCell"
     
-    weak var tableManager: MixerCellOut?
-    var playerName = String()
-    var hStack = UIStackView()
-    var iconImageView = UIImageView()
-    var volumeSlider = UISlider()
-    var deletePlayerButton = UIButton()
+    weak var delegate: MixerCellDelegate?
+    private var playerName = String()
+    private var hStack = UIStackView()
+    private var iconImageView = UIImageView()
+    private var deletePlayerButton = UIButton()
+    private var volumeSlider = UISlider()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -69,7 +69,7 @@ class MixerCell: UITableViewCell {
     
     @objc
     private func sliderChanged() {
-        tableManager?.changePlayerVolume(name: playerName, volume: volumeSlider.value)
+        delegate?.setPlayerVolume(name: playerName, volume: volumeSlider.value)
     }
     
     private func setupDeletePlayerButton() {
@@ -87,13 +87,14 @@ class MixerCell: UITableViewCell {
     
     @objc
     private func removePlayer() {
-        tableManager?.removePlayer(name: self.playerName)
+        delegate?.removePlayer(name: self.playerName)
     }
 }
 
 extension MixerCell {
-    func configure(from noiseName: String) {
+    func configure(from noiseName: String, volume: Float) {
         self.playerName = noiseName
         iconImageView.image = UIImage(named: noiseName)
+        volumeSlider.value = volume
     }
 }

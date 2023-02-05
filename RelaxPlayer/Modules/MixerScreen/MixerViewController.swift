@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol TableManagerOut: AnyObject {
+protocol MixerViewControllerDelegate: AnyObject {
     func removeAllPlayers()
     func removePlayer(name: String)
     func setPlayerVolume(name: String, volume: Float)
@@ -15,15 +15,14 @@ protocol TableManagerOut: AnyObject {
 
 class MixerViewController: UIViewController {
     
-    // MARK: - Properties
-    weak var presenter: MixerViewControllerOut?
-    private let tableManager: TableManagerIn
-    private let tableView: UITableView
-   
-    // MARK: - init
-    init(tableManager: TableManagerIn, tableView: UITableView) {
-        self.tableManager = tableManager
-        self.tableView = tableView
+    weak var delegate: MixerViewControllerDelegate?
+    private let tableView = UITableView(frame: .zero, style: .insetGrouped)
+    private var players = [String]()
+    private var playersVolume: [String : Float]
+    
+    init(players: [String], playersVolume: [String : Float]) {
+        self.players = players
+        self.playersVolume = playersVolume
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -31,9 +30,12 @@ class MixerViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationController?.navigationBar.backgroundColor = UIColor(named: "foregroundColor")
+        navigationItem.titleView = UIImageView(image: UIImage(systemName: "slider.horizontal.3"))
+        navigationItem.titleView?.tintColor = .white
         
         let backgroundBlurView = UIVisualEffectView()
         view.addSubview(backgroundBlurView)
@@ -41,13 +43,21 @@ class MixerViewController: UIViewController {
         let blurEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
         backgroundBlurView.effect = blurEffect
     
-        view.addSubview(tableView)
-        tableView.frame = view.bounds
-        
+        setupTableView()
         setupCleanButton()
     }
     
-    // MARK: - Private Methods
+    private func setupTableView() {
+        view.addSubview(tableView)
+        tableView.frame = view.bounds
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(MixerCell.self, forCellReuseIdentifier: MixerCell.reuseId)
+        tableView.separatorInset = .zero
+        tableView.allowsSelection = false
+        tableView.backgroundColor = .clear
+    }
+    
     private func setupCleanButton() {
         let removeAllPlayersButton = UIButton()
         view.addSubview(removeAllPlayersButton)
@@ -68,22 +78,54 @@ class MixerViewController: UIViewController {
     
     @objc
     private func cleanTableView() {
-        tableManager.cleanTableView()
+        delegate?.removeAllPlayers()
+        players.removeAll()
+        tableView.reloadData()
     }
 }
 
-// MARK: - TableManagerOut
-extension MixerViewController: TableManagerOut {
-    
-    func removeAllPlayers() {
-        presenter?.removeAllPlayers()
-    }
-    
+// MARK: - MixerCellDelegate
+extension MixerViewController: MixerCellDelegate {
+
     func removePlayer(name: String) {
-        presenter?.removePlayer(name: name)
+        if let playerNameIndex = players.firstIndex(of: name) {
+            players = players.filter {$0 != name}
+            delegate?.removePlayer(name: name)
+            let indexPath = IndexPath(item: playerNameIndex, section: 0)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
+    }
+
+    func setPlayerVolume(name: String, volume: Float) {
+        delegate?.setPlayerVolume(name: name, volume: volume)
+    }
+}
+
+// MARK: - UITableViewDataSource, UITableViewDelegate
+extension MixerViewController: UITableViewDataSource, UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if players.isEmpty {
+            dismiss(animated: true, completion: nil)
+        }
+        return players.count
     }
     
-    func setPlayerVolume(name: String, volume: Float) {
-        presenter?.setPlayerVolume(name: name, volume: volume)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if let cell = tableView.dequeueReusableCell(withIdentifier: MixerCell.reuseId,
+                                                    for: indexPath) as? MixerCell {
+
+            let player = players[indexPath.row]
+            if let volumeValue = playersVolume[player] {
+                cell.configure(from: player, volume: volumeValue)
+            }
+            cell.delegate = self
+            return cell
+        }
+        return UITableViewCell()
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        64
     }
 }

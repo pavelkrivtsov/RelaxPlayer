@@ -7,22 +7,20 @@
 
 import UIKit
 
-protocol TimePickerViewOut: AnyObject {
-    func getFromTimePicker(selectedSeconds: Int)
+protocol TimePickerViewDelegate: AnyObject {
+    func getSelectedSeconds(_ seconds: Int)
 }
 
 class TimePickerView: UIView {
     
-    weak var view: TimePickerViewOut?
+    weak var delegate: TimePickerViewDelegate?
     private var timePicker = UIDatePicker()
     private var timerLabel = UILabel()
-    
-    private var foregroundShapeLayer = CAShapeLayer()
-    private var backgroundShapeLayer = CAShapeLayer()
-    
     private var endTimeStack = UIStackView()
     private let bellImageView = UIImageView(image: UIImage(systemName: "bell.fill"))
     private var endTimeLabel = UILabel()
+    private var foregroundShapeLayer = CAShapeLayer()
+    private var backgroundShapeLayer = CAShapeLayer()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -87,7 +85,7 @@ class TimePickerView: UIView {
     @objc
     private func setNewValue() {
         let seconds = Int(timePicker.countDownDuration)
-        view?.getFromTimePicker(selectedSeconds: seconds)
+        delegate?.getSelectedSeconds(seconds)
     }
     
     private func makeTimeText(with remainingSeconds: Int) -> String  {
@@ -175,7 +173,7 @@ extension TimePickerView {
         backgroundShapeLayer.lineWidth = 30
         backgroundShapeLayer.fillColor = UIColor.clear.cgColor
         backgroundShapeLayer.lineCap = CAShapeLayerLineCap.round
-        backgroundShapeLayer.strokeColor = UIColor.systemGray2.cgColor
+        backgroundShapeLayer.strokeColor = UIColor(named: "foregroundColor")?.cgColor
         layer.addSublayer(backgroundShapeLayer)
     }
 }
