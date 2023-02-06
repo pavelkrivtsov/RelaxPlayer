@@ -12,7 +12,7 @@ protocol TimePickerViewControllerDelegate: AnyObject {
     func cancelTimer()
 }
 
-class TimePickerViewController: UIViewController {
+final class TimePickerViewController: UIViewController {
     
     weak var delegate: TimePickerViewControllerDelegate?
     private var timePickerView = TimePickerView()
@@ -23,10 +23,10 @@ class TimePickerViewController: UIViewController {
     private var remainingSeconds = Int()
  
     init(isTimerActive: Bool, selectedSeconds: Int, remainingSeconds: Int) {
+        super.init(nibName: nil, bundle: nil)
         self.isTimerActive = isTimerActive
         self.selectedSeconds = selectedSeconds
         self.remainingSeconds = remainingSeconds
-        super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {

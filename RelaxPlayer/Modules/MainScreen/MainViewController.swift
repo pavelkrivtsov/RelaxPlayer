@@ -6,16 +6,10 @@
 //
 
 import UIKit
-import AVFoundation
 
-class MainViewController: UIViewController {
-    
-    private var noisesNames = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
-    private var audioSassion = AVAudioSession.sharedInstance()
-    private var audioPlayers = [String: AVAudioPlayer]()
-    private var selectedPlayers = [String]()
-    private var selectedPlayersVolume = [String:Float]()
-    
+final class MainViewController: UIViewController {
+
+    private let audioManager: AudioManagerProtocol = AudioManager.shared
     private var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     private var playbackControlsToolbar = PlaybackControlsToolbar()
     
@@ -25,10 +19,11 @@ class MainViewController: UIViewController {
     private var isTimerActive = Bool()
     private var selectedSeconds = 60
     private var remainingSeconds = Int()
-
+     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "backgroundColor")
+        
         setupCollectionView()
         setupPlaybackControlsToolbar()
     }
@@ -69,7 +64,7 @@ class MainViewController: UIViewController {
     }
     
     private func updateButtons() {
-        let isAudioPlaying = audioPlayers
+        let isAudioPlaying = audioManager.getAudioPlayers()
             .values
             .filter { $0.isPlaying }
             .count > 0
@@ -80,7 +75,7 @@ class MainViewController: UIViewController {
         if isAudioPlaying {
             playbackControlsToolbar.updateVisualState(withPlayPauseIcon: .Pause)
         } else {
-            playbackControlsToolbar.updateVisualState(withPlayPauseIcon: selectedPlayers.count > 0 ? .Play : .Stop)
+            playbackControlsToolbar.updateVisualState(withPlayPauseIcon: audioManager.getSelectedPlayers().count > 0 ? .Play : .Stop)
         }
     }
 }
@@ -89,14 +84,14 @@ class MainViewController: UIViewController {
 extension MainViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        noisesNames.count
+        audioManager.getNoisesNames().count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath)-> UICollectionViewCell {
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NoiseCell.reuseId,
                                                          for: indexPath) as? NoiseCell {
-            let noise = noisesNames[indexPath.item]
-            let player = audioPlayers[noise]
+            let noise = audioManager.getNoisesNames()[indexPath.item]
+            let player = audioManager.getAudioPlayers()[noise]
             cell.configure(imageWith: noise, isSelected: player?.isPlaying ?? false)
             return cell
         }
@@ -110,63 +105,28 @@ extension MainViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         guard collectionView.cellForItem(at: indexPath) != nil else { return }
-        let name = noisesNames[indexPath.item]
+        let name = audioManager.getNoisesNames()[indexPath.item]
         
-        if let player = audioPlayers[name] {
+        if let player =  audioManager.getAudioPlayers()[name] {
             if player.isPlaying {
                 player.stop()
-                removePlayerFromSelected(with: name)
+                audioManager.removePlayerFromSelected(with: name)
             } else {
-                if selectedPlayers.contains(name) {
-                    removePlayerFromSelected(with: name)
+                if audioManager.getSelectedPlayers().contains(name) {
+                    audioManager.removePlayerFromSelected(with: name)
                 } else {
                     player.volume = 1
-                    selectedPlayers.append(name)
-                    selectedPlayersVolume[name] = 1
-                    activateSelectedPlayers()
+                    audioManager.appendPlayer(with: name)
+                    audioManager.activateSelectedPlayers()
                 }
             }
         } else {
-            createPlayer(with: name)
-            selectedPlayers.append(name)
-            selectedPlayersVolume[name] = 1
-            activateSelectedPlayers()
+            audioManager.createPlayer(with: name)
+            audioManager.appendPlayer(with: name)
+            audioManager.activateSelectedPlayers()
         }
-        
         updateButtons()
         collectionView.reloadItems(at: [indexPath])
-    }
-    
-    private func createPlayer(with name: String) {
-        do {
-            guard let audioPath = Bundle.main.path(forResource: name, ofType: "mp3") else { return }
-            let player = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: audioPath))
-            player.numberOfLoops = -1
-            player.volume = 1
-            player.prepareToPlay()
-            audioPlayers[name] = player
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
-    
-    private func activateSelectedPlayers() {
-        do {
-            try audioSassion.setActive(true)
-            for (name, player) in audioPlayers {
-                if selectedPlayers.contains(name) && player.isPlaying == false {
-                    player.play()
-                }
-            }
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
-    
-    private func removePlayerFromSelected(with name: String) {
-        if let playerIndex = selectedPlayers.firstIndex(of: name) {
-            selectedPlayers.remove(at: playerIndex)
-        }
     }
 }
 
@@ -183,14 +143,15 @@ extension MainViewController: PlaybackControlsToolbarDelegate {
     }
 
     func playPauseButtonDidPress() {
-        for playerName in selectedPlayers {
-            audioPlayers[playerName]?.toggle()
+        for player in audioManager.getSelectedPlayers() {
+            audioManager.getAudioPlayers()[player]?.toggle()
         }
         updateButtons()
     }
 
     func openMixerDidPress() {
-        let mixerVC = MixerViewController(players: selectedPlayers, playersVolume: selectedPlayersVolume)
+        let mixerVC = MixerViewController(players: audioManager.getSelectedPlayers(),
+                                          playersVolume: audioManager.getSelectedPlayersVolume())
         mixerVC.delegate = self
         self.present(UINavigationController(rootViewController: mixerVC), animated: true, completion: nil)
     }
@@ -218,23 +179,14 @@ extension MainViewController: TimePickerViewControllerDelegate {
 extension MainViewController: MixerViewControllerDelegate {
     
     func setPlayerVolume(name: String, volume: Float) {
-        if let player = audioPlayers[name] {
-            player.volume = volume
-            selectedPlayersVolume[name] = volume
-        }
+        audioManager.setPlayerVolume(name: name, volume: volume)
     }
 
     func removePlayer(name: String) {
-        if let player = audioPlayers[name] {
+        if let player = audioManager.getAudioPlayers()[name] {
             player.stop()
-
-            for player in selectedPlayers {
-                if player == name, let playerIndex = selectedPlayers.firstIndex(of: player) {
-                    selectedPlayers.remove(at: playerIndex)
-                }
-            }
-
-            if let playerIndex =  noisesNames.firstIndex(of: name) {
+            audioManager.removePlayer(name: name)
+            if let playerIndex = audioManager.getNoisesNames().firstIndex(of: name) {
                 let indexPath = IndexPath(item: playerIndex, section: 0)
                 collectionView.reloadItems(at: [indexPath])
             }
@@ -243,14 +195,8 @@ extension MainViewController: MixerViewControllerDelegate {
     }
 
     func removeAllPlayers() {
-        audioPlayers = audioPlayers.mapValues{ player in
-            if player.isPlaying{
-                player.stop()
-            }
-            return player
-        }
-        selectedPlayers.removeAll()
-        selectedPlayersVolume.removeAll()
+        audioManager.stopAllPlayers()
+        audioManager.removeAllPlayers()
         collectionView.reloadData()
         updateButtons()
     }
@@ -268,12 +214,7 @@ extension MainViewController: RelaxTimerDelegate {
     
     func timerIsFinished() {
         isTimerActive = false
-        audioPlayers = audioPlayers.mapValues{ player in
-            if player.isPlaying{
-                player.stop()
-            }
-            return player
-        }
+        audioManager.stopAllPlayers()
         updateButtons()
         timePickerVC?.stopCountdownMode()
     }

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class NoiseCell: UICollectionViewCell {
+final class NoiseCell: UICollectionViewCell {
     
     static let reuseId = "NoiseCell"
     private let iconImageView = UIImageView()

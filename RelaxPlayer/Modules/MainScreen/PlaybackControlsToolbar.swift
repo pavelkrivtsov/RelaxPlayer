@@ -13,7 +13,7 @@ protocol PlaybackControlsToolbarDelegate: AnyObject {
     func openMixerDidPress()
 }
 
-class PlaybackControlsToolbar: UIStackView {
+final class PlaybackControlsToolbar: UIStackView {
     
     enum PlayPauseIcon: String {
         case Play = "play.fill"

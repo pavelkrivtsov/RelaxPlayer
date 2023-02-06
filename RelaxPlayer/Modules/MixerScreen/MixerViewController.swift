@@ -13,19 +13,19 @@ protocol MixerViewControllerDelegate: AnyObject {
     func setPlayerVolume(name: String, volume: Float)
 }
 
-class MixerViewController: UIViewController {
+final class MixerViewController: UIViewController {
     
     weak var delegate: MixerViewControllerDelegate?
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     private var players = [String]()
-    private var playersVolume: [String : Float]
+    private var playersVolume = [String : Float]()
     
     init(players: [String], playersVolume: [String : Float]) {
+        super.init(nibName: nil, bundle: nil)
         self.players = players
         self.playersVolume = playersVolume
-        super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

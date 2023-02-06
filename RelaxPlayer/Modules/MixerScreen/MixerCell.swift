@@ -12,7 +12,7 @@ protocol MixerCellDelegate: AnyObject {
     func removePlayer(name: String)
 }
 
-class MixerCell: UITableViewCell {
+final class MixerCell: UITableViewCell {
     
     static let reuseId = "MixerCell"
     

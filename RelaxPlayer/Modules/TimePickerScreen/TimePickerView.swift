@@ -11,7 +11,7 @@ protocol TimePickerViewDelegate: AnyObject {
     func getSelectedSeconds(_ seconds: Int)
 }
 
-class TimePickerView: UIView {
+final class TimePickerView: UIView {
     
     weak var delegate: TimePickerViewDelegate?
     private var timePicker = UIDatePicker()
