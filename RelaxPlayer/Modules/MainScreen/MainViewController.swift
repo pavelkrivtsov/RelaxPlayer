@@ -214,6 +214,7 @@ extension MainViewController: RelaxTimerDelegate {
     
     func timerIsFinished() {
         isTimerActive = false
+        playbackControlsToolbar.hideTimeLabel()
         audioManager.stopAllPlayers()
         updateButtons()
         timePickerVC?.stopCountdownMode()

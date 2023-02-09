@@ -32,7 +32,6 @@ final class MixerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         navigationController?.navigationBar.backgroundColor = UIColor(named: "foregroundColor")
         navigationItem.titleView = UIImageView(image: UIImage(systemName: "slider.horizontal.3"))
         navigationItem.titleView?.tintColor = .white

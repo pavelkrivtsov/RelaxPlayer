@@ -55,6 +55,8 @@ final class TimePickerViewController: UIViewController {
             prepareCountdownMode(with: remainingSeconds)
             let currentValue = 1 - (Double(remainingSeconds) / Double(selectedSeconds))
             startCountdownMode(seconds: remainingSeconds, value: currentValue)
+        } else {
+            stopCountdownMode()
         }
     }
     
@@ -87,7 +89,9 @@ final class TimePickerViewController: UIViewController {
         playPauseButton.addTarget(self, action: #selector(playPauseButtonPressed), for: .touchUpInside)
         configuration.contentInsets = .init(top: 16, leading: 16, bottom: 16, trailing: 16)
         configuration.cornerStyle = .capsule
-        stopCountdownMode()
+        configuration.image = UIImage(systemName: "play")
+        configuration.baseBackgroundColor = .systemBlue
+        playPauseButton.configuration = configuration
     }
     
     @objc
@@ -118,6 +122,7 @@ extension TimePickerViewController {
     }
 
     func stopCountdownMode() {
+        isTimerActive = false
         timePickerView.stopCountdownMode()
         configuration.image = UIImage(systemName: "play")
         configuration.baseBackgroundColor = .systemBlue
