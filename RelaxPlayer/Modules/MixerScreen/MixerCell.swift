@@ -87,13 +87,13 @@ final class MixerCell: UITableViewCell {
     
     @objc
     private func removePlayer() {
-        delegate?.removePlayer(name: self.playerName)
+        delegate?.removePlayer(name: playerName)
     }
 }
 
 extension MixerCell {
     func configure(from noiseName: String, volume: Float) {
-        self.playerName = noiseName
+        playerName = noiseName
         iconImageView.image = UIImage(named: noiseName)
         volumeSlider.value = volume
     }

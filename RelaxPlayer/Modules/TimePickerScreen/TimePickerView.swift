@@ -36,7 +36,7 @@ final class TimePickerView: UIView {
     }
     
     private func setupTimePicker() {
-        self.addSubview(timePicker)
+        addSubview(timePicker)
         timePicker.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             timePicker.leadingAnchor.constraint(equalTo: self.leadingAnchor),
@@ -54,7 +54,7 @@ final class TimePickerView: UIView {
     }
     
     private func setupTimeLabel() {
-        self.addSubview(timerLabel)
+        addSubview(timerLabel)
         timerLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             timerLabel.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.5),
@@ -66,7 +66,7 @@ final class TimePickerView: UIView {
     }
     
     private func setupEndTimeStack() {
-        self.addSubview(endTimeStack)
+        addSubview(endTimeStack)
         endTimeStack.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             endTimeStack.topAnchor.constraint(equalTo: self.centerYAnchor, constant: 16),

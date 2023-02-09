@@ -133,6 +133,6 @@ extension TimePickerViewController {
 // MARK: - TimePickerViewDelegate
 extension TimePickerViewController: TimePickerViewDelegate {
     func getSelectedSeconds(_ seconds: Int) {
-        self.selectedSeconds = seconds
+        selectedSeconds = seconds
     }
 }

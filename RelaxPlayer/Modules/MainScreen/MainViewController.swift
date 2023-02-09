@@ -15,7 +15,7 @@ final class MainViewController: UIViewController {
     
     weak var timePickerVC: TimePickerViewController?
     
-    private var timer = RelaxTimer()
+    private var timer = Timer()
     private var isTimerActive = Bool()
     private var selectedSeconds = 60
     private var remainingSeconds = Int()
@@ -162,14 +162,14 @@ extension MainViewController: TimePickerViewControllerDelegate {
 
     func getSelectedSeconds(_ seconds: Int) {
         isTimerActive = true
-        self.selectedSeconds = seconds
+        selectedSeconds = seconds
         timer.delegate = self
-        timer.startTimer(with: self.selectedSeconds)
-        playbackControlsToolbar.setTimeLabelText(with: self.selectedSeconds)
+        timer.start(with: seconds)        
+        playbackControlsToolbar.setTimeLabelText(with: seconds)
     }
 
     func cancelTimer() {
-        timer.cancelTimer()
+        timer.stop()
         isTimerActive = false
         playbackControlsToolbar.hideTimeLabel()
     }
@@ -203,15 +203,15 @@ extension MainViewController: MixerViewControllerDelegate {
 }
 
 // MARK: - RelaxTimerDelegate
-extension MainViewController: RelaxTimerDelegate {
-    
+extension MainViewController: TimerDelegate {
+
     func getRemainingSeconds(_ seconds: Int) {
-        self.remainingSeconds = seconds
+        remainingSeconds = seconds
         playbackControlsToolbar.setTimeLabelText(with: seconds)
         let currentValue = 1 - (Double(seconds) / Double(selectedSeconds))
         timePickerVC?.startCountdownMode(seconds: seconds, value: currentValue)
     }
-    
+
     func timerIsFinished() {
         isTimerActive = false
         playbackControlsToolbar.hideTimeLabel()
