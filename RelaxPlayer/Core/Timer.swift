@@ -12,7 +12,7 @@ protocol TimerDelegate: AnyObject {
     func timerIsFinished()
 }
 
-class Timer {
+final class Timer {
     
     weak var delegate: TimerDelegate?
     private var timer: DispatchSourceTimer?

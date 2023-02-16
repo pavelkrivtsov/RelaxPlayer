@@ -19,6 +19,7 @@ final class MixerViewController: UIViewController {
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     private var players = [String]()
     private var playersVolume = [String : Float]()
+    private lazy var impactGenerator = UIImpactFeedbackGenerator(style: .rigid)
     
     init(players: [String], playersVolume: [String : Float]) {
         super.init(nibName: nil, bundle: nil)
@@ -80,6 +81,7 @@ final class MixerViewController: UIViewController {
         delegate?.removeAllPlayers()
         players.removeAll()
         tableView.reloadData()
+        impactGenerator.impactOccurred()
     }
 }
 
@@ -92,6 +94,7 @@ extension MixerViewController: MixerCellDelegate {
             delegate?.removePlayer(name: name)
             let indexPath = IndexPath(item: playerNameIndex, section: 0)
             tableView.deleteRows(at: [indexPath], with: .automatic)
+            impactGenerator.impactOccurred()
         }
     }
 

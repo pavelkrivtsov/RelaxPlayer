@@ -21,6 +21,7 @@ final class TimePickerViewController: UIViewController {
     private var isTimerActive = Bool()
     private var selectedSeconds = Int()
     private var remainingSeconds = Int()
+    private lazy var impactGenerator = UIImpactFeedbackGenerator(style: .rigid)
  
     init(isTimerActive: Bool, selectedSeconds: Int, remainingSeconds: Int) {
         super.init(nibName: nil, bundle: nil)
@@ -105,6 +106,7 @@ final class TimePickerViewController: UIViewController {
             stopCountdownMode()
         }
         playPauseButton.configuration?.image = UIImage(systemName: isTimerActive ? "stop" : "play")
+        impactGenerator.impactOccurred()
     }
     
     private func prepareCountdownMode(with seconds: Int) {

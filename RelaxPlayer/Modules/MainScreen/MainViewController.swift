@@ -19,6 +19,7 @@ final class MainViewController: UIViewController {
     private var isTimerActive = Bool()
     private var selectedSeconds = 60
     private var remainingSeconds = Int()
+    private lazy var impactGenerator = UIImpactFeedbackGenerator(style: .rigid)
      
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -126,6 +127,7 @@ extension MainViewController: UICollectionViewDelegate {
             audioManager.activateSelectedPlayers()
         }
         updateButtons()
+        impactGenerator.impactOccurred()
         collectionView.reloadItems(at: [indexPath])
     }
 }
@@ -139,6 +141,7 @@ extension MainViewController: PlaybackControlsToolbarDelegate {
                                         remainingSeconds: remainingSeconds)
         self.timePickerVC = timePickerVC
         self.timePickerVC?.delegate = self
+        impactGenerator.impactOccurred()
         self.present(UINavigationController(rootViewController: timePickerVC), animated: true, completion: nil)
     }
 
@@ -147,12 +150,14 @@ extension MainViewController: PlaybackControlsToolbarDelegate {
             audioManager.getAudioPlayers()[player]?.toggle()
         }
         updateButtons()
+        impactGenerator.impactOccurred()
     }
 
     func openMixerDidPress() {
         let mixerVC = MixerViewController(players: audioManager.getSelectedPlayers(),
                                           playersVolume: audioManager.getSelectedPlayersVolume())
         mixerVC.delegate = self
+        impactGenerator.impactOccurred()
         self.present(UINavigationController(rootViewController: mixerVC), animated: true, completion: nil)
     }
 }
