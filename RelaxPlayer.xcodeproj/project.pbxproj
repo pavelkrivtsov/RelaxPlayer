@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1E06519D29A3FDFC00DD3967 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1E06519B29A3FDFC00DD3967 /* Model.xcdatamodeld */; };
+		1E0651A029A3FE4100DD3967 /* Mix+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E06519E29A3FE4100DD3967 /* Mix+CoreDataClass.swift */; };
+		1E0651A129A3FE4100DD3967 /* Mix+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E06519F29A3FE4100DD3967 /* Mix+CoreDataProperties.swift */; };
 		1E2C22342971E80A0025876F /* NoiseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2C22332971E80A0025876F /* NoiseCell.swift */; };
 		1E3DD9EF27BA9A4E0068C41D /* 5.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E3DD9E827BA9A4E0068C41D /* 5.png */; };
 		1E3DD9F027BA9A4E0068C41D /* 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E3DD9E927BA9A4E0068C41D /* 1.png */; };
@@ -29,6 +32,9 @@
 		1E3DDA1D27BAB7F20068C41D /* 10.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1E3DDA1A27BAB7F20068C41D /* 10.mp3 */; };
 		1E3DDA1F27BAB9100068C41D /* 5.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1E3DDA1E27BAB9100068C41D /* 5.mp3 */; };
 		1E3F24AF27AF2B9C00860BB5 /* MixerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E3F24AE27AF2B9C00860BB5 /* MixerCell.swift */; };
+		1E5062B8299EE40900258995 /* CoreDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5062B7299EE40900258995 /* CoreDataStore.swift */; };
+		1E5062E829A2DEDE00258995 /* MixViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5062E729A2DEDE00258995 /* MixViewController.swift */; };
+		1E5062EA29A2DEEA00258995 /* MixCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5062E929A2DEEA00258995 /* MixCell.swift */; };
 		1E650C57297B092100B9C735 /* MixerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E650C56297B092100B9C735 /* MixerViewController.swift */; };
 		1E6D369D27BFAB2900EA87BA /* PlaybackControlsToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E6D369C27BFAB2900EA87BA /* PlaybackControlsToolbar.swift */; };
 		1E6D36A327BFE88D00EA87BA /* AVAudioPlayerUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E6D36A227BFE88D00EA87BA /* AVAudioPlayerUtils.swift */; };
@@ -44,6 +50,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1E06519C29A3FDFC00DD3967 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		1E06519E29A3FE4100DD3967 /* Mix+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mix+CoreDataClass.swift"; sourceTree = "<group>"; };
+		1E06519F29A3FE4100DD3967 /* Mix+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mix+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		1E2C22332971E80A0025876F /* NoiseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoiseCell.swift; sourceTree = "<group>"; };
 		1E3DD9E827BA9A4E0068C41D /* 5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 5.png; sourceTree = "<group>"; };
 		1E3DD9E927BA9A4E0068C41D /* 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1.png; sourceTree = "<group>"; };
@@ -66,6 +75,9 @@
 		1E3DDA1A27BAB7F20068C41D /* 10.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 10.mp3; sourceTree = "<group>"; };
 		1E3DDA1E27BAB9100068C41D /* 5.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 5.mp3; sourceTree = "<group>"; };
 		1E3F24AE27AF2B9C00860BB5 /* MixerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MixerCell.swift; sourceTree = "<group>"; };
+		1E5062B7299EE40900258995 /* CoreDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStore.swift; sourceTree = "<group>"; };
+		1E5062E729A2DEDE00258995 /* MixViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MixViewController.swift; sourceTree = "<group>"; };
+		1E5062E929A2DEEA00258995 /* MixCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MixCell.swift; sourceTree = "<group>"; };
 		1E650C56297B092100B9C735 /* MixerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MixerViewController.swift; sourceTree = "<group>"; };
 		1E6D369C27BFAB2900EA87BA /* PlaybackControlsToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackControlsToolbar.swift; sourceTree = "<group>"; };
 		1E6D36A227BFE88D00EA87BA /* AVAudioPlayerUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVAudioPlayerUtils.swift; sourceTree = "<group>"; };
@@ -108,8 +120,21 @@
 				1EC11F6129803E2300FBF530 /* Timer.swift */,
 				1E774E362990604A00FF8853 /* AudioManager.swift */,
 				1E6D36A227BFE88D00EA87BA /* AVAudioPlayerUtils.swift */,
+				1E5062B7299EE40900258995 /* CoreDataStore.swift */,
+				1E06519B29A3FDFC00DD3967 /* Model.xcdatamodeld */,
+				1E06519E29A3FE4100DD3967 /* Mix+CoreDataClass.swift */,
+				1E06519F29A3FE4100DD3967 /* Mix+CoreDataProperties.swift */,
 			);
 			path = Core;
+			sourceTree = "<group>";
+		};
+		1E5062E629A2DEB900258995 /* MixScreen */ = {
+			isa = PBXGroup;
+			children = (
+				1E5062E729A2DEDE00258995 /* MixViewController.swift */,
+				1E5062E929A2DEEA00258995 /* MixCell.swift */,
+			);
+			path = MixScreen;
 			sourceTree = "<group>";
 		};
 		1E6D36A427BFE9BD00EA87BA /* MainScreen */ = {
@@ -217,6 +242,7 @@
 			isa = PBXGroup;
 			children = (
 				1E6D36A427BFE9BD00EA87BA /* MainScreen */,
+				1E5062E629A2DEB900258995 /* MixScreen */,
 				1E6D36A627BFF0D700EA87BA /* TimePickerScreen */,
 				1E6D36A727BFF0E100EA87BA /* MixerScreen */,
 			);
@@ -313,14 +339,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E0651A129A3FE4100DD3967 /* Mix+CoreDataProperties.swift in Sources */,
+				1E5062E829A2DEDE00258995 /* MixViewController.swift in Sources */,
+				1E5062B8299EE40900258995 /* CoreDataStore.swift in Sources */,
 				1EC90D32298D5C84002D068C /* MainViewController.swift in Sources */,
 				1E2C22342971E80A0025876F /* NoiseCell.swift in Sources */,
 				1EC11F6229803E2300FBF530 /* Timer.swift in Sources */,
+				1E0651A029A3FE4100DD3967 /* Mix+CoreDataClass.swift in Sources */,
 				1EC11F5A297F273D00FBF530 /* TimePickerViewController.swift in Sources */,
 				1E6D36A327BFE88D00EA87BA /* AVAudioPlayerUtils.swift in Sources */,
 				1E3F24AF27AF2B9C00860BB5 /* MixerCell.swift in Sources */,
 				1ECBC1292779D44C00DCD60A /* AppDelegate.swift in Sources */,
 				1E6D369D27BFAB2900EA87BA /* PlaybackControlsToolbar.swift in Sources */,
+				1E5062EA29A2DEEA00258995 /* MixCell.swift in Sources */,
+				1E06519D29A3FDFC00DD3967 /* Model.xcdatamodeld in Sources */,
 				1E650C57297B092100B9C735 /* MixerViewController.swift in Sources */,
 				1EF44B3327C3E17B00101A16 /* TimePickerView.swift in Sources */,
 				1ECBC12B2779D44C00DCD60A /* SceneDelegate.swift in Sources */,
@@ -534,6 +566,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		1E06519B29A3FDFC00DD3967 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				1E06519C29A3FDFC00DD3967 /* Model.xcdatamodel */,
+			);
+			currentVersion = 1E06519C29A3FDFC00DD3967 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 1ECBC11D2779D44C00DCD60A /* Project object */;
 }

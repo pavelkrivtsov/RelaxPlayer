@@ -21,7 +21,7 @@ final class TimePickerViewController: UIViewController {
     private var isTimerActive = Bool()
     private var selectedSeconds = Int()
     private var remainingSeconds = Int()
-    private lazy var impactGenerator = UIImpactFeedbackGenerator(style: .rigid)
+    private var impactGenerator = UIImpactFeedbackGenerator(style: .rigid)
  
     init(isTimerActive: Bool, selectedSeconds: Int, remainingSeconds: Int) {
         super.init(nibName: nil, bundle: nil)
@@ -36,16 +36,7 @@ final class TimePickerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.backgroundColor = UIColor(named: "foregroundColor")
-        navigationItem.titleView = UIImageView(image: UIImage(systemName: "timer"))
-        navigationItem.titleView?.tintColor = .white
-        
-        let backgroundBlurView = UIVisualEffectView()
-        view.addSubview(backgroundBlurView)
-        backgroundBlurView.frame = view.bounds
-        let blurEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
-        backgroundBlurView.effect = blurEffect
-        
+        view.backgroundColor = UIColor(named: "backgroundColor")
         setupTimePicker()
         setupPlayPauseButton()
     }

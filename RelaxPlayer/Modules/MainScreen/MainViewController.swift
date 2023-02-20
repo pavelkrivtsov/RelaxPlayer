@@ -19,7 +19,7 @@ final class MainViewController: UIViewController {
     private var isTimerActive = Bool()
     private var selectedSeconds = 60
     private var remainingSeconds = Int()
-    private lazy var impactGenerator = UIImpactFeedbackGenerator(style: .rigid)
+    private var impactGenerator = UIImpactFeedbackGenerator(style: .rigid)
      
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -142,7 +142,9 @@ extension MainViewController: PlaybackControlsToolbarDelegate {
         self.timePickerVC = timePickerVC
         self.timePickerVC?.delegate = self
         impactGenerator.impactOccurred()
-        self.present(UINavigationController(rootViewController: timePickerVC), animated: true, completion: nil)
+        
+        timePickerVC.navigationItem.titleView = UIImageView(image: UIImage(systemName: "timer"))
+        navigationController?.pushViewController(timePickerVC, animated: true)
     }
 
     func playPauseButtonDidPress() {
@@ -158,7 +160,9 @@ extension MainViewController: PlaybackControlsToolbarDelegate {
                                           playersVolume: audioManager.getSelectedPlayersVolume())
         mixerVC.delegate = self
         impactGenerator.impactOccurred()
-        self.present(UINavigationController(rootViewController: mixerVC), animated: true, completion: nil)
+        
+        mixerVC.navigationItem.titleView = UIImageView(image: UIImage(systemName: "slider.horizontal.3"))
+        navigationController?.pushViewController(mixerVC, animated: true)
     }
 }
 
@@ -223,5 +227,32 @@ extension MainViewController: TimerDelegate {
         audioManager.stopAllPlayers()
         updateButtons()
         timePickerVC?.stopCountdownMode()
+    }
+}
+
+// MARK: - UINavigationController
+extension MainViewController {
+
+    func embedInNavigationController() -> UINavigationController {
+        let navigationController = UINavigationController(rootViewController: self)
+        navigationController.navigationBar.topItem?.title = "RelaxPlayer"
+        navigationController.navigationBar.topItem?.backButtonTitle = ""
+        navigationController.navigationBar.tintColor = .white
+        
+        let button = UIBarButtonItem(image: .init(systemName: "play.square.stack"),
+                                     style: .done,
+                                     target: self,
+                                     action: #selector(infoButtonTapped))
+        button.tintColor = .systemBlue
+        navigationItem.rightBarButtonItem = button
+        return navigationController
+    }
+    
+    @objc
+    private func infoButtonTapped() {
+        let mixVC = MixViewController()
+        mixVC.navigationItem.titleView = UIImageView(image: UIImage(systemName: "slider.horizontal.3"))
+        navigationController?.pushViewController(mixVC, animated: true)
+        impactGenerator.impactOccurred()
     }
 }

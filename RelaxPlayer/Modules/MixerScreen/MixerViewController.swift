@@ -19,7 +19,8 @@ final class MixerViewController: UIViewController {
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     private var players = [String]()
     private var playersVolume = [String : Float]()
-    private lazy var impactGenerator = UIImpactFeedbackGenerator(style: .rigid)
+    private var impactGenerator = UIImpactFeedbackGenerator(style: .rigid)
+    private var coreDataStore = CoreDataStore.shared
     
     init(players: [String], playersVolume: [String : Float]) {
         super.init(nibName: nil, bundle: nil)
@@ -33,18 +34,38 @@ final class MixerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.backgroundColor = UIColor(named: "foregroundColor")
-        navigationItem.titleView = UIImageView(image: UIImage(systemName: "slider.horizontal.3"))
-        navigationItem.titleView?.tintColor = .white
+        view.backgroundColor = UIColor(named: "backgroundColor")
+
+        let button = UIBarButtonItem(image: .init(systemName: "square.and.arrow.down"),
+                                     style: .done,
+                                     target: self,
+                                     action: #selector(showAlert))
+        button.tintColor = .systemBlue
+        navigationItem.rightBarButtonItem = button
         
-        let backgroundBlurView = UIVisualEffectView()
-        view.addSubview(backgroundBlurView)
-        backgroundBlurView.frame = view.bounds
-        let blurEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
-        backgroundBlurView.effect = blurEffect
-    
         setupTableView()
         setupCleanButton()
+    }
+    
+    @objc
+    private func showAlert() {
+        let alertController = UIAlertController(title: "Add mix name", message: nil, preferredStyle: .alert)
+        alertController.addTextField { textField in
+            textField.clearButtonMode = .whileEditing
+            textField.autocorrectionType = .default
+            textField.font = UIFont(name: "AvenirNext-UltraLight", size: 15)
+        }
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel)
+        let ok = UIAlertAction(title: "Ok", style: .default) { action in
+            guard let mixName = alertController.textFields?.first?.text else { return }
+            if mixName.isEmpty == false {
+                self.coreDataStore.saveMix(name: mixName)
+            }
+        }
+        alertController.addAction(cancel)
+        alertController.addAction(ok)
+        present(alertController, animated: true)
+        impactGenerator.impactOccurred()
     }
     
     private func setupTableView() {
@@ -108,7 +129,7 @@ extension MixerViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if players.isEmpty {
-            dismiss(animated: true, completion: nil)
+            navigationController?.popViewController(animated: true)
         }
         return players.count
     }

@@ -33,7 +33,7 @@ final class AudioManager {
     private var audioSassion = AVAudioSession.sharedInstance()
     private var audioPlayers = [String: AVAudioPlayer]()
     private var selectedPlayers = [String]()
-    private var selectedPlayersVolume = [String:Float]()
+    private var selectedPlayersVolume = [String : Float]()
 }
 
 extension AudioManager: AudioManagerProtocol {
