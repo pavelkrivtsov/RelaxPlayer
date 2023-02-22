@@ -59,7 +59,9 @@ final class MixerViewController: UIViewController {
         let ok = UIAlertAction(title: "Ok", style: .default) { action in
             guard let mixName = alertController.textFields?.first?.text else { return }
             if mixName.isEmpty == false {
-                self.coreDataStore.saveMix(name: mixName)
+                self.coreDataStore.saveMix(name: mixName,
+                                           players: self.players,
+                                           playersVolume: self.playersVolume)
             }
         }
         alertController.addAction(cancel)

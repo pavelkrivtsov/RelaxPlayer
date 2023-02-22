@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		1E06519D29A3FDFC00DD3967 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1E06519B29A3FDFC00DD3967 /* Model.xcdatamodeld */; };
-		1E0651A029A3FE4100DD3967 /* Mix+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E06519E29A3FE4100DD3967 /* Mix+CoreDataClass.swift */; };
-		1E0651A129A3FE4100DD3967 /* Mix+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E06519F29A3FE4100DD3967 /* Mix+CoreDataProperties.swift */; };
 		1E2C22342971E80A0025876F /* NoiseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2C22332971E80A0025876F /* NoiseCell.swift */; };
 		1E3DD9EF27BA9A4E0068C41D /* 5.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E3DD9E827BA9A4E0068C41D /* 5.png */; };
 		1E3DD9F027BA9A4E0068C41D /* 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E3DD9E927BA9A4E0068C41D /* 1.png */; };
@@ -46,13 +44,15 @@
 		1ECBC12B2779D44C00DCD60A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ECBC12A2779D44C00DCD60A /* SceneDelegate.swift */; };
 		1ECBC1322779D44D00DCD60A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1ECBC1312779D44D00DCD60A /* Assets.xcassets */; };
 		1ECBC1352779D44D00DCD60A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1ECBC1332779D44D00DCD60A /* LaunchScreen.storyboard */; };
+		1EEB732629A6C456004DBB1B /* Noise+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEB732229A6C456004DBB1B /* Noise+CoreDataClass.swift */; };
+		1EEB732729A6C456004DBB1B /* Noise+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEB732329A6C456004DBB1B /* Noise+CoreDataProperties.swift */; };
+		1EEB732829A6C456004DBB1B /* Mix+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEB732429A6C456004DBB1B /* Mix+CoreDataClass.swift */; };
+		1EEB732929A6C456004DBB1B /* Mix+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEB732529A6C456004DBB1B /* Mix+CoreDataProperties.swift */; };
 		1EF44B3327C3E17B00101A16 /* TimePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EF44B3227C3E17B00101A16 /* TimePickerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		1E06519C29A3FDFC00DD3967 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
-		1E06519E29A3FE4100DD3967 /* Mix+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mix+CoreDataClass.swift"; sourceTree = "<group>"; };
-		1E06519F29A3FE4100DD3967 /* Mix+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mix+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		1E2C22332971E80A0025876F /* NoiseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoiseCell.swift; sourceTree = "<group>"; };
 		1E3DD9E827BA9A4E0068C41D /* 5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 5.png; sourceTree = "<group>"; };
 		1E3DD9E927BA9A4E0068C41D /* 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1.png; sourceTree = "<group>"; };
@@ -91,6 +91,10 @@
 		1ECBC1312779D44D00DCD60A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1ECBC1342779D44D00DCD60A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1ECBC1362779D44D00DCD60A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1EEB732229A6C456004DBB1B /* Noise+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Noise+CoreDataClass.swift"; sourceTree = "<group>"; };
+		1EEB732329A6C456004DBB1B /* Noise+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Noise+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		1EEB732429A6C456004DBB1B /* Mix+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mix+CoreDataClass.swift"; sourceTree = "<group>"; };
+		1EEB732529A6C456004DBB1B /* Mix+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mix+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		1EF44B3227C3E17B00101A16 /* TimePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimePickerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -122,8 +126,10 @@
 				1E6D36A227BFE88D00EA87BA /* AVAudioPlayerUtils.swift */,
 				1E5062B7299EE40900258995 /* CoreDataStore.swift */,
 				1E06519B29A3FDFC00DD3967 /* Model.xcdatamodeld */,
-				1E06519E29A3FE4100DD3967 /* Mix+CoreDataClass.swift */,
-				1E06519F29A3FE4100DD3967 /* Mix+CoreDataProperties.swift */,
+				1EEB732229A6C456004DBB1B /* Noise+CoreDataClass.swift */,
+				1EEB732329A6C456004DBB1B /* Noise+CoreDataProperties.swift */,
+				1EEB732429A6C456004DBB1B /* Mix+CoreDataClass.swift */,
+				1EEB732529A6C456004DBB1B /* Mix+CoreDataProperties.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -339,13 +345,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1E0651A129A3FE4100DD3967 /* Mix+CoreDataProperties.swift in Sources */,
+				1EEB732629A6C456004DBB1B /* Noise+CoreDataClass.swift in Sources */,
 				1E5062E829A2DEDE00258995 /* MixViewController.swift in Sources */,
+				1EEB732729A6C456004DBB1B /* Noise+CoreDataProperties.swift in Sources */,
 				1E5062B8299EE40900258995 /* CoreDataStore.swift in Sources */,
 				1EC90D32298D5C84002D068C /* MainViewController.swift in Sources */,
 				1E2C22342971E80A0025876F /* NoiseCell.swift in Sources */,
+				1EEB732829A6C456004DBB1B /* Mix+CoreDataClass.swift in Sources */,
 				1EC11F6229803E2300FBF530 /* Timer.swift in Sources */,
-				1E0651A029A3FE4100DD3967 /* Mix+CoreDataClass.swift in Sources */,
+				1EEB732929A6C456004DBB1B /* Mix+CoreDataProperties.swift in Sources */,
 				1EC11F5A297F273D00FBF530 /* TimePickerViewController.swift in Sources */,
 				1E6D36A327BFE88D00EA87BA /* AVAudioPlayerUtils.swift in Sources */,
 				1E3F24AF27AF2B9C00860BB5 /* MixerCell.swift in Sources */,

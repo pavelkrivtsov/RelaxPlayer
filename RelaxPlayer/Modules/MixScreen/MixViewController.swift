@@ -35,7 +35,7 @@ final class MixViewController: UIViewController {
         tableView.frame = view.bounds
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "MixCell.reuseId")
+        tableView.register(MixCell.self, forCellReuseIdentifier: MixCell.reuseId)
         tableView.separatorInset = .zero
         tableView.allowsSelection = false
         tableView.backgroundColor = .clear
@@ -45,25 +45,31 @@ final class MixViewController: UIViewController {
 extension MixViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        fetchResultController.fetchedObjects?.count ?? 1
+        fetchResultController.fetchedObjects!.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "MixCell.reuseId") else { return UITableViewCell() }
-        let mix = fetchResultController.object(at: indexPath)
-        cell.textLabel?.text = mix.name
-        return cell
+
+        if let cell = tableView.dequeueReusableCell(withIdentifier: MixCell.reuseId, for: indexPath) as? MixCell {
+            let mix = fetchResultController.object(at: indexPath)
+            cell.configure(mix: mix)
+            return cell
+        }
+        return UITableViewCell()
     }
     
     func tableView(_ tableView: UITableView,
                    commit editingStyle: UITableViewCell.EditingStyle,
                    forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            
             let mix = fetchResultController.object(at: indexPath)
             CoreDataStore.shared.context.delete(mix)
             CoreDataStore.shared.saveContext()
         }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        64
     }
 }
 
