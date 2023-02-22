@@ -9,7 +9,7 @@ import UIKit
 
 final class MainViewController: UIViewController {
 
-    private let audioManager: AudioManagerProtocol = AudioManager.shared
+    private let audioManager = AudioManager.shared
     private var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     private var playbackControlsToolbar = PlaybackControlsToolbar()
     
@@ -65,7 +65,8 @@ final class MainViewController: UIViewController {
     }
     
     private func updateButtons() {
-        let isAudioPlaying = audioManager.getAudioPlayers()
+//        let isAudioPlaying = audioManager.getAudioPlayers()
+        let isAudioPlaying = audioManager.audioPlayers
             .values
             .filter { $0.isPlaying }
             .count > 0
@@ -76,7 +77,7 @@ final class MainViewController: UIViewController {
         if isAudioPlaying {
             playbackControlsToolbar.updateVisualState(withPlayPauseIcon: .Pause)
         } else {
-            playbackControlsToolbar.updateVisualState(withPlayPauseIcon: audioManager.getSelectedPlayers().count > 0 ? .Play : .Stop)
+            playbackControlsToolbar.updateVisualState(withPlayPauseIcon: audioManager.selectedPlayers.count > 0 ? .Play : .Stop)
         }
     }
 }
@@ -85,14 +86,14 @@ final class MainViewController: UIViewController {
 extension MainViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        audioManager.getNoisesNames().count
+        audioManager.noisesNames.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath)-> UICollectionViewCell {
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NoiseCell.reuseId,
                                                          for: indexPath) as? NoiseCell {
-            let noise = audioManager.getNoisesNames()[indexPath.item]
-            let player = audioManager.getAudioPlayers()[noise]
+            let noise = audioManager.noisesNames[indexPath.item]
+            let player = audioManager.audioPlayers[noise]
             cell.configure(imageWith: noise, isSelected: player?.isPlaying ?? false)
             return cell
         }
@@ -106,14 +107,14 @@ extension MainViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         guard collectionView.cellForItem(at: indexPath) != nil else { return }
-        let name = audioManager.getNoisesNames()[indexPath.item]
+        let name = audioManager.noisesNames[indexPath.item]
         
-        if let player =  audioManager.getAudioPlayers()[name] {
+        if let player =  audioManager.audioPlayers[name] {
             if player.isPlaying {
                 player.stop()
                 audioManager.removePlayerFromSelected(with: name)
             } else {
-                if audioManager.getSelectedPlayers().contains(name) {
+                if audioManager.selectedPlayers.contains(name) {
                     audioManager.removePlayerFromSelected(with: name)
                 } else {
                     player.volume = 1
@@ -148,16 +149,16 @@ extension MainViewController: PlaybackControlsToolbarDelegate {
     }
 
     func playPauseButtonDidPress() {
-        for player in audioManager.getSelectedPlayers() {
-            audioManager.getAudioPlayers()[player]?.toggle()
+        for player in audioManager.selectedPlayers {
+            audioManager.audioPlayers[player]?.toggle()
         }
         updateButtons()
         impactGenerator.impactOccurred()
     }
 
     func openMixerDidPress() {
-        let mixerVC = MixerViewController(players: audioManager.getSelectedPlayers(),
-                                          playersVolume: audioManager.getSelectedPlayersVolume())
+        let mixerVC = MixerViewController(players: audioManager.selectedPlayers,
+                                          playersVolume: audioManager.selectedPlayersVolume)
         mixerVC.delegate = self
         impactGenerator.impactOccurred()
         
@@ -192,10 +193,10 @@ extension MainViewController: MixerViewControllerDelegate {
     }
 
     func removePlayer(name: String) {
-        if let player = audioManager.getAudioPlayers()[name] {
+        if let player = audioManager.audioPlayers[name] {
             player.stop()
             audioManager.removePlayer(name: name)
-            if let playerIndex = audioManager.getNoisesNames().firstIndex(of: name) {
+            if let playerIndex = audioManager.noisesNames.firstIndex(of: name) {
                 let indexPath = IndexPath(item: playerIndex, section: 0)
                 collectionView.reloadItems(at: [indexPath])
             }

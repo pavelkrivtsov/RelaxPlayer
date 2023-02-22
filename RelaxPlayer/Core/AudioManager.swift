@@ -8,55 +8,25 @@
 import Foundation
 import AVFoundation
 
-protocol AudioManagerProtocol {
-    func getNoisesNames() -> [String]
-    func getAudioPlayers() -> [String: AVAudioPlayer]
-    func getSelectedPlayers() -> [String]
-    func getSelectedPlayersVolume() -> [String:Float]
-    
-    func createPlayer(with name: String)
-    func appendPlayer(with name: String)
-    func activateSelectedPlayers()
-    func removePlayerFromSelected(with name: String)
-    
-    func setPlayerVolume(name: String, volume: Float)
-    func removePlayer(name: String)
-    func removeAllPlayers()
-    func stopAllPlayers()
-}
 
 final class AudioManager {
     
-    static let shared: AudioManagerProtocol = AudioManager()
+    static let shared = AudioManager()
     
-    private var noisesNames = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
-    private var audioSassion = AVAudioSession.sharedInstance()
-    private var audioPlayers = [String: AVAudioPlayer]()
-    private var selectedPlayers = [String]()
-    private var selectedPlayersVolume = [String : Float]()
+    let noisesNames = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+    var audioPlayers = [String: AVAudioPlayer]()
+    var selectedPlayers = [String]()
+    var selectedPlayersVolume = [String : Float]()
 }
 
-extension AudioManager: AudioManagerProtocol {
-    
-    func getNoisesNames() -> [String] {
-        noisesNames
-    }
-    
-    func getAudioPlayers() -> [String: AVAudioPlayer] {
-        audioPlayers
-    }
-    
-    func getSelectedPlayers() -> [String] {
-        selectedPlayers
-    }
-    
-    func getSelectedPlayersVolume() -> [String:Float] {
-        selectedPlayersVolume
-    }
+extension AudioManager {
     
     func createPlayer(with name: String) {
         do {
-            guard let audioPath = Bundle.main.path(forResource: name, ofType: "mp3") else { return }
+            guard let audioPath = Bundle.main.path(forResource: name, ofType: "mp3") else {
+                print("audioPath not found")
+                return
+            }
             let player = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: audioPath))
             player.numberOfLoops = -1
             player.volume = 1
@@ -74,12 +44,15 @@ extension AudioManager: AudioManagerProtocol {
     
     func activateSelectedPlayers() {
         do {
-            try audioSassion.setActive(true)
+            try AVAudioSession.sharedInstance().setActive(true)
             for (name, player) in audioPlayers {
                 if selectedPlayers.contains(name) && player.isPlaying == false {
                     player.play()
                 }
             }
+            
+
+            
         } catch {
             print(error.localizedDescription)
         }
