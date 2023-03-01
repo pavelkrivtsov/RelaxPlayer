@@ -16,10 +16,10 @@ extension Mix {
         return NSFetchRequest<Mix>(entityName: "Mix")
     }
 
-    @NSManaged public var createdAt: Date?
-    @NSManaged public var id: UUID?
-    @NSManaged public var name: String?
-    @NSManaged public var noises: NSSet?
+    @NSManaged public var createdAt: Date
+    @NSManaged public var id: UUID
+    @NSManaged public var name: String
+    @NSManaged public var noises: NSSet
 
 }
 

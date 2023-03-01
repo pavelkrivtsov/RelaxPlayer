@@ -11,52 +11,60 @@ final class MixCell: UITableViewCell {
     
     static let reuseId = "MixCell"
     
-    private var title = UILabel()    
-    private var vStack = UIStackView()
-    private var hStack = UIStackView()
+    private var view = UIView()
+    private var stack = UIStackView()
+    private var titleLabel = UILabel()
+    private var noisesLabel = UILabel()
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+    required override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = UIColor(named: "foregroundColor")
-        setupVStack()
-        setupHStack()
+                
+        contentView.addSubview(view)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        var viewAnchors = [NSLayoutConstraint]()
+        viewAnchors.append(view.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8))
+        viewAnchors.append(view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8))
+        viewAnchors.append(view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8))
+        viewAnchors.append(view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8))
+        NSLayoutConstraint.activate(viewAnchors)
+        
+        view.addSubview(stack)
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        var stackAnchors = [NSLayoutConstraint]()
+        stackAnchors.append(stack.topAnchor.constraint(equalTo: view.topAnchor, constant: 8))
+        stackAnchors.append(stack.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -8))
+        stackAnchors.append(stack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8))
+        stackAnchors.append(stack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8))
+        NSLayoutConstraint.activate(stackAnchors)
+        
+        view.backgroundColor = UIColor(named: "foregroundColor")
+        view.layer.cornerRadius = 16
+
+        stack.axis = .vertical
+        stack.alignment = .center
+        stack.distribution = .fillEqually
+        stack.addArrangedSubview(titleLabel)
+        stack.addArrangedSubview(noisesLabel)
     }
-    
+     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func setupVStack() {
-        contentView.addSubview(vStack)
-        vStack.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            vStack.topAnchor.constraint(equalTo: self.topAnchor),
-            vStack.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            vStack.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            vStack.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-        ])
-        vStack.spacing = 16
-        vStack.alignment = .center
-        vStack.axis = .vertical
-        
-        vStack.addArrangedSubview(title)
-        vStack.addArrangedSubview(hStack)
-    }
-    
-    private func setupHStack() {
-        hStack.spacing = 8
-        hStack.alignment = .center
     }
 }
 
 extension MixCell {
     func configure(mix: Mix) {
-        self.title.text = mix.name
-        let noises = mix.noises?.allObjects as! [Noise]
-        for noise in noises {
-            let label = UILabel()
-            label.text = noise.name
-            hStack.addArrangedSubview(label)
+        guard let noises = mix.noises.allObjects as? [Noise] else {
+            return print("error configure cell")
         }
+        
+        var noiseNames = [String]()
+        for noise in noises {
+            noiseNames.append(noise.name)
+        }
+        noisesLabel.text = noiseNames.joined(separator: ", ")
+        noisesLabel.font = .systemFont(ofSize: 16)
+        titleLabel.text = mix.name
+        titleLabel.font = .boldSystemFont(ofSize: 20)
     }
 }

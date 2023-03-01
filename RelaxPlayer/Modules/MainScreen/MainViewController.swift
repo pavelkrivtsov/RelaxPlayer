@@ -252,7 +252,7 @@ extension MainViewController {
     @objc
     private func infoButtonTapped() {
         let mixVC = MixViewController()
-        mixVC.navigationItem.titleView = UIImageView(image: UIImage(systemName: "slider.horizontal.3"))
+        mixVC.navigationItem.titleView = UIImageView(image: UIImage(systemName: "play.square.stack"))
         navigationController?.pushViewController(mixVC, animated: true)
         impactGenerator.impactOccurred()
     }

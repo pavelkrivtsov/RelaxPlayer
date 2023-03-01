@@ -16,9 +16,9 @@ extension Noise {
         return NSFetchRequest<Noise>(entityName: "Noise")
     }
 
-    @NSManaged public var name: String?
-    @NSManaged public var volume: NSNumber?
-    @NSManaged public var mix: Mix?
+    @NSManaged public var name: String
+    @NSManaged public var volume: NSNumber
+    @NSManaged public var mix: Mix
 
 }
 

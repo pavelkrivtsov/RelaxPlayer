@@ -10,7 +10,7 @@ import CoreData
 
 final class MixViewController: UIViewController {
     
-    private let tableView = UITableView(frame: .zero, style: .insetGrouped)
+    private let tableView = UITableView(frame: .zero, style: .plain)
     private var fetchResultController: NSFetchedResultsController<Mix>!
     
     override func viewDidLoad() {
@@ -36,7 +36,7 @@ final class MixViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(MixCell.self, forCellReuseIdentifier: MixCell.reuseId)
-        tableView.separatorInset = .zero
+        tableView.separatorStyle = .none
         tableView.allowsSelection = false
         tableView.backgroundColor = .clear
     }
@@ -66,10 +66,6 @@ extension MixViewController: UITableViewDataSource, UITableViewDelegate {
             CoreDataStore.shared.context.delete(mix)
             CoreDataStore.shared.saveContext()
         }
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        64
     }
 }
 
