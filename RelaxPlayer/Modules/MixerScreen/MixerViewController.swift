@@ -20,6 +20,7 @@ final class MixerViewController: UIViewController {
     private var players = [String]()
     private var playersVolume = [String : Float]()
     private var impactGenerator = UIImpactFeedbackGenerator(style: .rigid)
+    private var okAction: UIAlertAction!
     
     init(players: [String], playersVolume: [String : Float]) {
         super.init(nibName: nil, bundle: nil)
@@ -52,21 +53,29 @@ final class MixerViewController: UIViewController {
         alertController.addTextField { textField in
             textField.clearButtonMode = .whileEditing
             textField.autocorrectionType = .default
-            textField.font = UIFont(name: "AvenirNext-UltraLight", size: 15)
+            textField.font = UIFont(name: "AvenirNext-Regular", size: 15)
+            textField.addTarget(self, action: #selector(self.textFieldDidChange(_:)), for: .editingChanged)
         }
+        
         let cancel = UIAlertAction(title: "Cancel", style: .cancel)
-        let ok = UIAlertAction(title: "Ok", style: .default) { action in
+        okAction = UIAlertAction(title: "Ok", style: .default) { action in
             guard let mixName = alertController.textFields?.first?.text else { return }
             if mixName.isEmpty == false {
                 CoreDataStore.shared.saveMix(name: mixName,
                                              players: self.players,
                                              playersVolume: self.playersVolume)
+                self.navigationController?.popViewController(animated: true)
             }
         }
+        okAction.isEnabled = false
         alertController.addAction(cancel)
-        alertController.addAction(ok)
+        alertController.addAction(okAction)
         present(alertController, animated: true)
         impactGenerator.impactOccurred()
+    }
+    
+    @objc private func textFieldDidChange(_ field: UITextField) {
+        okAction.isEnabled = field.text?.count ?? 0 > 0
     }
     
     private func setupTableView() {
