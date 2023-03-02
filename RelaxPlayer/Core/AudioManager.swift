@@ -50,9 +50,6 @@ extension AudioManager {
                     player.play()
                 }
             }
-            
-
-            
         } catch {
             print(error.localizedDescription)
         }

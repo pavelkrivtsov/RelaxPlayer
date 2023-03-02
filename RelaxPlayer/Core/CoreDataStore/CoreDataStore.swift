@@ -45,7 +45,7 @@ final class CoreDataStore {
         for player in players {
             let noise = Noise(context: context)
             noise.name = player
-            noise.volume = playersVolume["\(player)"]! as NSNumber
+            noise.volume = playersVolume[player] ?? 1
             mix.addToNoises(noise)
         }
         

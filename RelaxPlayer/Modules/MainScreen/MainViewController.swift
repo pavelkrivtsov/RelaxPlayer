@@ -167,24 +167,6 @@ extension MainViewController: PlaybackControlsToolbarDelegate {
     }
 }
 
-// MARK: - TimePickerViewControllerDelegate
-extension MainViewController: TimePickerViewControllerDelegate {
-
-    func getSelectedSeconds(_ seconds: Int) {
-        isTimerActive = true
-        selectedSeconds = seconds
-        timer.delegate = self
-        timer.start(with: seconds)        
-        playbackControlsToolbar.setTimeLabelText(with: seconds)
-    }
-
-    func cancelTimer() {
-        timer.stop()
-        isTimerActive = false
-        playbackControlsToolbar.hideTimeLabel()
-    }
-}
-
 // MARK: - MixerViewControllerDelegate
 extension MainViewController: MixerViewControllerDelegate {
     
@@ -209,6 +191,24 @@ extension MainViewController: MixerViewControllerDelegate {
         audioManager.removeAllPlayers()
         collectionView.reloadData()
         updateButtons()
+    }
+}
+
+// MARK: - TimePickerViewControllerDelegate
+extension MainViewController: TimePickerViewControllerDelegate {
+
+    func getSelectedSeconds(_ seconds: Int) {
+        isTimerActive = true
+        selectedSeconds = seconds
+        timer.delegate = self
+        timer.start(with: seconds)
+        playbackControlsToolbar.setTimeLabelText(with: seconds)
+    }
+
+    func cancelTimer() {
+        timer.stop()
+        isTimerActive = false
+        playbackControlsToolbar.hideTimeLabel()
     }
 }
 

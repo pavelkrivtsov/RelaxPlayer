@@ -124,12 +124,7 @@
 				1EC11F6129803E2300FBF530 /* Timer.swift */,
 				1E774E362990604A00FF8853 /* AudioManager.swift */,
 				1E6D36A227BFE88D00EA87BA /* AVAudioPlayerUtils.swift */,
-				1E5062B7299EE40900258995 /* CoreDataStore.swift */,
-				1E06519B29A3FDFC00DD3967 /* Model.xcdatamodeld */,
-				1EEB732229A6C456004DBB1B /* Noise+CoreDataClass.swift */,
-				1EEB732329A6C456004DBB1B /* Noise+CoreDataProperties.swift */,
-				1EEB732429A6C456004DBB1B /* Mix+CoreDataClass.swift */,
-				1EEB732529A6C456004DBB1B /* Mix+CoreDataProperties.swift */,
+				1EA6C41229B0BCE500DBC737 /* CoreDataStore */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -203,6 +198,19 @@
 				1E3DDA1327BAB7E40068C41D /* 10.png */,
 			);
 			path = Icons;
+			sourceTree = "<group>";
+		};
+		1EA6C41229B0BCE500DBC737 /* CoreDataStore */ = {
+			isa = PBXGroup;
+			children = (
+				1E5062B7299EE40900258995 /* CoreDataStore.swift */,
+				1E06519B29A3FDFC00DD3967 /* Model.xcdatamodeld */,
+				1EEB732229A6C456004DBB1B /* Noise+CoreDataClass.swift */,
+				1EEB732329A6C456004DBB1B /* Noise+CoreDataProperties.swift */,
+				1EEB732429A6C456004DBB1B /* Mix+CoreDataClass.swift */,
+				1EEB732529A6C456004DBB1B /* Mix+CoreDataProperties.swift */,
+			);
+			path = CoreDataStore;
 			sourceTree = "<group>";
 		};
 		1ECBC11C2779D44C00DCD60A = {

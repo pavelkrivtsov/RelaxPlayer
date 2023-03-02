@@ -20,7 +20,6 @@ final class MixerViewController: UIViewController {
     private var players = [String]()
     private var playersVolume = [String : Float]()
     private var impactGenerator = UIImpactFeedbackGenerator(style: .rigid)
-    private var coreDataStore = CoreDataStore.shared
     
     init(players: [String], playersVolume: [String : Float]) {
         super.init(nibName: nil, bundle: nil)
@@ -59,9 +58,9 @@ final class MixerViewController: UIViewController {
         let ok = UIAlertAction(title: "Ok", style: .default) { action in
             guard let mixName = alertController.textFields?.first?.text else { return }
             if mixName.isEmpty == false {
-                self.coreDataStore.saveMix(name: mixName,
-                                           players: self.players,
-                                           playersVolume: self.playersVolume)
+                CoreDataStore.shared.saveMix(name: mixName,
+                                             players: self.players,
+                                             playersVolume: self.playersVolume)
             }
         }
         alertController.addAction(cancel)

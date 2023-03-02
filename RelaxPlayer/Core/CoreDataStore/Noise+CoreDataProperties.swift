@@ -17,7 +17,7 @@ extension Noise {
     }
 
     @NSManaged public var name: String
-    @NSManaged public var volume: NSNumber
+    @NSManaged public var volume: Float
     @NSManaged public var mix: Mix
 
 }
