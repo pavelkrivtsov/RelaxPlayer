@@ -8,10 +8,16 @@
 import UIKit
 import CoreData
 
+protocol MixViewControllerDelegate: AnyObject {
+    func getNoises(noises: [Noise])
+}
+
 final class MixViewController: UIViewController {
     
+    weak var delegate: MixViewControllerDelegate?
     private let tableView = UITableView(frame: .zero, style: .plain)
     private var fetchResultController = NSFetchedResultsController<Mix>()
+    private var impactGenerator = UIImpactFeedbackGenerator(style: .rigid)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,13 +31,11 @@ final class MixViewController: UIViewController {
                                                            sectionNameKeyPath: nil,
                                                            cacheName:  nil)
         fetchResultController.delegate = self
-        
         do {
             try fetchResultController.performFetch()
         } catch let error {
             print(error.localizedDescription)
         }
-        
         setupTableView()
     }
 
@@ -42,13 +46,12 @@ final class MixViewController: UIViewController {
         tableView.delegate = self
         tableView.register(MixCell.self, forCellReuseIdentifier: MixCell.reuseId)
         tableView.separatorStyle = .none
-        tableView.allowsSelection = false
         tableView.backgroundColor = .clear
     }
 }
 
-// MARK: - UITableViewDataSource, UITableViewDelegate
-extension MixViewController: UITableViewDataSource, UITableViewDelegate {
+// MARK: - UITableViewDataSource
+extension MixViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let fetchedObjects = fetchResultController.fetchedObjects else { return 0 }
@@ -63,6 +66,22 @@ extension MixViewController: UITableViewDataSource, UITableViewDelegate {
             return cell
         }
         return UITableViewCell()
+    }
+}
+
+// MARK: - UITableViewDelegate
+extension MixViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let mix = fetchResultController.object(at: indexPath)
+        guard let noises = mix.noises.allObjects as? [Noise] else {
+            return print("error configure cell")
+        }
+        
+        print("noises \(noises)")
+        delegate?.getNoises(noises: noises)
+        impactGenerator.impactOccurred()
+        navigationController?.popViewController(animated: true)
     }
     
     func tableView(_ tableView: UITableView,

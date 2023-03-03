@@ -8,7 +8,7 @@
 import UIKit
 
 final class MainViewController: UIViewController {
-
+    
     private let audioManager = AudioManager.shared
     private var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     private var playbackControlsToolbar = PlaybackControlsToolbar()
@@ -20,7 +20,7 @@ final class MainViewController: UIViewController {
     private var selectedSeconds = 60
     private var remainingSeconds = Int()
     private var impactGenerator = UIImpactFeedbackGenerator(style: .rigid)
-     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "backgroundColor")
@@ -28,7 +28,7 @@ final class MainViewController: UIViewController {
         setupCollectionView()
         setupPlaybackControlsToolbar()
     }
-
+    
     private func setupCollectionView() {
         view.addSubview(collectionView)
         collectionView.frame = view.bounds
@@ -65,7 +65,6 @@ final class MainViewController: UIViewController {
     }
     
     private func updateButtons() {
-//        let isAudioPlaying = audioManager.getAudioPlayers()
         let isAudioPlaying = audioManager.audioPlayers
             .values
             .filter { $0.isPlaying }
@@ -109,23 +108,24 @@ extension MainViewController: UICollectionViewDelegate {
         guard collectionView.cellForItem(at: indexPath) != nil else { return }
         let name = audioManager.noisesNames[indexPath.item]
         
-        if let player =  audioManager.audioPlayers[name] {
-            if player.isPlaying {
+        if let player = audioManager.audioPlayers[name] {
+            switch player.isPlaying {
+            case true:
                 player.stop()
-                audioManager.removePlayerFromSelected(with: name)
-            } else {
-                if audioManager.selectedPlayers.contains(name) {
-                    audioManager.removePlayerFromSelected(with: name)
-                } else {
-                    player.volume = 1
-                    audioManager.appendPlayer(with: name)
-                    audioManager.activateSelectedPlayers()
+                audioManager.removePlayerFromSelected(name)
+            case false:
+                switch audioManager.selectedPlayers.contains(name) {
+                case true:
+                    audioManager.removePlayerFromSelected(name)
+                case false:
+                    audioManager.appendToSelectedPlayers(name, 1)
+                    audioManager.activateSelectedPlayers(1)
                 }
             }
         } else {
-            audioManager.createPlayer(with: name)
-            audioManager.appendPlayer(with: name)
-            audioManager.activateSelectedPlayers()
+            audioManager.createPlayer(name)
+            audioManager.appendToSelectedPlayers(name, 1)
+            audioManager.activateSelectedPlayers(1)
         }
         updateButtons()
         impactGenerator.impactOccurred()
@@ -135,19 +135,18 @@ extension MainViewController: UICollectionViewDelegate {
 
 // MARK: - PlaybackControlsToolbarDelegate
 extension MainViewController: PlaybackControlsToolbarDelegate {
-
+    
     func openTimerViewButtonDidPress() {
         let timePickerVC = TimePickerViewController(isTimerActive: isTimerActive,
-                                        selectedSeconds: selectedSeconds,
-                                        remainingSeconds: remainingSeconds)
+                                                    selectedSeconds: selectedSeconds,
+                                                    remainingSeconds: remainingSeconds)
         self.timePickerVC = timePickerVC
         self.timePickerVC?.delegate = self
-        impactGenerator.impactOccurred()
-        
         timePickerVC.navigationItem.titleView = UIImageView(image: UIImage(systemName: "timer"))
         navigationController?.pushViewController(timePickerVC, animated: true)
+        impactGenerator.impactOccurred()
     }
-
+    
     func playPauseButtonDidPress() {
         for player in audioManager.selectedPlayers {
             audioManager.audioPlayers[player]?.toggle()
@@ -155,15 +154,14 @@ extension MainViewController: PlaybackControlsToolbarDelegate {
         updateButtons()
         impactGenerator.impactOccurred()
     }
-
+    
     func openMixerDidPress() {
         let mixerVC = MixerViewController(players: audioManager.selectedPlayers,
                                           playersVolume: audioManager.selectedPlayersVolume)
         mixerVC.delegate = self
-        impactGenerator.impactOccurred()
-        
         mixerVC.navigationItem.titleView = UIImageView(image: UIImage(systemName: "slider.horizontal.3"))
         navigationController?.pushViewController(mixerVC, animated: true)
+        impactGenerator.impactOccurred()
     }
 }
 
@@ -173,22 +171,22 @@ extension MainViewController: MixerViewControllerDelegate {
     func setPlayerVolume(name: String, volume: Float) {
         audioManager.setPlayerVolume(name: name, volume: volume)
     }
-
+    
     func removePlayer(name: String) {
         if let player = audioManager.audioPlayers[name] {
             player.stop()
-            audioManager.removePlayer(name: name)
-            if let playerIndex = audioManager.noisesNames.firstIndex(of: name) {
-                let indexPath = IndexPath(item: playerIndex, section: 0)
+            audioManager.removePlayerFromSelected(name)
+            if let noiseIndex = audioManager.noisesNames.firstIndex(of: name) {
+                let indexPath = IndexPath(item: noiseIndex, section: 0)
                 collectionView.reloadItems(at: [indexPath])
             }
             updateButtons()
         }
     }
-
+    
     func removeAllPlayers() {
         audioManager.stopAllPlayers()
-        audioManager.removeAllPlayers()
+        audioManager.removeAllSelectedPlayers()
         collectionView.reloadData()
         updateButtons()
     }
@@ -196,7 +194,7 @@ extension MainViewController: MixerViewControllerDelegate {
 
 // MARK: - TimePickerViewControllerDelegate
 extension MainViewController: TimePickerViewControllerDelegate {
-
+    
     func getSelectedSeconds(_ seconds: Int) {
         isTimerActive = true
         selectedSeconds = seconds
@@ -204,7 +202,7 @@ extension MainViewController: TimePickerViewControllerDelegate {
         timer.start(with: seconds)
         playbackControlsToolbar.setTimeLabelText(with: seconds)
     }
-
+    
     func cancelTimer() {
         timer.stop()
         isTimerActive = false
@@ -214,14 +212,14 @@ extension MainViewController: TimePickerViewControllerDelegate {
 
 // MARK: - RelaxTimerDelegate
 extension MainViewController: TimerDelegate {
-
+    
     func getRemainingSeconds(_ seconds: Int) {
         remainingSeconds = seconds
         playbackControlsToolbar.setTimeLabelText(with: seconds)
         let currentValue = 1 - (Double(seconds) / Double(selectedSeconds))
         timePickerVC?.startCountdownMode(seconds: seconds, value: currentValue)
     }
-
+    
     func timerIsFinished() {
         isTimerActive = false
         playbackControlsToolbar.hideTimeLabel()
@@ -231,9 +229,26 @@ extension MainViewController: TimerDelegate {
     }
 }
 
+// MARK: - MixViewControllerDelegate
+extension MainViewController: MixViewControllerDelegate {
+    
+    func getNoises(noises: [Noise]) {
+        audioManager.stopAllPlayers()
+        audioManager.removeAllSelectedPlayers()
+        for noise in noises {
+            print("noise \(noise)")
+            audioManager.createPlayer(noise.name)
+            audioManager.appendToSelectedPlayers(noise.name, noise.volume)
+            audioManager.activateSelectedPlayers(noise.volume)
+        }
+        updateButtons()
+        collectionView.reloadData()
+    }
+}
+
 // MARK: - UINavigationController
 extension MainViewController {
-
+    
     func embedInNavigationController() -> UINavigationController {
         let navigationController = UINavigationController(rootViewController: self)
         navigationController.navigationBar.topItem?.title = "RelaxPlayer"
@@ -252,6 +267,7 @@ extension MainViewController {
     @objc
     private func infoButtonTapped() {
         let mixVC = MixViewController()
+        mixVC.delegate = self
         mixVC.navigationItem.titleView = UIImageView(image: UIImage(systemName: "play.square.stack"))
         navigationController?.pushViewController(mixVC, animated: true)
         impactGenerator.impactOccurred()

@@ -21,7 +21,7 @@ final class AudioManager {
 
 extension AudioManager {
     
-    func createPlayer(with name: String) {
+    func createPlayer(_ name: String) {
         do {
             guard let audioPath = Bundle.main.path(forResource: name, ofType: "mp3") else {
                 print("audioPath not found")
@@ -29,7 +29,6 @@ extension AudioManager {
             }
             let player = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: audioPath))
             player.numberOfLoops = -1
-            player.volume = 1
             player.prepareToPlay()
             audioPlayers[name] = player
         } catch {
@@ -37,17 +36,18 @@ extension AudioManager {
         }
     }
     
-    func appendPlayer(with name: String) {
+    func appendToSelectedPlayers(_ name: String, _ volume: Float) {
         selectedPlayers.append(name)
-        selectedPlayersVolume[name] = 1
+        selectedPlayersVolume[name] = volume
     }
     
-    func activateSelectedPlayers() {
+    func activateSelectedPlayers(_ volume: Float) {
         do {
             try AVAudioSession.sharedInstance().setActive(true)
-            for (name, player) in audioPlayers {
-                if selectedPlayers.contains(name) && player.isPlaying == false {
-                    player.play()
+            for name in selectedPlayers {
+                if audioPlayers[name]?.isPlaying == false {
+                    audioPlayers[name]?.volume = volume
+                    audioPlayers[name]?.play()
                 }
             }
         } catch {
@@ -55,7 +55,7 @@ extension AudioManager {
         }
     }
     
-    func removePlayerFromSelected(with name: String) {
+    func removePlayerFromSelected(_ name: String) {
         if let playerIndex = selectedPlayers.firstIndex(of: name) {
             selectedPlayers.remove(at: playerIndex)
         }
@@ -68,15 +68,7 @@ extension AudioManager {
         }
     }
     
-    func removePlayer(name: String) {
-        for player in selectedPlayers {
-            if player == name, let playerIndex = selectedPlayers.firstIndex(of: player) {
-                selectedPlayers.remove(at: playerIndex)
-            }
-        }
-    }
-    
-    func removeAllPlayers() {
+    func removeAllSelectedPlayers() {
         selectedPlayers.removeAll()
         selectedPlayersVolume.removeAll()
     }

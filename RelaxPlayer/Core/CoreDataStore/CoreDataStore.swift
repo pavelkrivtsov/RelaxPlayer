@@ -39,16 +39,17 @@ final class CoreDataStore {
     func saveMix(name: String, players: [String], playersVolume: [String : Float]) {
         let mix = Mix(context: context)
         mix.name = name
-        mix.id = UUID()
         mix.createdAt = Date()
         
         for player in players {
+            guard let volume = playersVolume[player] else {
+                return print("volume = playersVolume[player]")
+            }
             let noise = Noise(context: context)
             noise.name = player
-            noise.volume = playersVolume[player] ?? 1
+            noise.volume = volume
             mix.addToNoises(noise)
         }
-        
         saveContext()
     }
 }

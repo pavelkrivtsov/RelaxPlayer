@@ -17,15 +17,18 @@ final class MixerViewController: UIViewController {
     
     weak var delegate: MixerViewControllerDelegate?
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
-    private var players = [String]()
-    private var playersVolume = [String : Float]()
+    
+    private var selectedPlayers = [String]()
+    private var selectedPlayersVolume = [String : Float]()
+    
     private var impactGenerator = UIImpactFeedbackGenerator(style: .rigid)
     private var okAction: UIAlertAction!
     
     init(players: [String], playersVolume: [String : Float]) {
         super.init(nibName: nil, bundle: nil)
-        self.players = players
-        self.playersVolume = playersVolume
+        
+        self.selectedPlayers = players
+        self.selectedPlayersVolume = playersVolume
     }
 
     required init?(coder: NSCoder) {
@@ -60,12 +63,10 @@ final class MixerViewController: UIViewController {
         let cancel = UIAlertAction(title: "Cancel", style: .cancel)
         okAction = UIAlertAction(title: "Ok", style: .default) { action in
             guard let mixName = alertController.textFields?.first?.text else { return }
-            if mixName.isEmpty == false {
-                CoreDataStore.shared.saveMix(name: mixName,
-                                             players: self.players,
-                                             playersVolume: self.playersVolume)
-                self.navigationController?.popViewController(animated: true)
-            }
+            CoreDataStore.shared.saveMix(name: mixName,
+                                         players: self.selectedPlayers,
+                                         playersVolume: self.selectedPlayersVolume)
+            self.navigationController?.popViewController(animated: true)
         }
         okAction.isEnabled = false
         alertController.addAction(cancel)
@@ -110,27 +111,10 @@ final class MixerViewController: UIViewController {
     @objc
     private func cleanTableView() {
         delegate?.removeAllPlayers()
-        players.removeAll()
+        selectedPlayers.removeAll()
+        selectedPlayersVolume.removeAll()
         tableView.reloadData()
         impactGenerator.impactOccurred()
-    }
-}
-
-// MARK: - MixerCellDelegate
-extension MixerViewController: MixerCellDelegate {
-
-    func removePlayer(name: String) {
-        if let playerNameIndex = players.firstIndex(of: name) {
-            players = players.filter {$0 != name}
-            delegate?.removePlayer(name: name)
-            let indexPath = IndexPath(item: playerNameIndex, section: 0)
-            tableView.deleteRows(at: [indexPath], with: .automatic)
-            impactGenerator.impactOccurred()
-        }
-    }
-
-    func setPlayerVolume(name: String, volume: Float) {
-        delegate?.setPlayerVolume(name: name, volume: volume)
     }
 }
 
@@ -138,18 +122,17 @@ extension MixerViewController: MixerCellDelegate {
 extension MixerViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if players.isEmpty {
+        if selectedPlayers.isEmpty {
             navigationController?.popViewController(animated: true)
         }
-        return players.count
+        return selectedPlayers.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: MixerCell.reuseId,
                                                     for: indexPath) as? MixerCell {
-
-            let player = players[indexPath.row]
-            if let volumeValue = playersVolume[player] {
+            let player = selectedPlayers[indexPath.row]
+            if let volumeValue = selectedPlayersVolume[player] {
                 cell.configure(from: player, volume: volumeValue)
             }
             cell.delegate = self
@@ -160,5 +143,24 @@ extension MixerViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         64
+    }
+}
+
+// MARK: - MixerCellDelegate
+extension MixerViewController: MixerCellDelegate {
+
+    func removePlayer(name: String) {
+        if let playerNameIndex = selectedPlayers.firstIndex(of: name) {
+            selectedPlayers = selectedPlayers.filter {$0 != name}
+            delegate?.removePlayer(name: name)
+            let indexPath = IndexPath(item: playerNameIndex, section: 0)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            impactGenerator.impactOccurred()
+        }
+    }
+
+    func setPlayerVolume(name: String, volume: Float) {
+        delegate?.setPlayerVolume(name: name, volume: volume)
+        selectedPlayersVolume[name] = volume
     }
 }
