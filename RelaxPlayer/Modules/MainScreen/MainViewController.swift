@@ -119,13 +119,13 @@ extension MainViewController: UICollectionViewDelegate {
                     audioManager.removePlayerFromSelected(name)
                 case false:
                     audioManager.appendToSelectedPlayers(name, 1)
-                    audioManager.activateSelectedPlayers(1)
+                    audioManager.activateSelectedPlayers()
                 }
             }
         } else {
             audioManager.createPlayer(name)
             audioManager.appendToSelectedPlayers(name, 1)
-            audioManager.activateSelectedPlayers(1)
+            audioManager.activateSelectedPlayers()
         }
         updateButtons()
         impactGenerator.impactOccurred()
@@ -244,7 +244,7 @@ extension MainViewController: MixViewControllerDelegate {
             print("noise \(noise)")
             audioManager.createPlayer(noise.name)
             audioManager.appendToSelectedPlayers(noise.name, noise.volume)
-            audioManager.activateSelectedPlayers(noise.volume)
+            audioManager.activateSelectedPlayers()
         }
         updateButtons()
         collectionView.reloadData()

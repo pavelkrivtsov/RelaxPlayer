@@ -41,11 +41,12 @@ extension AudioManager {
         selectedPlayersVolume[name] = volume
     }
     
-    func activateSelectedPlayers(_ volume: Float) {
+    func activateSelectedPlayers() {
         do {
             try AVAudioSession.sharedInstance().setActive(true)
             for name in selectedPlayers {
-                if audioPlayers[name]?.isPlaying == false {
+                if let volume = selectedPlayersVolume[name],
+                   audioPlayers[name]?.isPlaying == false {
                     audioPlayers[name]?.volume = volume
                     audioPlayers[name]?.play()
                 }
