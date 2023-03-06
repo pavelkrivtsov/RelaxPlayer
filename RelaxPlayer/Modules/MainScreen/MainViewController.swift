@@ -111,7 +111,6 @@ extension MainViewController: UICollectionViewDelegate {
         if let player = audioManager.audioPlayers[name] {
             switch player.isPlaying {
             case true:
-                player.stop()
                 audioManager.removePlayerFromSelected(name)
             case false:
                 switch audioManager.selectedPlayers.contains(name) {

@@ -47,7 +47,10 @@ extension AudioManager {
             for name in selectedPlayers {
                 if let volume = selectedPlayersVolume[name],
                    audioPlayers[name]?.isPlaying == false {
-                    audioPlayers[name]?.volume = volume
+                    audioPlayers[name]?.volume = 0
+                    DispatchQueue.main.async {
+                        self.audioPlayers[name]?.setVolume(volume, fadeDuration: 3)
+                    }
                     audioPlayers[name]?.play()
                 }
             }
@@ -57,8 +60,12 @@ extension AudioManager {
     }
     
     func removePlayerFromSelected(_ name: String) {
-        if let playerIndex = selectedPlayers.firstIndex(of: name) {
+        if let playerIndex = selectedPlayers.firstIndex(of: name), let player = audioPlayers[name] {
+            if player.isPlaying {
+                player.stop()
+            }
             selectedPlayers.remove(at: playerIndex)
+            selectedPlayersVolume.removeValue(forKey: name)
         }
     }
     
