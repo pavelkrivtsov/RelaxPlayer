@@ -59,9 +59,15 @@ extension MixCell {
         }
         
         var noiseNames = [String]()
-        for noise in noises {
+        
+        let sortedNoises = noises.sorted { noise1, noise2 in
+            return noise1.createdAt < noise2.createdAt
+        }
+     
+        for noise in sortedNoises {
             noiseNames.append(noise.name)
         }
+        
         noisesLabel.text = noiseNames.joined(separator: ", ")
         noisesLabel.font = .systemFont(ofSize: 16)
         titleLabel.text = mix.name

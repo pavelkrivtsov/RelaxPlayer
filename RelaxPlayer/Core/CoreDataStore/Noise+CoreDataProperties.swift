@@ -2,7 +2,7 @@
 //  Noise+CoreDataProperties.swift
 //  RelaxPlayer
 //
-//  Created by Павел Кривцов on 23.02.2023.
+//  Created by Павел Кривцов on 03.03.2023.
 //
 //
 
@@ -18,6 +18,7 @@ extension Noise {
 
     @NSManaged public var name: String
     @NSManaged public var volume: Float
+    @NSManaged public var createdAt: Date
     @NSManaged public var mix: Mix
 
 }

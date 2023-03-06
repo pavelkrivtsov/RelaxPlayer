@@ -48,6 +48,7 @@ final class CoreDataStore {
             let noise = Noise(context: context)
             noise.name = player
             noise.volume = volume
+            noise.createdAt = Date()
             mix.addToNoises(noise)
         }
         saveContext()

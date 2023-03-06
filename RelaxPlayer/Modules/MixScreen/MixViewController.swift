@@ -9,7 +9,7 @@ import UIKit
 import CoreData
 
 protocol MixViewControllerDelegate: AnyObject {
-    func getNoises(noises: [Noise])
+    func setMix(noises: [Noise])
 }
 
 final class MixViewController: UIViewController {
@@ -79,7 +79,7 @@ extension MixViewController: UITableViewDelegate {
         }
         
         print("noises \(noises)")
-        delegate?.getNoises(noises: noises)
+        delegate?.setMix(noises: noises)
         impactGenerator.impactOccurred()
         navigationController?.popViewController(animated: true)
     }
