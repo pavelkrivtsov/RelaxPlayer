@@ -232,10 +232,15 @@ extension MainViewController: TimerDelegate {
 // MARK: - MixViewControllerDelegate
 extension MainViewController: MixViewControllerDelegate {
     
-    func getNoises(noises: [Noise]) {
+    func setMix(noises: [Noise]) {
         audioManager.stopAllPlayers()
         audioManager.removeAllSelectedPlayers()
-        for noise in noises {
+
+        let sortedNoises = noises.sorted { noise1, noise2 in
+            return noise1.createdAt < noise2.createdAt
+        }
+
+        for noise in sortedNoises {
             print("noise \(noise)")
             audioManager.createPlayer(noise.name)
             audioManager.appendToSelectedPlayers(noise.name, noise.volume)
